@@ -1,0 +1,328 @@
+* {
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul{
+    list-style: none;
+}
+
+body{
+    background-color: #3f3f3f;
+}
+
+/*上传文件模态框*/
+.modal{
+    display: none;
+    position: fixed;
+    background-color: rgba(28, 28, 28, 0.73);
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+.upload{
+    width: 95%;
+    max-width: 300px;
+    background-color: rgb(236, 236, 236);
+    padding: 15px 10px;
+    color: #000000;
+    text-align: center;
+    margin-top: 10%;
+    border-radius: 10px;
+}
+.upload .close{
+    width: 30px;
+    height: 30px;
+    float: right;
+    cursor: pointer;
+}
+.upload hr{
+    border: 0;
+    border-bottom: 1px solid #6a6a6a;
+    margin: 10px auto;
+}
+.upload .label{
+    width: 70px;
+    float: left;
+}
+.input{
+    width: 70%;
+    height: 26px;
+    border-radius: 3px;
+    border: 1px #9a9a9a solid;
+    padding: 0 4px;
+}
+.btn-choose{
+    padding: 4px 10px;
+    font-size: 16px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+.file-name{
+    color: #3f3f3f;
+}
+.btn-upload{
+    width: 40%;
+    padding: 4px 8px;
+    font-size: 20px;
+    background-color: #6b6b6b;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.btn-upload:hover{
+    background-color: #454545;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.header {
+    background: #262626;
+    overflow: visible;
+    position: relative;
+    display: block;
+    z-index: 250;
+    box-sizing: border-box;
+    height: 44px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.header h2 {
+    line-height: 44px;
+    position: absolute;
+    width: 45%;
+    z-index: 1;
+    height: 44px;
+    font-size: 18px;
+    font-weight: bold;
+    left: 27.5%;
+}
+.menu {
+    display: none;
+    width: 150px;
+    background-color: white;
+    position: absolute;
+    right: 0;
+    top: 44px;
+}
+.menu ul li {
+    list-style: none;
+    border-bottom: 1px solid #ddd;
+}
+.menu ul li a {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 26px;
+    display: block;
+    width: 100%;
+}
+.menu ul li a:hover {
+    color: white;
+    background-color: #317ef3;
+}
+.menu-btn {
+    margin: 6px;
+    background: url("../img/菜单.png");
+    float: right;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+.file {
+    width: 100%;
+    background-color: #3f3f3f;
+    padding-top: 10px;
+}
+.conditions{
+    width: 95%;
+    max-width: 600px;
+    height: 30px;
+    margin-top: 40px;
+}
+.conditions select{
+    padding: 3px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    float: left;
+    height: 100%;
+}
+.conditions .search{
+    height: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #555;
+    border: 1px solid #ccc;
+    float: left;
+}
+.conditions .btn-search{
+    height: 100%;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: #fff;
+    background-color: #286090;
+    cursor: pointer;
+    float: left;
+    border: none;
+}
+.list{
+    width: 95%;
+    max-width: 600px;
+    background-color: #585858;
+    margin-top: 40px;
+}
+.list ul li{
+    width: 100%;
+    color: #fff;
+    font-size: 16px;
+    line-height: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+.list ul li:hover{
+    background-color: #707070;
+}
+.list ul li a{
+    display: block;
+    width: calc(100% - 60px);
+    color: #fff;
+    font-size: 16px;
+    line-height: 30px;
+    cursor: pointer;
+    float: left;
+}
+.list ul li a:hover{
+    background-color: #707070;
+}
+.list ul li .ico{
+    width: 27px;
+    height: 30px;
+    float: left;
+    margin-right: 8px;
+}
+.list ul li .filename{
+    width: 29%;
+    height: 30px;
+    float: left;
+    margin-right: 8px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
+.list ul li .remark{
+    width: 29%;
+    height: 30px;
+    float: left;
+    margin-right: 8px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.list ul li .date{
+    width: 20%;
+    float: right;
+    color: #dddddd;
+}
+.list ul li .type-undone{
+    width: 11%;
+    color: #ffaa56;
+    float: right;
+}
+.list ul li .type-done{
+    width: 11%;
+    color: #56ff8e;
+    float: right;
+}
+.list ul li input[type='checkbox'], .list ul li input[type='radio']{
+    width: 20px;
+    height: 30px;
+    float: right;
+    cursor: pointer;
+}
+.list ul li .sealImg{
+    height: 100px;
+    float: left;
+    margin-right: 10px;
+}
+.list ul li .sealname{
+    line-height: 100px;
+    font-size: 20px;
+    float: left;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color: #fff;
+}
+.file .btn{
+    margin-top: 20px;
+    padding: 4px 10px;
+    font-size: 20px;
+    background-color: #c7c7c7;
+    color: #393939;
+    border-radius: 3px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.file .btn:hover{
+    background-color: #e9e9e9;
+    color: #1c1c1c;
+    border-radius: 3px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: block;
+    z-index: 250;
+}
+.footer ul li {
+    float: left;
+    list-style: none;
+    width: 33.2%;
+    height: 55px;
+    border-right: 1px solid #A9A1A1;
+    background-color: #ddd;
+}
+.footer ul li.active {
+    background-color: #9c9c9c;
+}
+.footer ul li div {
+    text-align: center;
+    width: 100%;
+    height: 55px;
+    cursor: pointer;
+}
+.footer ul li div span {
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+.clearfix:before, .clearfix:after{
+    content: "";
+    display: table;
+}
+.clearfix:after{
+    clear: both;
+}

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.log.dao.ModifyInfoLogDao">
+    
+	<sql id="tLogDetailColumns">
+		a.id AS "id",
+		a.table_name AS "tableName",
+		a.column_name AS "columnName",
+		a.column_text AS "columnText",
+		a.business_name AS "businessName",
+		a.operation_type AS "operationType",
+		a.old_value AS "oldValue",
+		a.new_value AS "newValue",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.type as type,
+		a.remarks AS "remarks",
+		usecom.company_name AS "companyName",
+		makecom.company_name AS "makeCom",
+		u.name AS "createBy.name"
+	</sql>
+	
+	<sql id="tLogDetailJoins">
+		INNER JOIN sys_user_${sysUserType} u ON u.id = a.create_by
+		LEFT JOIN t_company_1 makecom on makecom.id = a.make_com
+		LEFT JOIN t_company_2 usecom on usecom.id = a.company_name
+	</sql>
+    
+	<select id="get" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyInfoLog">
+		SELECT 
+			<include refid="tLogDetailColumns"/>
+		FROM t_log_detail a
+		<include refid="tLogDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyInfoLog">
+		SELECT 
+			<include refid="tLogDetailColumns"/>
+		FROM t_modify_info_log a
+		<include refid="tLogDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="columnText != null and columnText != ''">
+				AND a.column_text LIKE 
+					<if test="dbName == 'oracle'">'%'||#{columnText}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{columnText}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{columnText},'%')</if>
+			</if>
+			<if test="operationType != null and operationType != ''">
+				AND a.operation_type LIKE 
+					<if test="dbName == 'oracle'">'%'||#{operationType}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{operationType}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{operationType},'%')</if>
+			</if>
+			<if test="companyName != null and companyName != ''">
+				AND usecom.company_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{companyName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{companyName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{companyName},'%')</if>
+			</if>
+			<if test="makeCom != null and makeCom != ''">
+				AND makecom.company_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{makeCom}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{makeCom}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{makeCom},'%')</if>
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND u.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{createBy.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{createBy.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{createBy.id},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				and a.type = #{type}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		order by a.create_date desc
+	</select>
+	
+	<select id="findAllList" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyInfoLog">
+		SELECT 
+			<include refid="tLogDetailColumns"/>
+		FROM t_modify_info_log a
+		<include refid="tLogDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_modify_info_log(
+			id,
+			table_name,
+			column_name,
+			column_text,
+			business_name,
+			operation_type,
+			company_name,
+			old_value,
+			new_value,
+			make_com,
+			create_by,
+			del_flag,
+			remarks,
+			type
+		) VALUES (
+			#{id},
+			#{tableName},
+			#{columnName},
+			#{columnText},
+			#{businessName},
+			#{operationType},
+			#{companyName},
+			#{oldValue},
+			#{newValue},
+			#{makeCom},
+			#{createBy.id},
+			#{delFlag},
+			#{remarks},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_modify_info_log SET
+			table_name = #{tableName},
+			column_name = #{columnName},
+			column_text = #{columnText},
+			business_name = #{businessName},
+			operation_type = #{operationType},
+			company_name = #{companyName},
+			old_value = #{oldValue},
+			new_value = #{newValue},
+			make_com = #{makeCom},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_modify_info_log SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--返回所修改字段名-->
+	<select id="findColComment" parameterType="string" resultType="string">
+		SELECT COLUMN_COMMENT from (
+		SELECT COLUMN_NAME, COLUMN_COMMENT from  information_schema.`COLUMNS` where table_name=#{tableName} and table_schema ='bb' ) as a
+		where COLUMN_NAME=#{s}
+	</select>
+
+	<!--返回修改的表注释-->
+	<select id="findTableComment" parameterType="string" resultType="string">
+		SELECT TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_NAME=#{tableName}  and table_schema ='bb';
+	</select>
+
+	<sql id="modidy_info_base_query">
+		SELECT
+			a.id AS "id",
+			a.table_name AS "tableName",
+			a.column_name AS "columnName",
+			a.column_text AS "columnText",
+			a.business_name AS "businessName",
+			a.operation_type AS "operationType",
+			a.old_value AS "oldValue",
+			a.new_value AS "newValue",
+			a.create_by AS "createBy.id",
+			a.create_date AS "createDate",
+			a.del_flag AS "delFlag",
+			a.type as type,
+			a.company_name as "companyName",
+			a.remarks AS "remarks"
+		FROM
+			t_modify_info_log a
+	</sql>
+
+	<sql id="modidy_info_condition">
+		<where>
+			1 = 1
+			<if test="id != null and id != ''">
+				and a.id = #{id}
+			</if>
+			<if test="type != null and type != ''">
+				and a.type = #{type}
+			</if>
+			<if test="companyName != null and companyName != ''">
+				and a.company_name = #{companyName}
+			</if>
+		</where>
+	</sql>
+
+	<select id="findModifyInfoLog" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyInfoLog" parameterType="com.thinkgem.jeesite.modules.log.entity.ModifyInfoLog">
+		<include refid="modidy_info_base_query" />
+		<include refid="modidy_info_condition" />
+		order by a.id desc
+	</select>
+
+
+</mapper>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>许可证审核详情</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/licence.css">
+    <script language="JavaScript" src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="table-double">
+    <form id="mainform">
+        <div class="mod">
+            <table class="table maintable table-striped table-bordered">
+                <tbody>
+                <tr>
+                    <td>企业名称</td>
+                    <td>
+                        <input name="enterprise_name" id="enterprise_name" type="text" class="form-control readonly"
+                               readonly value="输入企业名称">
+                    </td>
+                    <td>经济性质</td>
+                    <td colspan="3">
+                        <input name="enterprise_name" id="enterprise_nature" type="text" class="form-control readonly"
+                               readonly value="经济性质">
+                    </td>
+                </tr>
+                <tr>
+                    <td>企业地址</td>
+                    <td>
+                        <input id="enterprse_address" type="text" class="form-control readonly" readonly value="输入企业地址">
+                    </td>
+                    <td>经营方式</td>
+                    <td colspan="3">
+                        <input id="enterprise_managementmode" type="text" class="form-control readonly" readonly
+                               value="输入企业经营方式">
+                    </td>
+                </tr>
+                <tr>
+                    <td>主要负责人</td>
+                    <td>
+                        <input type="text" id="mainperson" class="form-control readonly" value="输入企业主要负责人" readonly>
+                    </td>
+                    <td>身份证号码</td>
+                    <td>
+                        <input type="text" id="mainperson-id" class="form-control" value="输入主要负责人身份证号" readonly>
+                    </td>
+                    <td>联系电话</td>
+                    <td>
+                        <input type="text" id="mainperson-phone" class="form-control readonly" value="输入主要负责人联系电话"
+                               readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>治安负责人</td>
+                    <td>
+                        <input type="text" id="securityperson" class="form-control readonly" value="输入治安负责人" readonly>
+                    </td>
+                    <td>身份证号码</td>
+                    <td>
+                        <input type="text" id="securityperson-id" class="form-control readonly" value="输入治安身份证号"
+                               readonly>
+                    </td>
+                    <td>联系电话</td>
+                    <td>
+                        <input type="text" id="securityperson-phone" class="form-control readonly" value="输入治安负责人联系电话"
+                               readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>企业总人数</td>
+                    <td colspan="2">
+                        <input type="text" id="allpeople" class="form-control readonly" value="输入企业总人数" readonly>
+                    </td>
+                    <td>其中特业从业人数</td>
+                    <td colspan="2">
+                        <input type="text" id="specialpeople" class="form-control readonly" value="输入特业从业人数" readonly>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="licence-apply-address">
+                <span>企业所在区域:</span>
+                <select class="region" name="" id="">
+                    <option value="">广东省</option>
+                </select>
+                <select class="region" name="region" id="">
+                    <option value="">珠海市</option>
+                </select>
+                <select class="region" name="region" id="">
+                    <option value="">香洲区</option>
+                </select>
+            </div>
+            <p class="prompt">
+                请上传以下附件，都是必须上传的，不然审批不通过
+            </p>
+            <!--文件上传及照片预览--->
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <td rowspan="11" style="width: 10%;line-height:45px;text-align: center"><strong>附<br>件<br>材<br>料<br>上<br>传</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>《特种行业许可证申请表》</td>
+                    <td>
+                        <input class="addhtml showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>申请报告</td>
+                    <td>
+                        <input class="addhtml showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>工商部门核发的《工商营业执照》副本</td>
+                    <td>
+                        <input class="addhtml showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>经营场地平面图</td>
+                    <td>
+                        <input class="addhtml showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>印章刻制厂（店）拟任法定代表人、个体经营人和从业人员身份证、无犯罪记录证明书（从办理之日起三个月内有效）</td>
+                    <td>
+                        <input class="addhtml showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>符合国家标准的印章刻制机器设备的证明材料</td>
+                    <td>
+                        <input class=" showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>《凭证刻章制度》</td>
+                    <td>
+                        <input class=" showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>《印章刻制管理制度》</td>
+                    <td>
+                        <input class=" showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>《印章登记领取制度》</td>
+                    <td>
+                        <input class=" showimg" type="button" value="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>建设工程竣工验收消防备案受理凭证</td>
+                    <td>
+                        <input class=" showimg" type="button" value="查看">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="form-group">
+        <label for="" class="phone-check-label">评审意见:</label>
+        <input type="text" class="form-control phone-check-input">
+    </div>
+    <div class="form-group" style="width: 40%;text-align: right">
+        <button class="btn btn-default" style="width: 25%;min-width: 70px">通过</button>
+        <button class="btn btn-danger" style="width: 25%;min-width: 70px">不通过</button>
+    </div>
+    <!--模态框-->
+    <div class="modalBox">
+        <div class="overLay"></div>
+        <div class="alertContent" style="overflow:auto;">
+            <img src="images/tmp.png" alt="">
+            <img src="images/tmp.png" alt="">
+        </div>
+    </div>
+</div>
+
+<div style="clear: both"></div>
+
+<script>
+    $(function () {
+        $(".table-left ul li").click(function () {
+            $(this).addClass("select").siblings().removeClass("select");
+            var index = $(this).index();
+            $(".mod").eq(index).show().siblings().hide();
+        })
+        //图片展示
+        $(".showimg").click(function () {
+            $(".modalBox").css("display", "block");
+        })
+        $(".modalBox").click(function () {
+            $(this).css("display", "none");
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>刻制印章</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/engraveseal.css" rel="stylesheet">
+<body>
+<form class="border-box ">
+    <p style="font-size: 16px">
+        <span><strong>当前路径：</strong></span>
+        <span>首页</span>
+        <span>\</span>
+        <span>待刻印章</span>
+        <span>\</span>
+        <span>待刻印章详情</span>
+        <span>\</span>
+        <span>印章刻制</span>
+    </p>
+    <!--表单上方的印章单位基本信息-->
+    <div>
+        <div class="form-group each-input">
+            <label>印章单位：</label>
+            <input type="text" value="中国龙工控股有限公司" onfocus=this.blur(); />
+        </div>
+        <div class="form-group each-input">
+            <label>印章名称：</label>
+            <input type="text" value="中国龙工控股有限公司专用章" onfocus=this.blur(); />
+        </div>
+        <div class="form-group each-input">
+            <label>印章防伪码：</label>
+            <input type="text" value="4000402365" onfocus=this.blur(); />
+        </div>
+    </div>
+    <p class="essentialinformation clo-md-12">印章基本信息</p>
+    <!--印章刻制部分-->
+    <div class="engrave">
+        <!--左边选项部分-->
+        <div class="col-md-6 col-xs-6 col-sm-6 engrave-left">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="list">
+                <li role="presentation" class="active"><a href="#exterior" aria-controls="exterior" role="tab"
+                                                          data-toggle="tab">印章外观</a></li>
+                <li role="presentation"><a href="#outtext" aria-controls="outtext" role="tab"
+                                           data-toggle="tab">环形文字设置</a></li>
+                <li role="presentation"><a href="#intext" aria-controls="intext" role="tab" data-toggle="tab">横排文字设置</a>
+                </li>
+                <li role="presentation"><a href="#Security" aria-controls="Security" role="tab" data-toggle="tab">防伪码设置</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content clearfix">
+                <div role="tabpanel" class="tab-pane active clearfix" id="exterior">
+                    <div class="form-group engrave-left-tab" style="margin-top: 10px">
+                        <label class="col-md-4">印章类型：</label>
+                        <select id="selProvince" onchange="provinceChange()"></select>
+                        <select id="selCity"></select>
+                    </div>
+                    <div id="nofading">
+                    <div class="form-group engrave-left-tab">
+                        <label class="col-md-4">印章文本：</label>
+                        <input id="SealText" type="text" oninput="myFunction()"
+                               placeholder="请在此输入单位名称">
+                    </div>
+                    <div class="form-group engrave-left-tab">
+                        <label class="col-md-4">横排文字：</label>
+                        <input id="SubText" type="text" oninput="myFunction()" placeholder="横排文字">
+                    </div>
+                    <div class="form-group engrave-left-tab">
+                        <label class="col-md-4">下标文字：</label>
+                        <input id="LabelText" type="text" oninput="myFunction()" placeholder="下标文字"/>
+                    </div>
+                    <div class="form-group engrave-left-tab">
+                        <label class="col-md-4">防伪码：</label>
+                        <input id="AntiCode" type="text" oninput="myFunction()" placeholder="防伪码">
+                    </div>
+                    <div class="form-group engrave-left-tab">
+                        <label class="col-md-4">内框图：</label>
+                        <input type="text" placeholder="内刊图">
+                    </div>
+                    </div>
+                    <div id="fading" style="display: none">
+                        <div class="form-group engrave-left-tab">
+                            <label class="col-md-5">法定代表人姓名：</label>
+                            <input id="SealText" type="text" oninput="myFunction()"
+                                   placeholder="请在此输入姓名">
+                        </div>
+                        <div class="form-group engrave-left-tab clearfix">
+                            <label class="col-md-5" style="float: left">文本大小：</label>
+                            <div class="wrapBox">
+                                <div class="spinner">
+                                    <button type="button" class="btn btn-primary" onclick="">-</button>
+                                    <input id="value12" type="text" class="form-control" value="0"
+                                           style="width:70px;display: inline"/>
+                                    <button type="button" class="btn btn-primary" onclick="">+</button>
+                                    <div class="cb"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-3  bottom-btn" style="margin-left:10%;"
+                            onclick="funcRefreshAnti()">刷新防伪线
+                    </button>
+                    <button type="button" class="btn btn-primary col-md-3  bottom-btn" style="margin-left: 30%"
+                            onclick="restar()">重置
+                    </button>
+                </div>
+                <div role="tabpanel" class="tab-pane clearfix" id="outtext">
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">环形文本上下偏移：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SealTxtOffsetUp()">-</button>
+                                <input id="value1" type="text" class="form-control" value="0"
+                                       style="width:70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SealTxtOffsetDown()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">印章字号大小：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SealTxtSizePlus()">-</button>
+                                <input type="text" class="form-control" id="value2" value="0"
+                                       style="width:70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SealTxtSizeMinus()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">印章文本宽度：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SealTxtScalePlus()">-</button>
+                                <input type="text" class="form-control" id="value3" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SealTxtScaleMinus()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">印章文本角度：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SealTxtAnglePlus()">-</button>
+                                <input type="text" class="form-control" id="value4" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SealTxtAngleMinus()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="intext">
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">横排文本偏移：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SubTxtOffsetDown()">-</button>
+                                <input type="text" class="form-control" id="value5" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SubTxtOffsetUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">横排文本大小：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SubTxtSizeDown()">-</button>
+                                <input type="text" class="form-control" id="value6" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SubTxtSizeUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">横排文本宽度：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="SubTxtScaleDown()">-</button>
+                                <input type="text" class="form-control" id="value7" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="SubTxtScaleUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="Security">
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">字体大小：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtSizeDown()">-</button>
+                                <input type="text" class="form-control" id="value8" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtSizeUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">字体宽度：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtScaleDown()">-</button>
+                                <input type="text" class="form-control" id="value9" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtScaleUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix">
+                        <label class="col-md-5" style="float: left">上下偏移：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtOffsetDown()">-</button>
+                                <input type="text" class="form-control" id="value10" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtOffsetUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group engrave-left-tab clearfix" id="angle">
+                        <label class="col-md-5" style="float: left">角度：</label>
+                        <div class="wrapBox">
+                            <div class="spinner">
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtAngleDown()">-</button>
+                                <input type="text" class="form-control" id="value11" value="0"
+                                       style="width: 70px;display: inline"/>
+                                <button type="button" class="btn btn-primary" onclick="CodeTxtAngleUp()">+</button>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6 engrave-right">
+            <p>印章外观预览</p>
+            <!--<OBJECT CLASSID="CLSID:D2A20FFC-5207-434A-961E-79FCEA493433"-->
+                    <!--ID="SealDraw" style="width: 100%;height: 90%">-->
+            <!--</OBJECT>-->
+        </div>
+    </div>
+    <div class="foot">
+        <div style="display: none">
+            <label class="col-md-2" for="SealExport1">导出红色：</label>
+            <input type="text" class="col-md-6 form-control" id="SealExport1" value="c:/seal1.png"/>
+            <label class="col-md-2" for="SealExport2">导出黑白：</label>
+            <input type="text" class="col-md-6 form-control" id="SealExport2" value="c:/seal2.png"/>
+        </div>
+
+        <div class="row">
+            <button type="button" class="btn btn-default col-md-4" style="margin-left: 10%">
+                写入芯片
+            </button>
+            <button type="button" class="btn btn-default col-md-4" style="margin-left: 13%" onclick="funcExportblack()">
+                导出印模
+            </button>
+        </div>
+        <div style="margin: 10px 0 0 10% " class="file-box">
+            <input type='text' name='textfield' id='textfield' class='txt'/>
+            <input type='button' class='file-btn' value='浏览...'/>
+            <input type="file" name="fileField" class="file" size="28" onchange=
+            "document.getElementById('textfield').value = this.value" />
+        </div>
+        <button id="btn-finish" type="button" class="btn btn-primary col-md-4 bottom-btn" onclick="disp_confirm()"
+                style="margin-left: 33%">提交备案
+        </button>
+    </div>
+</form>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/engraveseal.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/makeSeal.js"></script>
+<script src="js/rangeslider.min.js"></script>
+<script>
+    function disp_confirm() {
+        var r = confirm("确认提交吗？");
+        if (r == true) {
+            this.location = "seal-finish.html";
+        }
+        else {
+        }
+    }
+</script>
+
+<script>
+    $(function () {
+        $('.spinner').spinner();
+        $(".input-group input:text").css("border", "none");
+        $("#btn-finish").click(function () {
+            alert("提交备案成功！");
+            window.parent.activechange();
+        })
+    })
+</script>
+<script>
+    var newSealText = document.getElementById("SealText").value;
+    var newSubText = document.getElementById("SubText").value;
+    var newLabelText = document.getElementById("LabelText").value;
+    var newAntiFakeCode = document.getElementById("AntiCode").value;
+    function restar(){
+        var obj = document.getElementById("SealDraw");
+        obj.SealText = newSealText;
+        obj.SubText = newSubText;
+        obj.LabelText = newLabelText;
+        obj.AntiFakeCode = newAntiFakeCode;
+    }
+    function myFunction() {
+        var obj = document.getElementById("SealDraw");
+
+        var SealText = document.getElementById("SealText").value;
+        var SubText = document.getElementById("SubText").value;
+        var LabelText = document.getElementById("LabelText").value;
+        var AntiFakeCode = document.getElementById("AntiCode").value;
+
+        obj.SealText = SealText;
+        obj.SubText = SubText;
+        obj.LabelText = LabelText;
+        obj.AntiFakeCode = AntiFakeCode;
+    }
+
+    function funcRefreshAnti() {
+        var obj = document.getElementById("SealDraw");
+        obj.RefreshAntiFakeLine();
+    }
+
+    function funcAntiText() {
+        var obj = document.getElementById("SealDraw");
+        var chk = document.getElementById("IsAntiText");
+        obj.IsAntiFakeText = chk.checked;
+    }
+
+    function funcExport() {
+        var obj = document.getElementById("SealDraw");
+        var path = document.getElementById("SealExport1").value;
+        obj.ExportSealEx(path, false);
+    }
+    function funcExportblack() {
+        var obj = document.getElementById("SealDraw");
+        var path = document.getElementById("SealExport2").value;
+        obj.ExportSealEx(path, true);
+    }
+
+    function SealTxtOffsetUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtOffset = obj.Adj_SealTxtOffset + 0.1;
+        document.getElementById("value1").value = obj.Adj_SealTxtOffset.toFixed(2);
+    }
+
+    function SealTxtOffsetDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtOffset = obj.Adj_SealTxtOffset - 0.1;
+        document.getElementById("value1").value = obj.Adj_SealTxtOffset.toFixed(2);
+    }
+
+
+    function SealTxtSizePlus() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtSize = obj.Adj_SealTxtSize - 1;
+        document.getElementById("value2").value = obj.Adj_SealTxtSize.toFixed(2);
+    }
+
+    function SealTxtSizeMinus() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtSize = obj.Adj_SealTxtSize + 1;
+        document.getElementById("value2").value = obj.Adj_SealTxtSize.toFixed(2);
+    }
+    function SealTxtScalePlus() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtScale = obj.Adj_SealTxtScale - 0.2;
+        document.getElementById("value3").value = obj.Adj_SealTxtScale.toFixed(2);
+    }
+
+    function SealTxtScaleMinus() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtScale = obj.Adj_SealTxtScale + 0.2;
+        document.getElementById("value3").value = obj.Adj_SealTxtScale.toFixed(2);
+    }
+    function SealTxtAnglePlus() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtAngle = obj.Adj_SealTxtAngle - 3;
+        document.getElementById("value4").value = obj.Adj_SealTxtAngle.toFixed(2);
+    }
+
+    function SealTxtAngleMinus() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtAngle = obj.Adj_SealTxtAngle + 3;
+        document.getElementById("value4").value = obj.Adj_SealTxtAngle.toFixed(2);
+    }
+    //设置横排文字的上下偏移
+    function SubTxtOffsetUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtOffset = obj.Adj_SealTxtOffset + 0.1;
+        document.getElementById("value5").value = obj.Adj_SealTxtOffset.toFixed(2);
+    }
+    function SubTxtOffsetDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtOffset = obj.Adj_SealTxtOffset - 0.1;
+        document.getElementById("value5").value = obj.Adj_SealTxtOffset.toFixed(2);
+    }
+    //设置横排文字的字号大小
+    function SubTxtSizeUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtSize = obj.Adj_SealTxtSize + 1;
+        document.getElementById("value6").value = obj.Adj_SealTxtSize.toFixed(2);
+    }
+    function SubTxtSizeDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtSize = obj.Adj_SealTxtSize - 1;
+        document.getElementById("value6").value = obj.Adj_SealTxtSize.toFixed(2);
+    }
+    //设置横排文字的字体宽度
+    function SubTxtScaleUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtScale = obj.Adj_SealTxtScale + 0.2;
+        document.getElementById("value7").value = obj.Adj_SealTxtScale.toFixed(2);
+    }
+    function SubTxtScaleDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_SealTxtScale = obj.Adj_SealTxtScale - 0.2;
+        document.getElementById("value7").value = obj.Adj_SealTxtScale.toFixed(2);
+    }
+    //设置防伪编码的字号大小
+    function CodeTxtSizeUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtSize = obj.Adj_CodeTxtSize + 1;
+        document.getElementById("value8").value = obj.Adj_SealTxtOffset.toFixed(2);
+    }
+    function CodeTxtSizeDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtSize = obj.Adj_CodeTxtSize - 1;
+        document.getElementById("value8").value = obj.Adj_SealTxtOffset.toFixed(2);
+    }
+    //设置防伪编码的字体宽度
+    function CodeTxtScaleUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtScale = obj.Adj_CodeTxtScale + 0.2;
+        document.getElementById("value9").value = obj.Adj_CodeTxtScale.toFixed(2);
+    }
+    function CodeTxtScaleDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtScale = obj.Adj_CodeTxtScale - 0.2;
+        document.getElementById("value9").value = obj.Adj_CodeTxtScale.toFixed(2);
+    }
+    //设置防伪编码的上下偏移
+    function CodeTxtOffsetUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtOffset = obj.Adj_CodeTxtOffset - 0.1;
+        document.getElementById("value10").value = obj.Adj_CodeTxtOffset.toFixed(2);
+    }
+    function CodeTxtOffsetDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtOffset = obj.Adj_CodeTxtOffset - 0.1;
+        document.getElementById("value10").value = obj.Adj_CodeTxtOffset.toFixed(2);
+    }
+    //设置防为编码文字的角度
+    function CodeTxtAngleUp() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtAngle = obj.Adj_CodeTxtAngle - 3;
+        document.getElementById("value11").value = obj.Adj_CodeTxtAngle.toFixed(2);
+    }
+    function CodeTxtAngleDown() {
+        var obj = document.getElementById("SealDraw");
+        obj.Adj_CodeTxtAngle = obj.Adj_CodeTxtAngle - 3;
+        document.getElementById("value11").value = obj.Adj_CodeTxtAngle.toFixed(2);
+    }
+    function sealType() {
+        var select = document.getElementById("SealType");
+        var index = select.selectedIndex;
+        var n = select.options[index].value;
+        var obj = document.getElementById("SealDraw");
+        obj.SealType = n;
+    }
+
+    var obj = document.getElementById("SealDraw");
+
+    //alert(obj.SealText + "\n"  + obj.Iconograph + "\n" + obj.SubText + "\n" + obj.AntiFakeCode)
+    document.getElementById("SealText").value = obj.SealText;
+    document.getElementById("SubText").value = obj.SubText;
+    document.getElementById("AntiCode").value = obj.AntiFakeCode;
+    document.getElementById("LabelText").value = obj.LabelText;
+    document.getElementById("Font").value = obj.SealTextFont;
+
+    document.getElementById("SealExport").value = "c:\\seal.png";
+
+
+</script>
+<script>
+    $(function () {
+        var $document = $(document);
+        var selector = '[data-rangeslider]';
+        var $inputRange = $(selector);
+
+        // Example functionality to demonstrate a value feedback
+        // and change the output's value.
+        function valueOutput(element) {
+            var value = element.value;
+            var output = element.parentNode.getElementsByTagName('output')[0];
+            output.innerHTML = value;
+        }
+
+        // Initial value output
+        for (var i = $inputRange.length - 1; i >= 0; i--) {
+            valueOutput($inputRange[i]);
+        }
+
+        // Update value output
+        $document.on('input', selector, function (e) {
+            valueOutput(e.target);
+
+        });
+
+        // Initialize the elements
+        $inputRange.rangeslider({
+            polyfill: false
+        });
+
+        // Example functionality to demonstrate programmatic value changes
+        $document.on('click', '#js-example-change-value button', function (e) {
+            var $inputRange = $('input[type="range"]', e.target.parentNode);
+            var value = $('input[type="number"]', e.target.parentNode)[0].value;
+
+            $inputRange
+                    .val(value)
+                    .change();
+        });
+
+        // Example functionality to demonstrate programmatic attribute changes
+        $document.on('click', '#js-example-change-attributes button', function (e) {
+            var $inputRange = $('input[type="range"]', e.target.parentNode);
+            var attributes = {
+                min: $('input[name="min"]', e.target.parentNode)[0].value,
+                max: $('input[name="max"]', e.target.parentNode)[0].value,
+                step: $('input[name="step"]', e.target.parentNode)[0].value
+            };
+
+            $inputRange
+                    .attr(attributes)
+                    .rangeslider('update', true);
+        });
+
+        // Example functionality to demonstrate destroy functionality
+        $document
+                .on('click', '#js-example-destroy button[data-behaviour="destroy"]', function (e) {
+                    $('input[type="range"]', e.target.parentNode).rangeslider('destroy');
+                })
+                .on('click', '#js-example-destroy button[data-behaviour="initialize"]', function (e) {
+                    $('input[type="range"]', e.target.parentNode).rangeslider({polyfill: false});
+                });
+    });
+
+</script>
+</body>
+</html>

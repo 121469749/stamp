@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.log.dao.ModifyCompanyAttachmentDao">
+
+	<sql id="modifyCompanyAttachmentColumns">
+		a.id AS "id",
+		a.company_id AS "companyId",
+		a.attachs AS "attachs",
+		a.company_type AS "companyType",
+		a.agent_name AS "agentName",
+		a.create_date AS "createDate",
+		a.agent_phone AS "agentPhone",
+		a.agent_cert_type AS "agentCertType",
+		a.agent_cert_code AS "agentCertCode",
+		a.modify_reason as "modifyReason"
+	</sql>
+
+	<sql id="modifyCompanyAttachmentJoins">
+	</sql>
+
+	<select id="get" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyCompanyAttachment">
+		SELECT
+		<include refid="modifyCompanyAttachmentColumns"/>
+		FROM t_modify_company_attachment a
+		<include refid="modifyCompanyAttachmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyCompanyAttachment" parameterType="com.thinkgem.jeesite.modules.log.entity.ModifyCompanyAttachment">
+		SELECT
+		<include refid="modifyCompanyAttachmentColumns"/>
+		FROM t_modify_company_attachment a
+		<include refid="modifyCompanyAttachmentJoins"/>
+		<where>
+			1 = 1
+			<if test="company != null and company.id != null and company.id != ''">
+				and a.company_id = #{company.id}
+			</if>
+			<if test="id != null and id != ''">
+				and a.id = #{id}
+			</if>
+		</where>
+	  	order by id desc
+	</select>
+
+	<select id="findAllList" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyCompanyAttachment">
+		SELECT
+		<include refid="modifyCompanyAttachmentColumns"/>
+		FROM t_modify_company_attachment a
+		<include refid="modifyCompanyAttachmentJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true"  keyProperty="id" keyColumn="id" >
+		INSERT INTO t_modify_company_attachment(
+		company_id,
+		attachs,
+		company_type,
+		agent_name,
+		create_date,
+		agent_phone,
+		agent_cert_type,
+		agent_cert_code,
+		modify_reason
+		) VALUES (
+		#{company.id},
+		#{attachs},
+		#{companyType},
+		#{agentName},
+		#{createDate},
+		#{agentPhone},
+		#{agentCertType},
+		#{agentCertCode},
+		#{modifyReason}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE t_modify_company_attachment SET
+		company_id = #{company.id},
+		attachs = #{attachs},
+		company_type = #{companyType},
+		agent_name = #{agentName},
+		agent_phone = #{agentPhone},
+		agent_cert_type = #{agentCertType},
+		agent_cert_code = #{agentCertCode},
+		modify_reason = #{modifyReason}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM t_modify_company_attachment
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findModifyCompanyAttachment" resultType="com.thinkgem.jeesite.modules.log.entity.ModifyCompanyAttachment">
+		SELECT
+			a.id AS "id",
+			a.attachs AS "attachs",
+			a.company_type AS "companyType",
+			a.agent_name AS "agentName",
+			a.create_date AS "createDate",
+			a.agent_phone AS "agentPhone",
+			a.agent_cert_type AS "agentCertType",
+			a.agent_cert_code AS "agentCertCode",
+			a.modify_reason as "modifyReason",
+			com.id as "company.id",
+			com.company_Name AS "company.companyName",
+			com.legal_Name AS "company.legalName",
+			com.legal_certType AS "company.legalCertType",
+			com.legal_certCode AS "company.legalCertCode",
+			com.legal_Phone AS "company.legalPhone",
+			com.comp_address AS "company.compAddress",
+			com.sole_code AS "company.soleCode",
+			com.type1 AS "company.type1"
+		FROM
+			t_modify_company_attachment a
+		LEFT JOIN t_company_2 com ON a.company_id = com.id
+			WHERE
+				a.ID = #{id}
+	</select>
+
+
+
+
+</mapper>

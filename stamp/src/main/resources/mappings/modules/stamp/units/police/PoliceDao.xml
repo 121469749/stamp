@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.police.PoliceDao">
+    
+	<sql id="policeColumns">
+		a.id AS "id",
+		a.police_code AS "policeCode",
+		a.area_id AS "area.id",
+		a.principal AS "principal",
+		a.address AS "address",
+		a.phone AS "phone",
+		a.postcode AS "postCode",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a2.name AS "area.name",
+		a2.parent_id AS "area.parent.id",
+    	a2.parent_ids AS "area.parentIds",
+    	a2.type AS "area.type"
+	</sql>
+
+
+
+	<sql id="policeJoins">
+		LEFT JOIN sys_area a2 ON a2.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="Police">
+		SELECT 
+			<include refid="policeColumns"/>
+		FROM t_police a
+		<include refid="policeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByArea" resultType="Police">
+		SELECT
+		<include refid="policeColumns"/>
+		FROM t_police a
+		<include refid="policeJoins"/>
+		WHERE a.area_id = #{area.id}
+	</select>
+	
+	<select id="findList" resultType="Police">
+		SELECT 
+			<include refid="policeColumns"/>
+		FROM t_police a
+		<include refid="policeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="area!=null">
+				AND	a.area_id=#{area.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Police">
+		SELECT 
+			<include refid="policeColumns"/>
+		FROM t_police a
+		<include refid="policeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_police(
+			id,
+			police_code,
+			area_id,
+			principal,
+			address,
+			phone,
+			postcode,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{policeCode},
+			#{area.id},
+			#{principal},
+			#{address},
+			#{phone},
+			#{postCode},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_police SET 	
+			area_id = #{area.id},
+			principal = #{principal},
+			address = #{address},
+			phone = #{phone},
+			postcode = #{postCode},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_police SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findPoliceByAreas" resultType="Police">
+		SELECT
+		a.id AS "id",
+		a.area_id AS "area.id",
+		a.principal AS "principal",
+		a.address AS "address",
+		a.phone AS "phone",
+		a.postcode AS "postCode",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		FROM t_police a
+		<where>
+			<if test="size != 0">
+				(
+				<foreach collection="list" separator="or" item="item">
+					a.area_id = #{item.id}
+				</foreach>
+				)
+			</if>
+		</where>
+	</select>
+
+	<select id="countPoliceArea" parameterType="Police" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM t_police a
+		<where>
+			a.area_id = #{area.id}
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+
+</mapper>

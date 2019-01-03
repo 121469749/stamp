@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamprecord.StampOperationDao">
+
+    <sql id="stampOperationColumns">
+        a.id AS "id",
+        a.stamp_id AS "stamp.id",
+        a.user_id AS "user.id",
+        a.apply_username AS "applyUsername",
+        a.opr_type AS "operaType",
+        a.use_date AS "useDate",
+        a.remarks AS "remarks",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id"
+    </sql>
+
+    <sql id="stampJoins">
+        LEFT JOIN t_stamp_${stamp.stampShape} s ON a.stamp_id = s.id
+        LEFT JOIN sys_user_${user.userType.key} u ON a.user_id = u.id
+    </sql>
+
+    <sql id="stampJoinsColumns">
+        s.stamp_name AS "stamp.stampName",
+        s.stamp_shape AS "stamp.stampShape",
+        s.stamp_texture AS "stamp.stampTexture",
+        s.stamp_type AS "stamp.stampType",
+        u.name AS "user.name"
+    </sql>
+
+
+    <insert id="insert" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampOperation">
+        INSERT INTO t_stampopr_${stamp.stampShape}(
+            stamp_id,
+            user_id,
+            apply_username,
+            opr_type,
+            use_date,
+            remarks,
+            create_date,
+            create_by
+        ) VALUES (
+            #{stamp.id},
+            #{user.id},
+            #{applyUsername},
+            #{operaType},
+            #{useDate},
+            #{remarks},
+            #{createDate},
+            #{createBy.id}
+        )
+    </insert>
+
+    <!-- 根据 印章ID 查询印章使用历史 -->
+    <select id="findOperation" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampOperation"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampOperation">
+        SELECT
+            <include refid="stampOperationColumns"/>,
+            <include refid="stampJoinsColumns"/>
+        FROM t_stampopr_${stamp.stampShape} a
+        <include refid="stampJoins"/>
+        WHERE stamp_id = #{stamp.id}
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                AND a.user_id = #{user.id}
+            </if>
+        </if>
+        ORDER BY a.create_date DESC
+    </select>
+
+    <!-- 根据印章类型（物理、电子）查询盖章列表 -->
+    <select id="findUseHistoryByShape" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampOperation">
+        SELECT
+          <include refid="stampOperationColumns"/>,
+          <include refid="stampJoinsColumns"/>
+        FROM t_stampopr_${stamp.stampShape} a
+          <include refid="stampJoins"/>
+        WHERE u.userTypeId = #{stamp.useComp.id}
+        AND a.create_date BETWEEN #{beginDate} AND #{endDate}
+        AND s.stamp_shape = #{stamp.stampShape}
+        <if test="stamp != null">
+            <if test="stamp.stampName != null and stamp.stampName != ''">
+                AND s.stamp_name LIKE concat(concat('%', #{stamp.stampName}), '%')
+            </if>
+        </if>
+        ORDER BY a.create_date DESC
+    </select>
+</mapper>

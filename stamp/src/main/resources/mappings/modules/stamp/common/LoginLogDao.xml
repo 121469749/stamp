@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.common.LoginLogDao">
+    <sql id="loginLogColumns">
+        a.id AS "id",
+        a.login_name AS "loginName",
+        a.ip AS "ip",
+        a.login_date AS "loginDate",
+        a.login_status AS "loginStatus",
+        a.reason AS "reason",
+        a.user_type AS "userType",
+        a.user_id AS "userId",
+        a.type AS "loginType"
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO t_login_log(
+        id,
+        login_name,
+        ip,
+        login_date,
+        login_status,
+        reason,
+        user_type,
+        user_id,
+            type
+        ) VALUES (
+        #{id},
+        #{loginName},
+        #{ip},
+        #{loginDate},
+        #{loginStatus},
+        #{reason},
+        #{userType},
+        #{userId},
+        #{loginType}
+        )
+    </insert>
+
+
+    <select id="findList" resultType="LoginLog">
+        SELECT
+        <include refid="loginLogColumns"/>
+        FROM t_login_log a
+        <where>
+            <if test="loginName !=null and loginName !=''">
+                AND a.login_name LIKE CONCAT('%', #{loginName}, '%')
+            </if>
+            <if test="userType !=null">
+                AND a.user_type = #{userType}
+            </if>
+        </where>
+
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.login_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

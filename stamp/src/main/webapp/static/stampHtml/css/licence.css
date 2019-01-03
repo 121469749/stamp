@@ -1,0 +1,132 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    min-width: 580px;
+
+}
+label{
+    color: red;
+}
+a,a:hover,a:link,a:active{
+    text-decoration: none;
+}
+.table-double{
+    width: 80%;
+    margin: 20px auto;
+}
+.table-left{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    list-style: none;
+}
+.table-left ul li{
+    width: 33%;
+    height: 30px;
+    float: left;
+    list-style: none;
+    border: 1px solid #eee;
+}
+.select{
+    background-color: #dcdcdc;
+}
+.region{
+    width: 10%;
+    height: 25px;
+    line-height: 25px;
+    margin-bottom: 20px;
+}
+.maintable{
+
+}
+.table-left ul li a{
+    display: block;
+    line-height: 30px;
+    text-align: center;
+    text-decoration: none;
+}
+.table-right{
+    width: 99%;
+
+    float: left;
+}
+.prompt{
+    margin-bottom: 20px;
+}
+.upload{
+    width: 100px;
+    margin: 0 10%;
+}
+.addhtml{
+    width: 70%;
+
+    margin: 0 10%;
+}
+.readonly{
+    border:none;
+}
+.showimg{
+}
+/*模态框样式*/
+.modalBox {
+    display: none;
+}
+.overLay {
+    position: absolute;/*这里的定位方式使用fixed能保证遮罩层百分百的覆盖整个窗口*/
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+}
+.alertContent {
+    width: 60%;
+    max-width: 1000px;
+    max-height: 800px;
+    margin: 0 auto;
+    position: absolute;
+    background-color: #ffffff;
+    top: 10px;
+    left: 20%;
+}
+.upload-modal{
+    padding: 15px;
+    border-radius: 10px;
+}
+/**模态框样式结束**/
+.phone-check{
+    width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.phone-check-input{
+    width: 20%;
+}
+.phone-check-label{
+    width: 20%;
+    text-align: right;
+    color: #353535;
+}
+.form-control{
+    display: inline;
+}
+.all-part{
+    width: 70%;
+    margin: 20px auto;
+}
+.left-part{
+    /*width: 30%;*/
+    float: left;
+    border: 1px solid #eee;
+}
+.right-part{
+    float: left;
+    width: 70%;
+}
+.clearfix{
+    margin-bottom: 10px;
+    min-width: 300px;
+}

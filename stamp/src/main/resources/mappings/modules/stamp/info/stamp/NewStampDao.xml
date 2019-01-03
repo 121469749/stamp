@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamp.NewStampDao">
+
+    <update id="bindPhyForEle" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_2 SET
+          bind_stamp = #{bindStamp.id}
+        WHERE id=#{id}
+    </update>
+
+    <update id="bindEleForPhy" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_1 SET
+          bind_stamp = #{bindStamp.id}
+        WHERE id=#{id}
+    </update>
+
+
+    <sql id="stampColumns">
+        a.id AS "id",
+        a.use_comp AS "useComp.id",
+        a.make_comp AS "makeComp.id",
+        a.now_comp AS "nowMakeComp.id",
+        a.record_id AS "lastRecord.id",
+        a.stamp_name AS "stampName",
+        a.allow_usenum AS "allowUseNum",
+        a.stamp_state AS "stampState",
+        a.use_state AS "useState",
+        a.sys_state AS "sysState",
+        a.laststate_by AS "lastStateBy.id",
+        a.laststate_date AS "lastStateDate",
+        a.stamp_type as "stampType",
+        a.stamp_texture AS "stampTexture",
+        a.stamp_subtype AS "stampSubType",
+        a.record_date AS "recordDate",
+        a.make_date AS "makeDate",
+        a.delivery_date AS "deliveryDate",
+        a.stamp_shape AS "stampShape",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.livePhoto AS "livePhoto",
+        a.recordPhoto AS "recordPhoto",
+        a.remarks AS "remarks",
+        a.shape_id AS "stampShapeId",
+        a.ele_model AS "eleModel",
+        a.phy_model AS "phyModel",
+        a.record_state AS "recordState",
+        a.del_flag AS "delFlag",
+        a.stamp_code AS "stampCode",
+        a.make_money AS "makeMoney",
+        a.city_money AS "cityMoney",
+        a.rc_money AS "rcMoney",
+        a.province_money AS "provinceMoney"
+    </sql>
+
+
+    <select id="findDependPhyStamps" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_1 a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            And a.bind_stamp IS NULL
+            <!--枚举属性 start-->
+            <if test="stampState !=null">
+                AND a.stamp_state=#{stampState}
+            </if>
+
+            <if test="useState != null">
+                AND a.use_state=#{useState}
+            </if>
+
+            <if test="sysState != null ">
+                AND a.sys_state=#{sysState}
+            </if>
+
+            <if test="useComp !=null ">
+                <if test="useComp.id !=null and useComp.id !=''">
+                    AND a.use_comp = #{useComp.id}
+                </if>
+            </if>
+
+            <if test="stampType != null and stampType !=''">
+                AND a.stamp_type = #{stampType}
+            </if>
+
+        </where>
+    </select>
+
+
+    <update id="rollBackStampState" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape}
+        SET
+          stamp_state =#{stampState}
+        WHERE id=#{id}
+    </update>
+
+</mapper>

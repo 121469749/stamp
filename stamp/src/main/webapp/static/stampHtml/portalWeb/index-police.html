@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <!-- ie渲染-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <title>中国标准电子印章服务平台</title>
+    <link rel="stylesheet" href="../css/portalWeb_style.css"/>
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#for-l1").click(function(){
+                $(".list ul li a").removeClass("list-active");
+                $(this).addClass("list-active");
+                $(".text ul li").hide();
+                $("#l1").show();
+            });
+            $("#for-l2").click(function(){
+                $(".list ul li a").removeClass("list-active");
+                $(this).addClass("list-active");
+                $(".text ul li").hide();
+                $("#l2").show();
+            });
+        })
+    </script>
+</head>
+<body>
+<div class="header">
+    <div style="height: 95px"><img src="../images/bg.png" alt=""/></div>
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="index-use.html">用章单位</a></li>
+            <li><a href="index-makestamp.html">刻章点</a></li>
+            <li><a class="active" href="#">公安部门</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    <div class="login">
+        <form action="">
+            <div class="login-role">
+                <label>公安部门用户登录</label>
+            </div>
+            <div class="login-user">
+                <label>用户名：<input type="text"/></label><br>
+                <label>密&nbsp;码：<input type="password"/></label>
+            </div>
+            <div class="login-btn">
+                <button type="submit">密码登录</button>
+                <button type="submit">证书登录</button>
+            </div>
+        </form>
+    </div>
+    <div class="message">
+        <div class="list">
+            <ul>
+                <li><a class="list-active" href="#" id="for-l1">公安部门管理条例</a></li>
+                <li><a href="#" id="for-l2">常见问题列表</a></li>
+            </ul>
+        </div>
+        <div class="text">
+            <ul>
+                <li id="l1"><p>公安部门管理条例</p></li>
+                <li id="l2" style="display: none"><p>常见问题列表</p></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

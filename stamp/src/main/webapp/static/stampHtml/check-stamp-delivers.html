@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>印章刻制查看</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/myCss.css">
+    <style type="text/css">
+        @media print {
+            #ext-table, #print-btn {
+                display: none;
+            }
+
+            .curroute {
+                display: none;
+            }
+        }
+
+        body {
+            padding: 0 2%;
+            font-family: "微软雅黑";
+        }
+
+        /*隐藏滚动条*/
+        body::-webkit-scrollbar {
+            display: none
+        }
+
+        th {
+            text-align: center;
+        }
+
+        #tbody tr td input {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: rgba(0, 0, 0, 0);
+        }
+
+        th img {
+            width: 22px;
+            height: 22px;
+            display: none;
+        }
+
+        .opacity {
+            background: rgba(0, 0, 0, 0);
+            border: none;
+            box-shadow: none;
+            text-align: center;
+        }
+
+        #seal-type {
+            width: 75%;
+            float: left;
+        }
+
+        .seal-pic {
+            width: 200px;
+            height: 200px;
+            margin-right: 2%;
+            margin-bottom: 20px;
+            float: right;
+            border: 1px solid #eee;
+        }
+
+        @media print {
+            .noprint {
+                display: none;
+            }
+            #seal-type {
+                width: 500px;
+            }
+            .seal-pic {
+                width: 150px;
+                height: 150px;
+            }
+            .longlong {
+                min-width: 300px;
+            }
+            body {
+                color: #000;
+                background: #fff;
+            }
+            table tr td {
+                border: 1px solid black !important;
+            }
+            table tr th {
+                border: 1px solid black !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="panel-head noprint">
+        <p class="curroute" style="font-size: 18px">
+            <span><strong>当前路径：</strong></span>
+            <span>首页</span>
+            <span>\</span>
+            <span>交付印章</span>
+            <span>\</span>
+            <span>交付印章详情</span>
+        </p>
+        <b><span class="fa fa-address-book-o"></span>
+            &nbsp;印章刻制查看</b>
+        <span style="float: right">
+            登记时间：<span id="cur-time" style="margin-right: 50px">2017.04.17</span>
+            刻制时间：<span id="seal-time" style="margin-right: 50px">2017.04.17</span>
+            业务流水号：<span>00715626X10Z24030011612007000</span>
+        </span>
+    </div>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>企业名称<img src="images/correct.png"></th>
+            <td><input class="longlong" id="unit-name" type="text" name="info" value="" placeholder="中国龙工控股有限公司" onfocus=this.blur()></td>
+            <th>企业类型<img src="images/correct.png"></th>
+            <td><input id="unit-kind" type="text" placeholder="采矿业" value="" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>企业统一社会信用代码<img src="images/correct.png"></th>
+            <td colspan="3"><input id="unit-code" type="text" name="info" value="" placeholder="4400008546" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>企业地址<img src="images/correct.png"></th>
+            <td colspan="3"><input id="unit-address" type="text" name="info" value="" placeholder="广东省珠海市" onfocus=this.blur()></td>
+        </tr>
+        <th>法人姓名<img src="images/correct.png"></th>
+        <td><input id="legal-name" type="text" name="info" value="" placeholder="郑浩澜" onfocus=this.blur()></td>
+        <th>法人联系电话<img src="images/correct.png"></th>
+        <td><input id="legal-contact" type="tel" name="info" value="" placeholder="13765651234" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>法人证件号码<img src="images/correct.png"></th>
+            <td>
+                <input id="legal-type1" type="text" name="info" value="" placeholder="326589566659688745" onfocus=this.blur()>
+            </td>
+            <td colspan="2"><input id="legal-id" type="text" name="info" value="" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>经办人姓名<img src="images/correct.png"></th>
+            <td><input id="operator-name" type="text" name="info" value="" placeholder="郑浩澜" onfocus=this.blur()></td>
+            <th>经办人联系电话<img src="images/correct.png"></th>
+            <td><input id="operator-contact" type="tel" name="info" value="" placeholder="13765651234" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>经办人证件号码<img src="images/correct.png"></th>
+            <td>
+                <input id="legal-type2" type="text" name="info" value="" placeholder="二代身份证" onfocus=this.blur()>
+            </td>
+            <td colspan="2"><input id="operator-id" type="text" name="info" value="" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>登记时间<img src="images/correct.png"></th>
+            <td colspan="3"><input id="register-time" type="text" name="info" value="" placeholder="2017/4/24" onfocus=this.blur()></td>
+        </tr>
+        <tr>
+            <th>刻章时间<img src="images/correct.png"></th>
+            <td colspan="3"><input id="stamp-time" type="text" name="info" value="" placeholder="2017/4/24" onfocus=this.blur()></td>
+        </tr>
+    </table>
+    <table id="seal-type" class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th width="30%">刻章种类</th>
+            <th>章型</th>
+            <th>章材</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        <tr>
+            <th>1</th>
+            <td>
+                <input id="legal-seals" type="text" name="info" value="" placeholder="财务专用章" onfocus=this.blur()>
+            </td>
+            <td><input type="text" name="info" value="" placeholder="物理印章" onfocus=this.blur()></td>
+            <td><input type="text" name="info" value="" placeholder="牛角印章" onfocus=this.blur()></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="seal-pic">
+        <img src="images/stamp.png" width="100%" height="100%">
+    </div>
+    <table id="ext-table" class="table table-striped table-bordered noprint">
+        <tr>
+            <td rowspan="6" style="width: 10%;line-height:45px;text-align: center"><strong>附<br>件<br>材<br>料<br>上<br>传</strong></td>
+        </tr>
+        <tr>
+            <td>委托书（单位法人手签名并在名字上盖右手食指印模）</td>
+            <td>（已上传）</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">查看</button>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>工商营业执照副本复印件</strong>（法人在复印件上注明“此复印件与原件一致”，并在手签名处，盖右手食指印模、写时间）</td>
+            <td>（已上传）</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">查看</button>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>法人身份证复印件</strong>（法人在复印件上注明“此复印件与原件一致”、并在手签名处，盖右手食指印模、写时间）</td>
+            <td>（已上传）</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">查看</button>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>经办人身份证复印件</strong>(经办人在身份证复印件上注明“此复印件与原件一致”、并在手签名处，盖右手食指印模、写时间）</td>
+            <td>（已上传）</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">查看</button>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>其它材料</strong></td>
+            <td>无</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">查看</button>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>印章名称</th>
+            <td width="25%"><input id="stamp-name" type="text" name="info" value="" onfocus=this.blur()></td>
+            <th width="25%">印章盖章</th>
+            <th width="25%">制章点盖章</th>
+        </tr>
+        <tr>
+            <th style="line-height: 150px">经办人签名<br></th>
+            <td><input id="operator-sign" type="text" name="info" value="" onfocus=this.blur()></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+</div>
+<!--模态框-->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content opacity">
+            <div class="modal-header" style="border: 0;padding-right: 10%">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><img src="images/close.png"></span></button>
+            </div>
+            <img src="images/tmp.png" style="width: 70%;height: auto">
+        </div>
+    </div>
+</div>
+<div class="foot noprint" style="height: 50px">
+    <button id="print-btn" type="button" class="btn btn-primary col-md-2 col-md-offset-2  bottom-btn" onclick="printf()">打印</button>
+    <button type="button" class="btn btn-success col-md-2 col-md-offset-1" data-toggle="modal" data-target="#input">已盖上传</button>
+    <button type="button" class="btn btn-primary col-md-2 col-md-offset-1  bottom-btn">查看登记</button>
+    <!-- 上传的模态框-->
+    <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="file" onchange="imgPreview(this)">
+                            <br/>
+                            <img id="preview" style="width: 100%"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="fn()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="my-mask"></div>
+<div class="contact-tip">
+    <span class="fa fa-warning"></span> 请输入有效的联系电话！
+</div>
+<div class="id-tip">
+    <span class="fa fa-warning"></span> 请输入有效的身份证号！
+</div>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    function printf() {
+
+        window.print();
+    }
+    function fn() {
+        if (confirm("确定上传吗")) {
+            location.href = "receipt.html";
+        } else {
+        }
+    }
+    function imgPreview(fileDom) {
+        //判断是否支持FileReader
+        if (window.FileReader) {
+            var reader = new FileReader();
+        } else {
+            alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+        }
+
+        //获取文件
+        var file = fileDom.files[0];
+        var imageType = /^image\//;
+        //是否是图片
+        if (!imageType.test(file.type)) {
+            alert("请选择图片！");
+            return;
+        }
+        //读取完成
+        reader.onload = function (e) {
+            //获取图片dom
+            var img = document.getElementById("preview");
+            //图片路径设置为读取的图片
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+</body>
+</html>

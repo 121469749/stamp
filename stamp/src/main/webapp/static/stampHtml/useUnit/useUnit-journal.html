@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>系统操作日志</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/licence.css">
+    <script language="JavaScript" src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <style>
+        table input{
+            border: none;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+<div class="all-part">
+    <img class="left-part" src="../images/delete.png" alt="">
+    <div class="right-part">
+        <table class="table table-bordered" style="width: 80%;margin: 0 auto">
+            <tr>
+                <td>印章标题：</td>
+                <td><input type="text" value="xxx高新区xx公司公章" readonly></td>
+            </tr>
+            <tr>
+                <td>印章序列号：</td>
+                <td><input type="text" value="40968546u546joi" readonly></td>
+            </tr>
+            <tr>
+                <td>制作时间：</td>
+                <td><input type="text" value="2016-09-03 14:35:23" readonly></td>
+            </tr>
+            <tr>
+                <td>印章描述：</td>
+                <td><input type="text" value="xxxxxxxxx" readonly></td>
+            </tr>
+            <tr>
+                <td>印章状态：</td>
+                <td>
+                    <input type="radio" name="zt" value="启用" >启用
+                    <input type="radio" name="zt" value="暂停" >暂停
+                </td>
+            </tr>
+        </table>
+        <button class="btn btn-default" style="width:10%;margin-left: 45%;margin-top: 20px">提交</button>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+<div class="all-part">
+    <div class="form-group">
+        <label for="" style="color: black">用户列表:</label>
+        <button class="btn btn-default">新增用户</button>
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>账号名</th>
+            <th>用户真实姓名</th>
+            <th>授权状态</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>001</td>
+            <td>张三</td>
+            <td>未授权</td>
+            <td>
+                <button class="btn btn-default">授权</button>
+                <button class="btn btn-default">删除</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>001</td>
+            <td>张三</td>
+            <td>已授权</td>
+            <td>
+                <button class="btn btn-default">取消授权</button>
+                <button class="btn btn-default">删除</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

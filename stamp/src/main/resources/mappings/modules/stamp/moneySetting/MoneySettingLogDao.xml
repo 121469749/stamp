@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.moneySetting.MoneySettingLogDao">
+
+	<sql id="MoneySettingLog">
+		  a.id AS "id",
+		  a.u_money AS "uMoney",
+		  a.phy_money AS "phyMoney",
+		  a.eleMoney AS "eleMoney",
+		  a.opr_type AS "type",
+		  a.create_time AS "createDate",
+		  a.create_By AS "createUser.id",
+		  a.company_id AS "company.id"
+	</sql>
+
+	<insert id="insert" parameterType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySettingLog">
+		INSERT INTO t_moneysetting_log(
+		  id ,
+		  u_money ,
+		  phy_money,
+		  eleMoney,
+		  opr_type,
+		  create_time,
+		  create_By,
+		  company_id
+		)VALUE (
+			#{id},
+			#{uMoney},
+			#{phyMoney},
+			#{eleMoney},
+			#{type},
+			#{createDate},
+			#{createUser.id},
+			#{company.id}
+		)
+	</insert>
+
+
+</mapper>

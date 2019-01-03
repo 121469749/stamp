@@ -1,0 +1,144 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html,body{
+    height: 100%;
+    width: 100%;
+    overflow-y: hidden;
+}
+a{
+    color: black;
+    text-decoration: none;
+}
+a:hover,a:link,a:active,a:visited{
+    color: black;
+    text-decoration: none;
+}
+.head{
+    height:12%;
+}
+.logo{
+    float: left;
+    width: 20%;
+    text-align: center;
+}
+.title{
+    float: left;
+    width: 40%;
+    height: 42px;
+    margin-top: 10px;
+    border: 1px solid lightblue;
+    text-align: center;
+}
+.title-text{
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    height: 100%;
+    background-color: lightblue;
+    width: 20%;
+}
+.title-text a{
+    line-height: 40px;
+    font-weight: bold;
+}
+.message{
+    text-align: center;
+    width: 38%;
+    float: left;
+}
+.num{
+    text-align: center;
+    width: 70%;
+    float: left;
+}
+.exit{
+    float: left;
+    margin-top: 10px;
+    height: 40px;
+    color: white;
+    border: 1px solid #d9534f;
+    background-color: #d9534f;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.exit:hover{
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+.main{
+    height: 88%;
+    width: 100%;
+}
+.main:after{
+    display: table;
+    content: " ";
+    clear: both;
+}
+.chapter{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url("../images/chapter.png") no-repeat;
+}
+.left{
+    border: 1px solid #eee;
+    float: left;
+    width: 14%;
+    height: 80%;
+}
+.left ul{
+    list-style: none;
+}
+.left ul li{
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+}
+.left ul li:hover{
+    background-color: lightblue;
+}
+.left ul li a{
+    color: black;
+    display: block;
+    margin: auto;
+    line-height: 50px;
+}
+.left ul li + li{
+    border-top: 1px solid lightblue;
+}
+.active{
+    background-color: lightblue;
+}
+.right{
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+@media (max-width: 968px) {
+    .title-text{
+        width: 30%;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .logo h3{
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .num h3{
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .exit{
+        font-size: 12px;
+        padding: 3px 6px;
+    }
+}

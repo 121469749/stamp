@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.UserDao">
+
+
+	<resultMap id="userMap2" type="User">
+		<id column="id" property="id"></id>
+		<result column="login_name" property="loginName"></result>
+		<result column="password" property="password"></result>
+		<result column="no" property="no"></result>
+		<result column="name" property="name"></result>
+		<result column="email" property="email"></result>
+		<result column="phone" property="phone" ></result>
+		<result column="mobile" property="mobile"></result>
+		<result column="user_type" property="userType"></result>
+		<!--枚举映射处理-->
+		<result column="user_type" property="userType"></result>
+		<result column="login_ip" property="loginIp"></result>
+		<result column="login_date" property="loginDate"></result>
+		<result column="remarks" property="remarks"></result>
+		<result column="login_flag" property="loginFlag"></result>
+		<result column="photo" property="photo"></result>
+		<result column="create_by" property="createBy.id"></result>
+		<result column="create_date" property="createDate"></result>
+		<result column="update_by" property="updateBy.id"></result>
+		<result column="update_date" property="updateDate"></result>
+		<result column="del_flag" property="delFlag"></result>
+
+	</resultMap>
+
+	<resultMap id="userMap" type="User">
+		<id column="id" property="id"></id>
+		<result column="company.id" property="company.id" ></result>
+		<result column="office.id" property="office.id"></result>
+		<result column="login_name" property="loginName"></result>
+		<result column="password" property="password"></result>
+		<result column="no" property="no"></result>
+		<result column="name" property="name"></result>
+		<result column="email" property="email"></result>
+		<result column="phone" property="phone" ></result>
+		<result column="mobile" property="mobile"></result>
+		<result column="user_type" property="userType"></result>
+		<result column="cert_modulus" property="certModulus"></result>
+		<result column="cert_file_path" property="certFilePath"></result>
+		<!--枚举映射处理-->
+		<result column="user_type" property="userType"></result>
+		<result column="login_ip" property="loginIp"></result>
+		<result column="login_date" property="loginDate"></result>
+		<result column="remarks" property="remarks"></result>
+		<result column="login_flag" property="loginFlag"></result>
+		<result column="photo" property="photo"></result>
+		<result column="create_by" property="createBy.id"></result>
+		<result column="create_date" property="createDate"></result>
+		<result column="update_by" property="updateBy.id"></result>
+		<result column="update_date" property="updateDate"></result>
+		<result column="del_flag" property="delFlag"></result>
+		<result property="company.name" column="company.name" />
+		<result property="company.parentId" column="company.parentId" />
+		<result property="company.parentIds" column="company.parentIds" />
+		<result property="company.area.id" column="company.area.id" />
+		<result property="company.area.name" column="company.area.name" />
+		<result property="company.area.parentId" column="company.area.parentId" />
+		<result property="company.area.parentIds" column="company.area.parentIds" />
+		<result property="company.primaryPerson.id" column="company.primaryPerson.id" />
+		<result property="company.primaryPerson.name" column="company.primaryPerson.name" />
+		<result property="company.deputyPerson.id" column="company.deputyPerson.id" />
+		<result property="company.deputyPerson.name" column="company.deputyPerson.name" />
+		<result property="office.name" column="office.name" />
+		<result property="office.parentId" column="office.parentId" />
+		<result property="office.parentIds" column="office.parentIds" />
+		<result property="office.area.id" column="office.area.id" />
+		<result property="office.area.name" column="office.area.name" />
+		<result property="office.area.parentId" column="office.area.parentId" />
+		<result property="office.area.parentIds" column="office.area.parentIds" />
+		<result property="office.primaryPerson.id" column="office.primaryPerson.id" />
+		<result property="office.primaryPerson.name" column="office.primaryPerson.name" />
+		<result property="office.deputyPerson.id" column="office.deputyPerson.id" />
+		<result property="office.deputyPerson.name" column="office.deputyPerson.name" />
+		<result property="userTypeId" column="userTypeId"></result>
+		<result column="is_sysrole" property="isSysrole"></result>
+		<collection property="roleList" ofType="Role">
+			<id property="id" column="roleList.id" />
+			<result property="office.id" column="roleList.office.id" />
+			<result property="name" column="roleList.name" />
+			<result property="enname" column="roleList.enname" />
+			<result property="roleType" column="roleList.roleType" />
+			<result property="dataScope" column="roleList.dataScope" />
+			<collection property="officeList" ofType="Office">
+				<id property="id" column="roleList.officeList.id" />
+			</collection>
+		</collection>
+	</resultMap>
+
+
+    <sql id="userColumns">
+    	a.id,
+    	a.company_id AS "company.id",
+    	a.office_id AS "office.id",
+    	a.login_name,
+    	a.password,
+    	a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.userTypeId,
+		a.is_sysrole,
+		a.cert_modulus,
+		a.cert_file_path,
+    	c.name AS "company.name",
+    	c.parent_id AS "company.parent.id",
+    	c.parent_ids AS "company.parentIds",
+    	ca.id AS "company.area.id",
+    	ca.name AS "company.area.name",
+    	ca.parent_id AS "company.area.parent.id",
+    	ca.parent_ids AS "company.area.parentIds",
+    	o.name AS "office.name",
+    	o.parent_id AS "office.parent.id",
+    	o.parent_ids AS "office.parentIds",
+    	oa.id AS "office.area.id",
+    	oa.name AS "office.area.name",
+    	oa.parent_id AS "office.area.parent.id",
+    	oa.parent_ids AS "office.area.parentIds",
+    	cu.id AS "company.primaryPerson.id",
+    	cu.name AS "company.primaryPerson.name",
+    	cu2.id AS "company.deputyPerson.id",
+    	cu2.name AS "company.deputyPerson.name",
+    	ou.id AS "office.primaryPerson.id",
+    	ou.name AS "office.primaryPerson.name",
+    	ou2.id AS "office.deputyPerson.id",
+    	ou2.name AS "office.deputyPerson.name"
+		<!-- ,
+        r.id AS "roleList.id",
+        r.office_id AS "roleList.office.id",
+        r.name AS "roleList.name",
+        r.enname AS "roleList.enname",
+        r.role_type AS "roleList.roleType",
+        r.data_scope AS "roleList.dataScope" -->
+    </sql>
+
+	<sql id="userColumns2">
+		a.id,
+    	a.login_name,
+    	a.password,
+    	a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.userTypeId,
+		a.is_sysrole
+	</sql>
+
+    <sql id="userJoins">
+		LEFT JOIN sys_office c ON c.id = a.company_id
+		LEFT JOIN sys_area ca ON ca.id = c.area_id
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_area oa ON oa.id = o.area_id
+		LEFT JOIN sys_user_${userType.key} cu ON cu.id = c.primary_person
+		LEFT JOIN sys_user_${userType.key} cu2 ON cu2.id = c.deputy_person
+		LEFT JOIN sys_user_${userType.key} ou ON ou.id = o.primary_person
+		LEFT JOIN sys_user_${userType.key} ou2 ON ou2.id = o.deputy_person
+		<!--
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+        LEFT JOIN sys_role r ON r.id = ur.role_id -->
+    </sql>
+
+	<sql id="userJoins2">
+		LEFT JOIN sys_office c ON c.id = a.company_id
+		LEFT JOIN sys_area ca ON ca.id = c.area_id
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_area oa ON oa.id = o.area_id
+		LEFT JOIN sys_user_${user.userType.key} cu ON cu.id = c.primary_person
+		LEFT JOIN sys_user_${user.userType.key} cu2 ON cu2.id = c.deputy_person
+		LEFT JOIN sys_user_${user.userType.key} ou ON ou.id = o.primary_person
+		LEFT JOIN sys_user_${user.userType.key} ou2 ON ou2.id = o.deputy_person
+		<!--
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+        LEFT JOIN sys_role r ON r.id = ur.role_id -->
+	</sql>
+
+
+	<!-- 根据编号获得用户 -->
+	<select id="get" resultType="User" resultMap="userMap">
+		SELECT
+			<include refid="userColumns"/><!-- ,
+			ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/><!-- 
+		LEFT JOIN sys_role_office ro ON ro.role_id = r.id -->
+
+		<where>
+			a.user_type = #{userType} AND a.del_flag = '0'
+			<if test=" id !=null and id != '' ">
+				AND a.id = #{id}
+			</if>
+			<if test="userTypeId != null and userTypeId != ''">
+				AND a.userTypeId = #{userTypeId}
+			</if>
+			<if test="isSysrole !=null and isSysrole !=''">
+				AND a.is_sysrole = #{isSysrole}
+			</if>
+			<if test="remarks !=null and remarks !=''">
+				AND a.remarks = #{remarks}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据登录名查询用户 -->
+	<select id="getByLoginName" resultType="User" resultMap="userMap">
+		SELECT
+		<include refid="userColumns"/><!-- ,
+			ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/><!--
+		LEFT JOIN sys_role_office ro ON ro.role_id = r.id -->
+		WHERE a.login_name = #{loginName} AND a.del_flag = #{DEL_FLAG_NORMAL}  AND a.user_type=#{userType}
+	</select>
+	
+	<!-- 分页查询用户信息 -->
+	<select id="findList"  resultMap="userMap">
+		SELECT
+			<include refid="userColumns"/>
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/>
+		<if test="role != null and role.id != null and role.id != ''">
+			JOIN sys_user_role ur ON ur.user_id = a.id AND ur.role_id = #{role.id}
+		</if>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="company != null and company.id != null and company.id != ''">
+			AND (c.id = #{company.id} OR c.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%,'||#{company.id}||',%')</if>
+					<if test="dbName == 'mssql'">'%,'+#{company.id}+',%')</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{company.id}, ',%'))</if>
+		</if>
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (o.id = #{office.id} OR o.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+					<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="!currentUser.admin">
+			AND a.id != '1'
+		</if>
+
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like 
+					<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+
+		<if test="name != null and name != ''">
+			AND a.name like 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+
+		<if test="isSysrole != null and isSysrole != ''">
+		AND a.is_sysrole = #{isSysrole}
+		</if>
+
+		<if test=" userType !=null">
+			AND a.user_type=#{userType}
+		</if>
+		<if test="userTypeId != null and userTypeId != ''">
+			AND a.userTypeId = #{userTypeId}
+		</if>
+		<!--	${sqlMap.areafilter}-->
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY c.code, o.code, a.name
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 根据OfficeId获取用户（树查询用户时用） -->
+	<select id="findUserByOfficeId"  resultMap="userMap" useCache="true">
+		SELECT
+			a.id, a.name, a.login_name
+		FROM sys_user_${userType.key} a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.office_id = #{office.id}
+		ORDER BY a.name
+	</select>
+	
+	<!-- 查询全部用户 -->
+	<select id="findAllList"  resultMap="userMap">
+		SELECT
+			<include refid="userColumns"/>
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY c.code, o.code, a.name
+	</select>
+	
+	<!-- 查询全部用户数目 -->
+	<select id="findAllCount" resultType="long">
+		SELECT
+			COUNT(1)
+		FROM sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 插入用户 -->
+	<insert id="insert">
+		INSERT INTO sys_user_${userType.key}(
+			id, 
+			company_id, 
+			office_id, 
+			login_name, 
+			password, 
+			no, 
+			name, 
+			email, 
+			phone, 
+			mobile, 
+			user_type, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			login_flag, 
+			photo, 
+			del_flag,
+			userTypeId,
+			is_sysrole,
+			cert_modulus,
+			cert_file_path
+		) VALUES (
+			#{id}, 
+			#{company.id}, 
+			#{office.id}, 
+			#{loginName}, 
+			#{password}, 
+			#{no}, 
+			#{name}, 
+			#{email}, 
+			#{phone}, 
+			#{mobile}, 
+			#{userType},
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{loginFlag}, 
+			#{photo}, 
+			#{delFlag},
+			#{userTypeId},
+			#{isSysrole},
+			#{certModulus},
+			#{certFilePath}
+		)
+	</insert>
+	
+	<!-- 更新用户 -->
+	<update id="update">
+		UPDATE sys_user_${userType.key} SET
+			login_name = #{loginName},
+			<if test="password !=null and password !=''">
+				password = #{password},
+			</if>
+			no = #{no},
+			name = #{name}, 
+			email = #{email}, 
+			phone = #{phone}, 
+			mobile = #{mobile}, 
+			user_type = #{userType},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks},
+			login_flag = #{loginFlag},
+			photo = #{photo}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateCert" parameterType="com.thinkgem.jeesite.modules.sys.entity.User">
+		UPDATE sys_user_${userType.key}
+		<set>
+			<if test="certModulus != null">
+				cert_modulus = #{certModulus},
+			</if>
+			<if test="certFilePath != null">
+				cert_file_path = #{certFilePath},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteUserRole">
+		DELETE FROM sys_user_role WHERE user_id = #{id}
+	</delete>
+	
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertUserRole">
+		INSERT INTO sys_user_role(user_id, role_id)
+		<foreach collection="roleList" item="role" separator=" union all ">
+			SELECT #{id}, #{role.id}
+			<if test="dbName != 'mssql'">
+			FROM dual
+			</if>
+		</foreach>
+	</insert>
+	
+	<!-- 更新用户信息  -->
+	<update id="updateUserInfo">
+		UPDATE sys_user_${userType.key} SET
+			email = #{email}, 
+			phone = #{phone}, 
+			mobile = #{mobile}, 
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks},
+			photo = #{photo}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新用户密码 -->
+	<update id="updatePasswordById">
+		UPDATE sys_user_${userType.key} SET
+			password = #{password} 
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新登录信息，如登录IP、登录时间 -->
+	<update id="updateLoginInfo">
+		UPDATE sys_user_${userType.key} SET
+			login_ip = #{loginIp}, 
+			login_Date = #{loginDate} 
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 逻辑删除用户 -->
+	<update id="delete">
+		UPDATE sys_user_${userType.key} SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!--绑定用户 userTypeId
+		根据用户 Id
+	-->
+	<update id="updateUseTypeIdAndComp">
+		UPDATE sys_user_${userType.key} SET
+			userTypeId = #{userTypeId},
+			company_id = #{company.id}
+		WHERE
+		 	id=#{id}
+		 	AND del_flag=#{DEL_FLAG_NORMAL}
+	</update>
+
+	<!-- 通过UserTypeId获取用户列表 -->
+	<select id="findUserByUserTypeId" resultMap="userMap">
+		SELECT
+			<include refid="userColumns"/>
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/>
+		WHERE a.userTypeId = #{companyId}
+		AND a.del_flag =  '0'
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="checkLoginName" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM  sys_user_${userType.key} a
+		WHERE
+			a.login_Name = #{loginName}
+		AND a.del_flag= '0'
+	</select>
+	<!--查找该手机号码已经备案了多少个公司-->
+	<select id="checkLoginNameNumber" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM sys_user_${userType.key} a
+		WHERE
+			a.login_Name LIKE #{loginName}"%"
+		AND a.del_flag = '0'
+	</select>
+
+	<!-- 查找公司下的全部员工 -->
+	<select id="findAllUserInCompany" resultMap="userMap">
+		SELECT
+			<include refid="userColumns"/>
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/>
+		WHERE a.userTypeId = #{userTypeId}
+		AND a.del_flag = '0'
+	</select>
+
+	<!-- 检查员工工号是否已存在 -->
+	<select id="checkNo" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM sys_user_${userType.key} a
+		WHERE a.no = #{no}
+		AND a.userTypeId = #{companyId}
+		AND a.del_flag = '0'
+	</select>
+
+	<!-- 更改loginflag根据usertypeid -->
+	<update id="updateLoginFlagByUserTypeId">
+		UPDATE sys_user_${userType.key} SET
+			login_flag = #{loginFlag},
+			update_by = #{updateBy.id},
+			update_date =#{updateDate}
+		  WHERE userTypeId = #{userTypeId} AND user_type = #{userType}
+	</update>
+
+	<update id="deleteByUserTypeId">
+			UPDATE sys_user_${userType.key} SET
+				del_flag = #{DEL_FLAG_DELETE}
+				WHERE userTypeId = #{userTypeId} AND user_type=#{userType}
+	</update>
+
+	<!-- 通过UserTypeId获取用户列表 -->
+	<select id="findUsersByUserTypeId" resultMap="userMap">
+		SELECT
+		<include refid="userColumns"/>
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/>
+		WHERE
+		a.userTypeId = #{userTypeId}
+		AND a.del_flag = '0'
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="countUserByUserTypeId" resultType="java.lang.Integer"
+		parameterType="com.thinkgem.jeesite.modules.sys.entity.User">
+	  SELECT COUNT(*)
+	  FROM sys_user_${userType.key} a
+	  <where>
+		  a.del_flag = '0'
+		  <if test="userType != null">
+			 AND a.user_type = #{userType}
+		  </if>
+
+		  <if test="userTypeId !=null and userTypeId !=''">
+			 AND a.userTypeId = #{userTypeId}
+		  </if>
+
+		  <if test="isSysrole !=null and isSysrole !='' ">
+			  AND a.is_sysrole =#{isSysrole}
+		  </if>
+
+	  </where>
+	</select>
+
+	
+	<update id="systemOprationLoginFlag">
+		UPDATE sys_user_${userType.key} a SET
+			a.login_flag = #{loginFlag},
+			a.update_by = #{updateBy.id},
+			a.update_date =#{updateDate}
+		WHERE a.userTypeId = #{userTypeId}
+	</update>
+
+	<select id="getUseComapnySysUser" resultMap="userMap">
+		SELECT
+		<include refid="userColumns"/>
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/>
+		WHERE
+		a.userTypeId = #{userTypeId}
+		AND a.del_flag = '0'
+		AND a.is_sysrole = '1'
+	</select>
+
+	<!--<select id="findPoliceSysUser" resultMap="userMap">-->
+		<!--SELECT-->
+		<!--<include refid="userColumns"></include>-->
+		<!--FROM sys_user_${user.userType.key} a-->
+		<!--<include refid="userJoins2"/>-->
+		<!--<where>-->
+			<!--a.del_flag = '0'-->
+			<!--AND a.is_sysrole = '1'-->
+			<!--AND a.user_type= #{user.userType}-->
+			<!--<if test="size != 0">-->
+				<!--AND-->
+				<!--(-->
+				<!--<foreach collection="list" separator="or" item="item">-->
+					<!--a.userTypeId = #{item.id}-->
+				<!--</foreach>-->
+				<!--OR FALSE-->
+				<!--)-->
+			<!--</if>-->
+		<!--</where>-->
+	<!--</select>-->
+
+	<select id="findUserByUserTypeIds" resultMap="userMap2">
+		SELECT
+		<include refid="userColumns2"></include>
+		FROM sys_user_${user.userType.key} a
+		<where>
+			a.del_flag = '0'
+			AND a.is_sysrole = '1'
+			AND a.user_type= #{user.userType}
+			<if test="size != 0">
+				AND
+				(
+				<foreach collection="list" separator="or" item="item">
+					a.userTypeId = #{item.id}
+				</foreach>
+				OR FALSE
+				)
+			</if>
+		</where>
+	</select>
+
+	<update id="changeLoginFlag" parameterType="User">
+		UPDATE  sys_user_${userType.key} a
+		SET a.login_flag = #{loginFlag}
+		WHERE
+			a.id=#{id}  AND a.user_type= #{userType}
+	</update>
+
+	<select id="findPoliceUser" resultType="User">
+		SELECT
+			<include refid="userColumns2"/>
+		FROM sys_user_${user.userType.key} a
+		<where>
+			a.del_flag = '0'
+			AND a.user_type = #{user.userType}
+			<if test="user.isSysrole !=null and user.isSysrole !=''">
+				  AND a.is_sysrole = #{user.isSysrole}
+			</if>
+			<if test="size != 0">
+				AND
+				(
+				<foreach collection="list" separator="or" item="item">
+					a.userTypeId = #{item.id}
+				</foreach>
+				)
+			</if>
+			<if test="size == 0">
+				AND a.login_flag = '4'  /*此条件是为了去除当size=0的时候的数据，实际上login_flag的值不可能为4*/
+			</if>
+		</where>
+	</select>
+
+	<update id="changePassword" parameterType="User">
+		UPDATE  sys_user_${userType.key} a
+		SET a.password = #{password}
+		WHERE
+			a.id=#{id}  AND a.user_type= #{userType}
+	</update>
+
+	<sql id="userMore">
+		a.id,
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		a.login_name,
+		a.password,
+		a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.userTypeId,
+		a.is_sysrole
+	</sql>
+
+	<select id="findUserByMore" parameterType="User" resultType="User">
+		SELECT
+		<include refid="userMore"/>
+		FROM sys_user_${userType.key} a
+		<!--经销商-->
+		<!--用章单位-->
+		<!--刻章单位-->
+				<if test="userType.key == '2'.toString() ">
+					,t_company_3 b
+				</if>
+				<if test="userType.key == '3'.toString() ">
+					,t_company_1 b
+				</if>
+				<if test="userType.key == '4'.toString() ">
+					,t_company_2 b
+				</if>
+		<!--公安机关-->
+		<if test="userType.key =='5'.toString() ">
+			,t_police c
+		</if>
+		<where>
+			a.del_flag='0'
+			<if test="userType.key !='5'.toString() and userType.key !='1'.toString() ">
+				AND a.userTypeId = b.id
+				<!--所属区域-->
+				<if test="companyInfo.area !=null ">
+					<if test="companyInfo.area.id !=null and companyInfo.area.id!=''">
+						AND b.area_id =#{companyInfo.area.id}
+					</if>
+				</if>
+				<if test="companyInfo.companyName !=null and companyInfo.companyName != ''">
+					AND b.company_name LIKE CONCAT('%', #{companyInfo.companyName}, '%')
+				</if>
+			</if>
+			<!--公安机关-->
+			<if test="userType.key =='5'.toString() ">
+				<!--所属区域-->
+				AND a.userTypeId = c.id
+				<if test="policeInfo.area !=null ">
+					<if test="policeInfo.area.id !=null and policeInfo.area.id !='' ">
+						AND c.area_id =#{company.area.id}
+					</if>
+				</if>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据名字和企业id查询用户 -->
+	<select id="findUserByNameAndComPanyId" resultType="User" resultMap="userMap">
+		SELECT
+		<include refid="userColumns"/><!-- ,
+			ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user_${userType.key} a
+		<include refid="userJoins"/><!--
+		LEFT JOIN sys_role_office ro ON ro.role_id = r.id -->
+		WHERE a.name = #{name} AND a.del_flag = #{DEL_FLAG_NORMAL}  AND a.user_type=#{userType} AND a.company_id = #{company.id}
+	</select>
+
+</mapper>

@@ -1,0 +1,1126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.company.CompanyDao">
+
+
+    <sql id="companyColumns">
+        a.id AS "id",
+        a.comp_type AS "compType",
+        a.area_id AS "area.id",
+        a.sole_code AS "soleCode",
+        a.company_name AS "companyName",
+        a.company_code AS "companyCode",
+        a.type1 AS "type1",
+        a.type2 AS "type2",
+        a.type3 AS "type3",
+        a.legal_name AS "legalName",
+        a.legal_phone AS "legalPhone",
+        a.legal_certtype AS "legalCertType",
+        a.legal_certcode AS "legalCertCode",
+        a.police_name AS "policeName",
+        a.police_idcode AS "policeIdCode",
+        a.police_phone AS "policePhone",
+        a.bus_model AS "busModel",
+        a.bus_type AS "busType",
+        a.head_count AS "headCount",
+        a.special_count AS "specialCount",
+        a.comp_address AS "compAddress",
+        a.comp_phone AS "compPhone",
+        a.postcode AS "postcode",
+        a.bus_licnum AS "busLicnum",
+        a.bus_tagnum AS "busTagnum",
+        a.comp_state AS "compState",
+        a.comp_creatdate AS "compCreatDate",
+        a.bus_startdate AS "busStartDate",
+        a.bus_enddate AS "busEndDate",
+        a.record_unit AS "recordUnit",
+        a.bus_scope AS "busScope",
+        a.reg_cap AS "regCap",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+        a.last_licence_state AS "lastLicenceState",
+        a.sysOpr_state AS "sysOprState",
+        a3.name AS "area.name",
+        a3.parent_id as "area.parent.id",
+        a3.parent_ids as "area.parentIds",
+        a3.code as "code",
+        a3.type AS "area.type"
+    </sql>
+
+    <sql id="companyColumns2">
+        a.id AS "id",
+        a.comp_type AS "compType",
+        a.area_id AS "area.id",
+        a.sole_code AS "soleCode",
+        a.company_name AS "companyName",
+        a.company_code AS "companyCode",
+        a.type1 AS "type1",
+        a.type2 AS "type2",
+        a.type3 AS "type3",
+        a.legal_name AS "legalName",
+        a.legal_phone AS "legalPhone",
+        a.legal_certtype AS "legalCertType",
+        a.legal_certcode AS "legalCertCode",
+        a.police_name AS "policeName",
+        a.police_idcode AS "policeIdCode",
+        a.police_phone AS "policePhone",
+        a.bus_model AS "busModel",
+        a.bus_type AS "busType",
+        a.head_count AS "headCount",
+        a.special_count AS "specialCount",
+        a.comp_address AS "compAddress",
+        a.comp_phone AS "compPhone",
+        a.postcode AS "postcode",
+        a.bus_licnum AS "busLicnum",
+        a.bus_tagnum AS "busTagnum",
+        a.comp_state AS "compState",
+        a.comp_creatdate AS "compCreatDate",
+        a.bus_startdate AS "busStartDate",
+        a.bus_enddate AS "busEndDate",
+        a.record_unit AS "recordUnit",
+        a.bus_scope AS "busScope",
+        a.reg_cap AS "regCap",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+        a.last_licence_state AS "lastLicenceState",
+        a.sysOpr_state AS "sysOprState"
+    </sql>
+
+    <sql id="companyLicenseColumns">
+        a.id ,
+        a.comp_type ,
+        a.area_id ,
+        a.sole_code ,
+        a.company_name ,
+        a.type1 ,
+        a.type2 ,
+        a.type3 ,
+        a.legal_name ,
+        a.legal_phone ,
+        a.legal_certtype ,
+        a.legal_certcode ,
+        a.police_name ,
+        a.police_idcode ,
+        a.police_phone ,
+        a.bus_model ,
+        a.bus_type ,
+        a.head_count ,
+        a.special_count ,
+        a.comp_address ,
+        a.comp_phone ,
+        a.postcode ,
+        a.bus_licnum ,
+        a.bus_tagnum ,
+        a.comp_state ,
+        a.comp_creatdate ,
+        a.bus_startdate ,
+        a.bus_enddate ,
+        a.record_unit ,
+        a.bus_scope ,
+        a.reg_cap ,
+        a.create_by ,
+        a.create_date ,
+        a.update_by ,
+        a.update_date ,
+        a.remarks ,
+        a.del_flag ,
+        a3.name ,
+        a3.parent_id ,
+        <!-- license -->
+        li.id AS "licenceList.id",
+        li.make_comp ,
+        li.work_type ,
+        li.work_reason ,
+        li.comp_name ,
+        li.bus_type AS "licenceList.busType",
+        li.legal_name AS "licenceList.legalName",
+        li.legal_phone AS "licenceList.legalPhone",
+        li.legal_certtype AS "licenceList.legalCertType",
+        li.legal_certcode AS "licenceList.legalCertCode",
+        li.police_name AS "licenceList.policeName",
+        li.police_idcode AS "licenceList.policeIdCode",
+        li.police_phone AS "licenceList.policePhone",
+        li.head_count AS "licenceList.headCount",
+        li.special_count AS "licenceList.specialCount",
+        li.agent_name ,
+        li.agent_certcode ,
+        li.agent_phone ,
+        li.attachs ,
+        li.bus_run ,
+        li.check_state ,
+        li.check_reason ,
+        li.create_by AS "licenceList.createBy.id",
+        li.create_date AS "licenceList.createDate",
+        li.update_by AS "licenceList.updateBy.id",
+        li.update_date AS "licenceList.updateDate",
+        li.remarks AS "licenceList.remarks",
+        li.del_flag AS "licenceList.delFlag"
+    </sql>
+
+
+    <resultMap id="companyMap" type="Company">
+        <id column="id" property="id"></id>
+        <result column="comp_type" property="compType"/>
+        <result column="area_id" property="area.id"/>
+        <result column="sole_code" property="soleCode"/>
+        <result column="company_Name" property="companyName"/>
+        <result column="type1" property="type1"/>
+        <result column="type2" property="type2"/>
+        <result column="type3" property="type3"/>
+        <result column="legal_Name" property="legalName"/>
+        <result column="legal_Phone" property="legalPhone"/>
+        <result column="legal_certType" property="legalCertType"/>
+        <result column="legal_certCode" property="legalCertCode"/>
+        <result column="police_Name" property="policeName"/>
+        <result column="police_IdCode" property="policeIdCode"/>
+        <result column="police_Phone" property="policePhone"/>
+        <result column="bus_model" property="busModel"/>
+        <result column="bus_type" property="busType"/>
+        <result column="head_count" property="headCount"/>
+        <result column="special_count" property="specialCount"/>
+        <result column="comp_address" property="compAddress"/>
+        <result column="comp_phone" property="compPhone"/>
+        <result column="postCode" property="postcode"/>
+        <result column="bus_licNum" property="busLicnum"/>
+        <result column="bus_tagNum" property="busTagnum"/>
+        <result column="comp_state" property="compState"/>
+        <result column="comp_creatDate" property="compCreatDate"/>
+        <result column="bus_startDate" property="busStartDate"/>
+        <result column="bus_endDate" property="busEndDate"/>
+        <result column="record_unit" property="recordUnit"/>
+        <result column="bus_scope" property="busScope"/>
+        <result column="reg_cap" property="regCap"/>
+        <result column="sysOpr_state" property="sysOprState"/>
+        <result column="create_by" property="createBy.id"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy.id"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="remarks" property="remarks"/>
+        <result column="del_flag" property="delFlag"/>
+        <collection property="licenceList" ofType="Licence" javaType="java.util.ArrayList">
+            <id property="id" column="licenceList.id"/>
+            <result column="make_comp" property="makeComp.id"/>
+            <result column="work_type" property="workType" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+            <result column="work_reason" property="workReason"/>
+            <result column="comp_name" property="compName"/>
+            <result column="licenceList.busType" property="busType"/>
+            <result column="legalName" property="legalName"/>
+            <result column="licenceList.legalPhone" property="legalPhone"/>
+            <result column="licenceList.legalCertType" property="legalCertType"/>
+            <result column="licenceList.legalCertCode" property="legalCertCode"/>
+            <result column="licenceList.policeName" property="policeName"/>
+            <result column="licenceList.policeIdCode" property="policeIdCode"/>
+            <result column="licenceList.policePhone" property="policePhone"/>
+            <result column="licenceList.headCount" property="headCount"/>
+            <result column="licenceList.specialCount" property="specialCount"/>
+            <result column="agent_name" property="agentName"/>
+            <result column="agent_certCode" property="agentCertCode"/>
+            <result column="agent_phone" property="agentPhone"/>
+            <result column="attachs" property="attachs"/>
+            <result column="bus_run" property="busRun"/>
+            <result column="check_state" property="checkState"/>
+            <result column="check_reason" property="checkReason"/>
+            <result column="licenceList.create_by" property="createBy.id"/>
+            <result column="licenceList.create_date" property="createDate"/>
+            <result column="licenceList.update_by" property="updateBy.id"/>
+            <result column="licenceList.update_date" property="updateDate"/>
+            <result column="licenceList.remarks" property="remarks"/>
+            <result column="licenceList.del_flag" property="delFlag"/>
+        </collection>
+    </resultMap>
+
+    <sql id="companyJoins">
+        LEFT JOIN sys_area a3 ON a3.id = a.area_id
+    </sql>
+
+    <sql id="joinWithLicense">
+        LEFT JOIN t_licence li ON li.make_comp = a.id
+    </sql>
+
+    <select id="get" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = 0
+
+            <if test=" id !=null and id !='' ">
+                AND a.id = #{id}
+            </if>
+
+            <if test="area !=null">
+                <if test="area.id !=null and area.id !=''">
+                    AND a.area_id = #{area.id}
+                </if>
+            </if>
+
+            <if test="companyName !=null and companyName !=''">
+                AND a.company_Name = #{companyName}
+            </if>
+
+            <if test="compType !=null">
+                AND a.comp_type = #{compType}
+            </if>
+
+            <if test="soleCode !=null and soleCode !=''">
+                AND a.sole_code = #{soleCode}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+<!--通过ID查找公司-->
+    <select id="getCompanyById" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = 0
+
+            <if test=" id !=null and id !='' ">
+                AND a.id = #{id}
+            </if>
+
+        </where>
+        limit 1
+    </select>
+
+    <select id="getDetails" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_1 a
+        <include refid="companyJoins"/>
+        <where>
+            <if test=" id !=null and id !='' ">
+                AND a.id = #{id}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="findList" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="compState != null and compState != ''">
+                AND a.comp_state = #{compState}
+            </if>
+            <if test="compType != null and compType != ''">
+                AND a.comp_type = #{compType}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findList2" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="compState != null and compState != ''">
+                AND a.comp_state = #{compState}
+            </if>
+            <if test="compType != null and compType != ''">
+                AND a.comp_type = #{compType}
+            </if>
+            <if test="area !=null">
+                <if test="area.id!=null and area.id !=''">
+                    AND a.area_id = #{area.id}
+                </if>
+
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="findListWithLicenseList" resultMap="companyMap">
+        SELECT
+        <include refid="companyLicenseColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            AND li.del_flag = #{licence.DEL_FLAG_NORMAL}
+            <if test="compType != null and compType != ''">
+                AND a.comp_type = #{compType}
+            </if>
+            <if test="compState != null and compState != ''">
+                AND a.comp_state = #{compState}
+            </if>
+            <if test="licence != null">
+                <if test="licence.checkState != null ">
+                    AND li.check_state = #{licence.checkState}
+                </if>
+            </if>
+        </where>
+
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="findAllList" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_company_${compType.key}(
+        id,
+        comp_type,
+        area_id,
+        sole_code,
+        company_name,
+        company_code,
+        type1,
+        type2,
+        type3,
+        legal_name,
+        legal_phone,
+        legal_certtype,
+        legal_certcode,
+        police_name,
+        police_idcode,
+        police_phone,
+        bus_model,
+        bus_type,
+        head_count,
+        special_count,
+        comp_address,
+        comp_phone,
+        postcode,
+        bus_licnum,
+        bus_tagnum,
+        comp_state,
+        comp_creatdate,
+        bus_startdate,
+        bus_enddate,
+        record_unit,
+        bus_scope,
+        reg_cap,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag
+        ) VALUES (
+        #{id},
+        #{compType},
+        #{area.id},
+        #{soleCode},
+        #{companyName},
+        #{companyCode},
+        #{type1},
+        #{type2},
+        #{type3},
+        #{legalName},
+        #{legalPhone},
+        #{legalCertType},
+        #{legalCertCode},
+        #{policeName},
+        #{policeIdCode},
+        #{policePhone},
+        #{busModel},
+        #{busType},
+        #{headCount},
+        #{specialCount},
+        #{compAddress},
+        #{compPhone},
+        #{postcode},
+        #{busLicnum},
+        #{busTagnum},
+        #{compState},
+        #{compCreatDate},
+        #{busStartDate},
+        #{busEndDate},
+        #{recordUnit},
+        #{busScope},
+        #{regCap},
+        #{createBy.id},
+        #{createDate},
+        #{updateBy.id},
+        #{updateDate},
+        #{remarks},
+        #{delFlag}
+        )
+    </insert>
+
+
+
+    <insert id="saveOldCompany">
+        INSERT INTO t_company_2_old_data(
+        company_id,
+        comp_type,
+        area_id,
+        sole_code,
+        company_name,
+        type1,
+        type2,
+        type3,
+        legal_name,
+        legal_phone,
+        legal_certtype,
+        legal_certcode,
+        police_name,
+        police_idcode,
+        police_phone,
+        bus_model,
+        bus_type,
+        head_count,
+        special_count,
+        comp_address,
+        comp_phone,
+        postcode,
+        bus_licnum,
+        bus_tagnum,
+        comp_state,
+        comp_creatdate,
+        bus_startdate,
+        bus_enddate,
+        record_unit,
+        bus_scope,
+        reg_cap,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag
+        ) VALUES (
+        #{id},
+        #{compType},
+        #{area.id},
+        #{soleCode},
+        #{companyName},
+        #{type1},
+        #{type2},
+        #{type3},
+        #{legalName},
+        #{legalPhone},
+        #{legalCertType},
+        #{legalCertCode},
+        #{policeName},
+        #{policeIdCode},
+        #{policePhone},
+        #{busModel},
+        #{busType},
+        #{headCount},
+        #{specialCount},
+        #{compAddress},
+        #{compPhone},
+        #{postcode},
+        #{busLicnum},
+        #{busTagnum},
+        #{compState},
+        #{compCreatDate},
+        #{busStartDate},
+        #{busEndDate},
+        #{recordUnit},
+        #{busScope},
+        #{regCap},
+        #{createBy.id},
+        #{createDate},
+        #{updateBy.id},
+        #{updateDate},
+        #{remarks},
+        #{delFlag}
+        )
+    </insert>
+
+
+    <update id="update">
+        UPDATE t_company_${compType.key} SET
+        comp_type = #{compType},
+        area_id = #{area.id},
+        sole_code = #{soleCode},
+        company_name = #{companyName},
+        type1 = #{type1},
+        type2 = #{type2},
+        type3 = #{type3},
+        legal_name = #{legalName},
+        legal_phone = #{legalPhone},
+        legal_certtype = #{legalCertType},
+        legal_certcode = #{legalCertCode},
+        police_name = #{policeName},
+        police_idcode = #{policeIdCode},
+        police_phone = #{policePhone},
+        bus_model = #{busModel},
+        bus_type = #{busType},
+        head_count = #{headCount},
+        special_count = #{specialCount},
+        comp_address = #{compAddress},
+        comp_phone = #{compPhone},
+        postcode = #{postcode},
+        bus_licnum = #{busLicnum},
+        bus_tagnum = #{busTagnum},
+        comp_state = #{compState},
+        comp_creatdate = #{compCreatDate},
+        bus_startdate = #{busStartDate},
+        bus_enddate = #{busEndDate},
+        record_unit = #{recordUnit},
+        bus_scope = #{busScope},
+        reg_cap = #{regCap},
+        update_by = #{updateBy.id},
+        update_date = #{updateDate},
+        remarks = #{remarks}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE t_company_${compType.key} SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 更改company状态-->
+    <update id="updateComDateState" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        UPDATE t_company_${compType.key} a SET
+        a.comp_state = #{compState},
+           a.bus_startdate = #{busStartDate},
+        a.bus_enddate = #{busEndDate}
+        where id = #{id}
+    </update>
+
+    <!-- 更改company状态-->
+    <update id="updateComState" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        UPDATE t_company_${compType.key} a SET
+        a.comp_state = #{compState}
+        where id = #{id}
+    </update>
+    <!--通过唯一码和企业名称检测公司是否存在-->
+    <select id="checkCompanyBysoleCodeAndCompName" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM t_company_${compType.key} a
+        <where>
+            a.sole_code = #{soleCode}
+            AND
+            a.company_name = #{compName}
+            AND
+            a.del_flag = 0
+            <!--<if test="otherInfo != null">-->
+            <!--<if test="otherInfo.companyName !=null and otherInfo.companyName !=''">-->
+            <!--AND a.company_name = #{otherInfo.companyName}-->
+            <!--</if>-->
+
+            <!--<if test="otherInfo.type1 != null and otherInfo.type1 != ''">-->
+            <!--AND a.type1 =#{otherInfo.type1}-->
+            <!--</if>-->
+
+            <!--<if test="otherInfo.legalName != null and otherInfo.legalName != '' ">-->
+            <!--AND a.legalName = #{otherInfo.legalName}-->
+            <!--</if>-->
+            <!--AND a.legalPhone = #{otherInfo.legalPhone}-->
+            <!--AND a.legalCertType = #{otherInfo.legalCertType}-->
+            <!--</if>-->
+        </where>
+        limit 1
+    </select>
+
+    <!--通过统一码和企业名称查找公司-->
+    <select id="getCompanyBysoleCodeAndCompName" resultType="Company">
+        SELECT
+        a.id AS "id",
+        a.comp_type AS "compType",
+        a.area_id AS "area.id",
+        a.sole_code AS "soleCode",
+        a.company_name AS "companyName",
+        a.type1 AS "type1",
+        a.type2 AS "type2",
+        a.type3 AS "type3",
+        a.legal_name AS "legalName",
+        a.legal_phone AS "legalPhone",
+        a.legal_certtype AS "legalCertType",
+        a.legal_certcode AS "legalCertCode",
+        a.police_name AS "policeName",
+        a.police_idcode AS "policeIdCode",
+        a.police_phone AS "policePhone",
+        a.bus_model AS "busModel",
+        a.bus_type AS "busType",
+        a.head_count AS "headCount",
+        a.special_count AS "specialCount",
+        a.comp_address AS "compAddress",
+        a.comp_phone AS "compPhone",
+        a.postcode AS "postcode",
+        a.bus_licnum AS "busLicnum",
+        a.bus_tagnum AS "busTagnum",
+        a.comp_state AS "compState",
+        a.comp_creatdate AS "compCreatDate",
+        a.bus_startdate AS "busStartDate",
+        a.bus_enddate AS "busEndDate",
+        a.record_unit AS "recordUnit",
+        a.bus_scope AS "busScope",
+        a.reg_cap AS "regCap",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks"
+        FROM t_company_${compType.key} a
+        <where>
+            a.sole_code = #{soleCode}
+            AND
+            a.company_name = #{compName}
+            AND
+            a.del_flag = 0
+        </where>
+        limit 1
+    </select>
+
+    <!--通过企业名称查找公司-->
+    <select id="getCompanyByCompName" resultType="Company">
+        SELECT
+        a.id AS "id",
+        a.comp_type AS "compType",
+        a.area_id AS "area.id",
+        a.sole_code AS "soleCode",
+        a.company_name AS "companyName",
+        a.type1 AS "type1",
+        a.type2 AS "type2",
+        a.type3 AS "type3",
+        a.legal_name AS "legalName",
+        a.legal_phone AS "legalPhone",
+        a.legal_certtype AS "legalCertType",
+        a.legal_certcode AS "legalCertCode",
+        a.police_name AS "policeName",
+        a.police_idcode AS "policeIdCode",
+        a.police_phone AS "policePhone",
+        a.bus_model AS "busModel",
+        a.bus_type AS "busType",
+        a.head_count AS "headCount",
+        a.special_count AS "specialCount",
+        a.comp_address AS "compAddress",
+        a.comp_phone AS "compPhone",
+        a.postcode AS "postcode",
+        a.bus_licnum AS "busLicnum",
+        a.bus_tagnum AS "busTagnum",
+        a.comp_state AS "compState",
+        a.comp_creatdate AS "compCreatDate",
+        a.bus_startdate AS "busStartDate",
+        a.bus_enddate AS "busEndDate",
+        a.record_unit AS "recordUnit",
+        a.bus_scope AS "busScope",
+        a.reg_cap AS "regCap",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks"
+        FROM t_company_${compType.key} a
+        <where>
+            a.company_name = #{compName}
+            AND
+            a.del_flag = 0
+        </where>
+        limit 1
+    </select>
+
+    <!--公安业务 -->
+    <select id="findMakeComList" resultType="Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+             a.last_licence_state != ''
+            <if test="compType != null and compType != ''">
+                AND a.comp_type = #{compType}
+            </if>
+            <if test="compState != null and compState != ''">
+                AND a.comp_state = #{compState}
+            </if>
+            <if test="licence != null">
+                <if test="licence.checkState != null ">
+                    AND li.check_state = #{licence.checkState}
+                </if>
+            </if>
+            <if test="companyName != null and companyName !=''">
+                AND a.company_name LIKE CONCAT('%', #{companyName}, '%')
+            </if>
+            <!-- area过滤 -->
+            ${sqlMap.areafilter}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <update id="updateBaseInfo" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        UPDATE t_company_${compType.key} SET
+        police_Name = #{policeName},
+        police_IdCode = #{policeIdCode},
+        police_Phone = #{policePhone},
+        head_count = #{headCount},
+        special_count = #{specialCount},
+        postCode = #{postcode},
+        bus_model = #{busModel},
+        comp_address = #{compAddress},
+        comp_phone = #{compPhone},
+        record_unit = #{recordUnit},
+        bus_scope = #{busScope},
+        reg_cap = #{regCap},
+        bus_startdate = #{busStartDate},
+        bus_enddate = #{busEndDate}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateCompany" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        update t_company_${compType.key}
+        <set>
+            <if test="companyName != null">`company_name` = #{companyName}, </if>
+            <if test="legalName != null">`legal_Name` = #{legalName}, </if>
+            <if test="legalPhone != null">`legal_phone` = #{legalPhone}, </if>
+            <if test="legalCertType != null">`legal_certType` = #{legalCertType}, </if>
+            <if test="legalCertCode != null">`legal_certCode` = #{legalCertCode}, </if>
+            <if test="policeName != null">`police_Name` = #{policeName}, </if>
+            <if test="policeIdCode != null">`police_IdCode` = #{policeIdCode}, </if>
+            <if test="policePhone != null">`police_Phone` = #{policePhone}, </if>
+            <if test="busModel != null">`bus_model` = #{busModel}, </if>
+            <if test="busType != null">`bus_type` = #{busType}, </if>
+            <if test="headCount != null">`head_count` = #{headCount}, </if>
+            <if test="specialCount != null">`special_count` = #{specialCount}, </if>
+            <if test="compAddress != null">`comp_address` = #{compAddress}, </if>
+            <if test="compPhone != null">`comp_phone` = #{compPhone}, </if>
+            <if test="postcode != null">`postcode` = #{postcode}, </if>
+            <if test="busLicnum != null">`bus_licNum` = #{busLicnum}, </if>
+            <if test="busTagnum != null">`bus_tagNum` = #{busTagnum}, </if>
+            <if test="compState != null">`comp_state` = #{compState}, </if>
+            <if test="busStartDate != null">`bus_startDate` = #{busStartDate}, </if>
+            <if test="busEndDate != null">`bus_endDate` = #{busEndDate}, </if>
+            <if test="busScope != null">`bus_scope` = #{busScope}, </if>
+            <if test="regCap != null">`reg_cap` = #{regCap}, </if>
+            <if test="sysOprState != null">`sysOpr_state` = #{sysOprState}, </if>
+            <if test="updateBy != null">`update_by` = #{updateBy}, </if>
+            <if test="updateDate != null">`update_date` = #{updateDate}</if>
+            <if test="remarks != null">`remarks` = #{remarks}, </if>
+            <if test="delFlag != null">`del_flag` = #{delFlag}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 变更-->
+    <update id="updateByLicense">
+        UPDATE t_company_${compType.key} a SET
+        a.bus_startdate = #{busStartDate},
+        a.bus_enddate = #{busEndDate},
+        a.bus_type = #{busType},
+        a.head_count = #{headCount},
+        a.special_count = #{specialCount},
+        a.legal_name = #{legalName},
+        a.legal_phone = #{legalPhone},
+        a.legal_certcode = #{legalCertCode},
+        a.police_name = #{policeName},
+        a.police_idcode = #{policeIdCode},
+        a.police_phone = #{policePhone}
+        where id = #{id}
+    </update>
+
+    <select id="countAgencyByArea" resultType="java.lang.Integer"
+            parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT count(*)
+        FROM t_company_${compType.key} a
+        <where>
+            a.del_flag = '0'
+            <if test="sysOprState !=null">
+                AND a.sysOpr_state = #{sysOprState}
+            </if>
+
+            <if test="compType !=null">
+                AND a.comp_type=#{compType}
+            </if>
+
+            <if test="area !=null">
+                <if test="area.id !=null and area.id != '' ">
+                    AND a.area_id = #{area.id}
+                </if>
+            </if>
+
+        </where>
+        LIMIT 1
+    </select>
+
+    <select id="findCompanyListByAreas" resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+            parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = '0'
+            <if test="companyName !=null and companyName !=''">
+                AND a.company_name like CONCAT('%', #{companyName}, '%')
+            </if>
+            <if test="compType != null ">
+                AND a.comp_type=#{compType}
+            </if>
+            ${sqlMap.areafilter}
+        </where>
+    </select>
+
+    <update id="systemOprationState">
+        update t_company_${compType.key} a SET
+          a.sysOpr_state = #{oprState}
+        WHERE
+          a.id=#{id} AND a.comp_type=#{compType}
+    </update>
+
+
+    <!--更新刻章点的最新license状态-->
+    <update id="updateLastLicenseState">
+        UPDATE t_company_1 a SET
+            a.last_licence_state = #{workType}
+        WHERE
+            a.id=#{company.id}
+    </update>
+
+    <select id="findCompanyByArea" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = '0'
+            AND a.comp_type = #{compType}
+            <if test="area !=null">
+                <if test="area.id !=null and area !='' ">
+                    AND a.area_id = #{area.id}
+                </if>
+            </if>
+            <if test="companyName !=null and companyName != ''">
+                AND  a.company_name LIKE CONCAT('%', #{companyName}, '%')
+            </if>
+
+        </where>
+    </select>
+
+    <!--查询当前区域下某刻章点下的用章企业-->
+    <select id="findUseCompByArea" parameterType="com.thinkgem.jeesite.modules.stamp.dto.count.CompanyCountDTO"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        <include refid="companyColumns2"/>
+        FROM t_company_${company.compType.key} a
+        <where>
+            a.id IN (
+            SELECT
+            DISTINCT b.use_comp AS "useComp.id"
+            FROM t_stamp_${stamp.stampShape} b
+            WHERE
+            b.del_flag = #{company.DEL_FLAG_NORMAL}
+            AND b.now_comp = #{stamp.nowMakeComp.id}
+            )
+            <if test="company.companyName !=null and company.companyName != ''">
+                AND  a.company_name LIKE CONCAT('%', #{company.companyName}, '%')
+            </if>
+            <if test="company.legalName !=null and company.legalName != ''">
+                AND  a.legal_name LIKE CONCAT('%', #{company.legalName}, '%')
+            </if>
+            <if test="company.legalPhone !=null and company.legalPhone != ''">
+                AND  a.legal_phone LIKE CONCAT('%', #{company.legalPhone}, '%')
+            </if>
+            AND a.del_flag = '0'
+        </where>
+    </select>
+
+
+    <update id="changeCompanyInfo">
+        UPDATE  t_company_${compType.key} a SET
+          a.legal_name = #{legalName},
+          a.legal_phone = #{legalPhone},
+          a.legal_certtype = #{legalCertType},
+          a.legal_certcode = #{legalCertCode},
+          a.sole_Code = #{soleCode},
+          a.company_name = #{companyName},
+          a.type1 = #{type1},
+          a.comp_address=#{compAddress},
+          a.comp_phone= #{compPhone}
+        WHERE a.id=#{id}
+    </update>
+
+
+    <!-- add by linzhibao 2018-8-28-->
+    <select id="findCompanyInfoByIds"  resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT * FROM
+            (SELECT
+            t1.stamp_state as "stamp.stampState",
+            <include refid="companyColumns2"/>FROM t_company_2 a
+            JOIN t_stamp_1
+            t1 ON t1.use_comp = a.id
+            where a.del_flag = '0'
+            and a.id in
+            <foreach collection="ids.split(',')" item="idItem" index="index"
+                         open="(" close=")" separator=",">
+                    '${idItem}'
+                </foreach>
+                union ALL
+                SELECT
+                t2.stamp_state as "stamp.stampState",
+                <include refid="companyColumns2" />
+                FROM t_company_2 a
+                JOIN t_stamp_2 t2 ON t2.use_comp = a.id
+                where a.del_flag = '0'
+                and a.id in
+                <foreach collection="ids.split(',')" item="idItem" index="index"
+                         open="(" close=")" separator=",">
+                    '${idItem}'
+                </foreach>
+        )tt GROUP BY tt.id
+    </select>
+
+
+
+    <!--主要是经销商使用-->
+    <select id="getAgenyCompanyByArea"  parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+      SELECT
+      <include refid="companyColumns2"/>
+        FROM t_company_${compType.key} a
+      <where>
+          a.del_flag = '0'
+          AND  a.comp_type = #{compType}
+          AND  a.area_id = #{area.id}
+          <if test="soleCode != null and soleCode !=''">
+              AND a.sole_Code = #{soleCode}
+          </if>
+      </where>
+
+    </select>
+
+    <select id="sysFindList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+                        resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = '0'
+            <if test="soleCode != null and soleCode !=''">
+                AND a.sole_code like CONCAT('%', #{soleCode}, '%')
+            </if>
+            <if test="companyName != null and companyName !=''">
+                AND a.company_name like CONCAT('%', #{companyName}, '%')
+            </if>
+            <if test="area != null  ">
+                <if test="area.id !=null and area.id!=''">
+                    AND a.area_id = #{area.id}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <select id="multipleConditionsFindList" resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+            parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="compState != null and compState != ''">
+                AND a.comp_state = #{compState}
+            </if>
+            <if test="compType != null and compType != ''">
+                AND a.comp_type = #{compType}
+            </if>
+            <if test="companyName !=null and companyName !=''">
+                AND a.company_name LIKE  CONCAT('%', #{companyName}, '%')
+            </if>
+        </where>
+
+    </select>
+
+
+    <update id="editCompanyInfo"  parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        UPDATE t_company_${compType.key} SET
+          legal_name = #{legalName},
+          legal_phone = #{legalPhone},
+          legal_certtype = #{legalCertType},
+          legal_certcode = #{legalCertCode},
+          type1 = #{type1},
+          comp_address=#{compAddress},
+          comp_phone= #{compPhone}
+        WHERE id=#{id}
+    </update>
+
+    <select id="countCompanyPage" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+        resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        <include refid="companyColumns"/>
+        FROM t_company_${compType.key} a
+        <include refid="companyJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="compType != null and compType != ''">
+                AND a.comp_type = #{compType}
+            </if>
+            <if test="companyName != null and companyName !=''">
+                AND a.company_name LIKE CONCAT('%', #{companyName}, '%')
+            </if>
+            <!-- area过滤 -->
+            ${sqlMap.areafilter}
+        </where>
+    </select>
+
+    <select id="getSequenceNextVal" resultType="int" >
+        SELECT nextval_${seq_type}(#{seq_name}) from dual;
+    </select>
+
+</mapper>

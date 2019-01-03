@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.thinkgem.jeesite.modules.sign.dao.DocumentActionDao">
+
+
+    <insert id="insert" parameterType="com.thinkgem.jeesite.modules.sign.entity.Document">
+      INSERT INTO t_document_sign(
+        id,
+        file_name,
+        file_orginal_path,
+        create_date,
+        user,
+        status,
+        remarks,
+        hex_code_orginal
+      ) VALUE (
+        #{id},
+        #{fileName},
+        #{fileOrgPath},
+        #{createDate},
+        #{user.id},
+        #{status},
+        #{remarks},
+        #{hexCodeOrginal}
+      )
+    </insert>
+
+  <update id="finishSinatrue" parameterType="com.thinkgem.jeesite.modules.sign.entity.Document">
+        UPDATE t_document_sign a
+        SET
+         a.file_signature_path=#{fileSinaturePath},
+         a.singal_date=#{singalDate},
+         a.hex_code_signature=#{hexCodeSignture},
+         a.singature_md5=#{singatureMD5},
+         a.seal=#{stamp.bindStampId}
+        WHERE
+         a.id=#{id}
+    </update>
+
+    <update id="updateSignData" parameterType="Map">
+        UPDATE
+          t_document_sign a
+        SET
+          a.status='1',
+          a.hex_code_signature=#{SignData}
+        WHERE
+          a.id=#{DocmentId}
+    </update>
+
+    <update id="delete">
+        UPDATE t_document_sign
+        SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

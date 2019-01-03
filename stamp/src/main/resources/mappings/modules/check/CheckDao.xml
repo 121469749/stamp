@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.CheckDao">
+
+    <sql id="stampSql">
+		a.id AS "id",
+		a.use_comp AS "useComp.id",
+		a.make_comp AS "makeComp.id",
+		a.now_comp AS "nowMakeComp.id",
+		a.record_id AS "lastRecord.id",
+		a.stamp_name AS "stampName",
+		a.allow_usenum AS "allowUseNum",
+		a.stamp_state AS "stampState",
+		a.use_state AS "useState",
+		a.sys_state AS "sysState",
+		a.laststate_date AS "lastStateDate",
+		a.stamp_type as "stampType",
+		a.stamp_texture AS "stampTexture",
+		a.stamp_subtype AS "stampSubType",
+		a.record_date AS "recordDate",
+		a.make_date AS "makeDate",
+		a.delivery_date AS "deliveryDate",
+		a.stamp_shape AS "stampShape",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.livePhoto AS "livePhoto",
+		a.recordPhoto AS "recordPhoto",
+		a.remarks AS "remarks",
+		a.shape_id AS "stampShapeId",
+		a.ele_model AS "eleModel",
+		a.phy_model AS "phyModel",
+		a.record_state AS "recordState",
+		a.del_flag AS "delFlag",
+		a.stamp_code AS "stampCode",
+		a.water_model AS "waterEleModel"
+	</sql>
+
+    <select id="findCheckStamp" parameterType="com.thinkgem.jeesite.modules.check.dto.QueryDTO"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+				SELECT
+				<include refid="stampSql"/>
+				FROM t_stamp_${stampShape} a
+					,t_company_2 b
+				<where>
+					a.del_flag = '0'
+					AND a.use_state in ('OPEN','STOP')
+					AND a.sys_state = 'USABLE'
+					AND a.use_comp = b.id
+					<if test=" stampCode != null and stampCode !=''">
+						AND	a.stamp_code LIKE "%"#{stampCode}"%"
+					</if>
+					<if test=" companyName != null and companyName != ''  ">
+						AND b.company_Name LIKE "%"#{companyName}"%"
+					</if>
+					<if test=" stampName != null and stampName != ''  ">
+						AND a.stamp_name LIKE "%"#{stampName}"%"
+					</if>
+				</where>
+				ORDER BY a.create_date DESC
+            </when>
+            <otherwise>
+				SELECT
+				<include refid="stampSql"/>
+				FROM t_stamp_1 a
+				,t_company_2 b
+				<where>
+					a.del_flag = '0'
+					AND a.use_state in ('OPEN','STOP')
+					AND a.sys_state = 'USABLE'
+					AND a.use_comp = b.id
+					<if test=" stampCode != null and stampCode !=''">
+						AND	a.stamp_code LIKE "%"#{stampCode}"%"
+					</if>
+					<if test=" companyName != null and companyName != ''  ">
+							AND b.company_Name LIKE "%"#{companyName}"%"
+					</if>
+					<if test=" stampName != null and stampName != ''  ">
+						AND a.stamp_name LIKE "%"#{stampName}"%"
+					</if>
+				</where>
+
+
+				UNION
+				SELECT
+				<include refid="stampSql"/>
+				FROM t_stamp_2 a
+					,t_company_2 b
+				<where>
+					a.del_flag = '0'
+					AND a.use_state in ('OPEN','STOP')
+					AND a.sys_state = 'USABLE'
+					AND a.use_comp = b.id
+					<if test=" stampCode != null and stampCode !=''">
+						AND	a.stamp_code LIKE "%"#{stampCode}"%"
+					</if>
+					<if test=" companyName != null and companyName != ''  ">
+						AND b.company_name LIKE "%"#{companyName}"%"
+					</if>
+					<if test=" stampName != null and stampName != ''  ">
+						AND a.stamp_name LIKE "%"#{stampName}"%"
+					</if>
+				</where>
+            </otherwise>
+        </choose>
+
+    </select>
+
+	<!--润成经销商时效管控-->
+	<select id="findCheckStamp2" parameterType="com.thinkgem.jeesite.modules.check.dto.QueryDTO"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+
+				SELECT
+				<include refid="stampSql"/>
+				FROM t_stamp_2 a
+					,t_company_2 b
+				<where>
+					a.del_flag = '0'
+					AND a.use_state in ('OPEN','STOP')
+					AND a.sys_state = 'USABLE'
+					AND a.use_comp = b.id
+					<if test=" stampCode != null and stampCode !=''">
+						AND	a.stamp_code LIKE "%"#{stampCode}"%"
+					</if>
+					<if test=" companyName != null and companyName != ''  ">
+						AND b.company_Name LIKE "%"#{companyName}"%"
+					</if>
+					<if test=" stampName != null and stampName != ''  ">
+						AND a.stamp_name LIKE "%"#{stampName}"%"
+					</if>
+				</where>
+				ORDER BY a.create_date DESC
+
+
+	</select>
+
+	<sql id="companySql">
+		a.id AS "id",
+        a.comp_type AS "compType",
+        a.area_id AS "area.id",
+        a.sole_code AS "soleCode",
+        a.company_name AS "companyName",
+        a.type1 AS "type1",
+        a.type2 AS "type2",
+        a.type3 AS "type3",
+        a.legal_name AS "legalName",
+        a.legal_phone AS "legalPhone",
+        a.legal_certtype AS "legalCertType",
+        a.legal_certcode AS "legalCertCode",
+        a.police_name AS "policeName",
+        a.police_idcode AS "policeIdCode",
+        a.police_phone AS "policePhone",
+        a.bus_model AS "busModel",
+        a.bus_type AS "busType",
+        a.head_count AS "headCount",
+        a.special_count AS "specialCount",
+        a.comp_address AS "compAddress",
+        a.comp_phone AS "compPhone",
+        a.postcode AS "postcode",
+        a.bus_licnum AS "busLicnum",
+        a.bus_tagnum AS "busTagnum",
+        a.comp_state AS "compState",
+        a.comp_creatdate AS "compCreatDate",
+        a.bus_startdate AS "busStartDate",
+        a.bus_enddate AS "busEndDate",
+        a.record_unit AS "recordUnit",
+        a.bus_scope AS "busScope",
+        a.reg_cap AS "regCap",
+        a.create_date AS "createDate",
+        a.update_date AS "updateDate",
+        a.del_flag AS "delFlag",
+        a.last_licence_state AS "lastLicenceState",
+        a.sysOpr_state AS "sysOprState"
+	</sql>
+
+	<select id="getUseCompany" resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+		SELECT
+			<include refid="companySql"/>
+		FROM t_company_2 a
+		<where>
+			a.id=#{id}
+		</where>
+	</select>
+
+	<select id="getMakeCompany" resultType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+		SELECT
+		<include refid="companySql"/>
+		FROM t_company_1 a
+		<where>
+			a.id=#{id}
+		</where>
+	</select>
+
+	<select id="findStamp" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+				parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+		SELECT
+			<include refid="stampSql"/>
+		FROM t_stamp_${stampShape} a
+		WHERE
+			a.id=#{id} AND a.del_flag ='0'
+	</select>
+
+</mapper>

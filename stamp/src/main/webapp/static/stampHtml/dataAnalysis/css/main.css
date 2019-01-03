@@ -1,0 +1,366 @@
+html { overflow-x:hidden; }
+.content-header {
+	position: relative;
+	padding: 0 0 3px 8px
+}
+
+.content-header>.breadcrumb {
+    position: relative;
+    top: 0;
+    right: 0;
+    float: none;
+    margin-top: 0px;
+    padding-left: 10px;
+    background: #ecf0f5;
+}
+
+.main-footer {
+    padding: 7px;
+    color: #444;
+    border-top: 1px solid #eee;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.form-inline .form-group {
+    margin-bottom: 10px;
+    margin-right: 15px;
+    vertical-align: baseline;
+}
+
+.grid-btn{
+	margin-bottom:12px;
+}
+.grid-btn .btn{
+	margin-right:10px;
+}
+.pointer{cursor: pointer;}
+
+.ml-10 { margin-left:0 !important; }
+@media (min-width: 768px) {
+	.ml-10 { margin-left:10px !important; }
+	.col-sm-10 {width: 70%;padding-left: 0px;}
+	.col-sm-2 {width: 24%;}
+}
+tbody > tr > th {font-weight: normal; }
+.panel .table { margin:0 0; }
+.panel .pagination { margin:0; }
+.panel-default>.panel-heading {background-color: #f5f5f5;}
+.row{
+	border-top: 1px solid #ddd;
+	margin:0;
+	padding:20px 2px 0px 2px;
+}
+.col-xs-6{padding-left: 0px;padding-right: 0px;}
+.form-horizontal .form-group {margin-left:0px;margin-right:0px;}
+.form-horizontal{
+	width:100%;padding-top:20px;
+}
+
+/* add by lxc 20170626  */
+
+.ui-jqgrid tr.jqgrow td  {
+white-space: normal !important;
+height:auto;
+vertical-align:text-top;
+padding-top:2px;
+word-break:break-all;
+}
+
+/************jQuery.Validate插件样式开始********************/
+label.error
+{
+    background: url(common/jquery-validate-1.13.0/images/error.png) no-repeat 0px 0px;
+    color: Red;
+    padding-left: 20px;
+}
+label.success
+{			
+   background:url("common/jquery-validate-1.13.0/images/checked.gif") no-repeat 0px 0px; 
+}
+input.error
+{
+    border: dashed 1px red;
+}
+/************jQuery.Validate插件样式结束********************/
+
+/* 卡片样式 */
+.card-panel{
+    position: relative;
+    overflow: auto;
+    color: #666;
+    background: #fff;
+    -webkit-box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.card-panel .card-panel-wrapper{
+    float: left;
+    margin: 14px 0 14px 14px;
+    padding: 20px;
+    -webkit-transition: all 0.38s ease-out;
+    transition: all 0.38s ease-out;
+    border-radius: 6px;
+}
+
+.icon-make{
+    background: #40c9c6;
+}
+.icon-delivery{
+    background: #36a3f7;
+}
+.icon-use{
+    background: #f4516c;
+}
+.icon-apply{
+    background: #1685a9;
+}
+
+.card-panel .card-panel-description{
+    width: 170px;
+    float: right;
+    font-weight: bold;
+    margin: 10px;
+    margin-left: 0px;
+}
+.card-panel .card-panel-description-title{
+   line-height: 20px;
+}
+.card-panel .card-panel-description-content{
+    text-align: center;
+    line-height: 30px;
+}
+/*下载卡片样式*/
+.download-panel{
+    position: relative;
+    padding: 30px 50px 50px;
+    border-radius: 0;
+    border-top: 5px solid #64d9d6;
+    background-color: #fff;
+    text-align: center;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    -webkit-box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
+.download-panel h2{
+    padding-bottom: 15px;
+    font-size: 18px !important;
+}
+
+.download-badge{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #e6e6e6;
+    line-height: 28px;
+    padding: 0 15px;
+    border-radius: 2px;
+}
+
+.download-panel ul{
+    height: 330px;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.download-btn{
+    position: relative;
+    text-align: center;
+}
+
+.download-btn .layui-btn{
+    width: 100%;
+    background-color: #409eff;
+}
+
+.download-btn a:hover{
+    text-decoration:none;
+}
+
+.download-btn a:focus{
+    text-decoration:none;
+    color: #fff;
+}
+
+.layui-main .layui-elem-field {
+    width: 300px;
+    margin: 0 auto 50px;
+    text-align: center;
+}
+
+.layui-main .layui-elem-field legend {
+    padding: 0 15px;
+}
+
+
+/* 去掉表单样式row的横线 */
+.row
+{
+    border-top: none;
+}
+/* 表单显示标签的宽度 */
+.widthLabel{
+    width:28%;
+}
+/* 表单输入框标签样式 */
+.inputLabel{
+    padding-top: 7px;
+    margin-bottom: 0;
+    text-align: right;
+}
+/* syslogin.html图标颜色 */
+.icon{
+    color: #889aa4 !important;
+}
+/* input-group里各个标签样式 */
+.inInputGroupCss{
+    border: 0px;
+    background: transparent;
+    color: #eee;
+}
+/* 修改input的背景色 */
+.input-group .input-group-addon {
+    background-color: transparent;
+}
+/* 包含图标整个input的div样式 */
+.inputCss {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+/* 密码显示按钮的样式 */
+.showPasswordBtnCss {
+    display: inline-block;
+    width: 30px;
+    height: 34px;
+    position: absolute;
+    right: 2px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+
+
+/********** 用户信息模块并排div显示样式 **********/
+.div-content {
+    overflow: auto;
+}
+/* 树 */
+.div-left {
+    float: left;
+}
+/* 折叠/展开div */
+.div-mid {
+    float: left;
+    background: #fafafa;
+    width: 8px;
+    height: -webkit-fill-available !important;
+    height: 700px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+/* 表格 */
+.div-right {
+    overflow: hidden;
+    margin-left: 0;
+}
+.bottom-line {
+    border-bottom: 1px solid #eee;
+}
+/* 折叠/展开 */
+.div-mid .middleBox {
+    position: relative;
+    top: 50%;
+    border: 1px solid #eee;
+    background: #eee;
+    cursor: pointer;
+    height: 40px;
+}
+/********** 用户信息模块并排div显示样式 **********/
+
+.width-auto {
+    width: auto !important;
+}
+
+/*下拉导航触发*/
+.dropdown-user:hover .dropdown-menu{
+    display: block;
+    margin-top: 0;
+}
+.dropdown-menu {
+    animation-duration: .3s;
+    animation-name: fadeInUp;
+}
+@keyframes fadeInUp{
+    from{opacity:0;transform:translate3d(0,100%,0)}
+    to{opacity:1;transform:translate3d(0,0,0)}
+}
+/*用户头像*/
+.user-avatar{
+    text-align: center;
+}
+.user-avatar img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+.user-icon{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+/* 清除输入框自带的清除标志 */
+.hiddenInputClear::-ms-clear {
+    display: none;
+}
+/* 清除密码框自带的显示隐藏标志 */
+.hiddenInputEye::-ms-reveal {
+    display: none;
+}
+
+/* 密码强度条样式 */
+.progress-bar_wrap {
+    width: 350px;
+    height: 5px;
+    background: #F6F6FA;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.progress-bar_item {
+    display: inline-block;
+    height: 100%;
+    width: 32.5%;
+    margin-right: .8%;
+    border-radius: 5px;
+    float: left;
+    -webkit-transition: background-color .5s, visisility .1s;
+    transition: background-color .5s, visisility .1s;
+}
+
+.progress-bar_text {
+    display: inline-block;
+    color: #aaa;
+    margin-left: 5px;
+    -webkit-transition: .5s;
+    transition: .5s;
+}
+
+.progress-bar_item-1.active {
+    background-color: #FF4B47;
+}
+
+.progress-bar_item-2.active {
+    background-color: #F9AE35;
+}
+
+.progress-bar_item-3.active {
+    background-color: #2DAF7D;
+}

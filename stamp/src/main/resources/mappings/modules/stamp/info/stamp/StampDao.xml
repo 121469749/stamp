@@ -1,0 +1,2495 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamp.StampDao">
+
+    <sql id="stampColumns">
+		a.id AS "id",
+		a.use_comp AS "useComp.id",
+		a.make_comp AS "makeComp.id",
+		a.now_comp AS "nowMakeComp.id",
+		a.record_id AS "lastRecord.id",
+		a.stamp_name AS "stampName",
+		a.allow_usenum AS "allowUseNum",
+		a.stamp_state AS "stampState",
+		a.use_state AS "useState",
+		a.sys_state AS "sysState",
+		a.laststate_by AS "lastStateBy.id",
+		a.laststate_date AS "lastStateDate",
+		a.stamp_type as "stampType",
+		a.stamp_texture AS "stampTexture",
+		a.stamp_subtype AS "stampSubType",
+		a.record_date AS "recordDate",
+		a.make_date AS "makeDate",
+		a.delivery_date AS "deliveryDate",
+		a.stamp_shape AS "stampShape",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.livePhoto AS "livePhoto",
+		a.recordPhoto AS "recordPhoto",
+		a.remarks AS "remarks",
+		a.ele_model AS "eleModel",
+		a.phy_model AS "phyModel",
+		a.es_ele_model AS "esEleModel",
+		a.scan_model AS "scanModel",
+		a.anti_fake_id AS "antiFakeId",
+		a.anti_fake_write AS "antiFakeWrite",
+		a.record_state AS "recordState",
+		a.shape_id AS "stampShapeId",
+		a.del_flag AS "delFlag",
+		a.stamp_code AS "stampCode",
+		a.make_money AS "makeMoney",
+		a.city_money AS "cityMoney",
+		a.rc_money AS "rcMoney",
+		a.province_money AS "provinceMoney",
+		a.water_model AS "waterEleModel",
+		a.return_code AS "returnCode",
+		a.state_flag AS "stateFlag",
+		a.record_pdf AS "recordPDF"
+	</sql>
+
+    <sql id="stampColumns1">
+        a.id AS "id",
+        a.use_comp AS "useComp.id",
+        a.record_id AS "lastRecord.id",
+        a.stamp_state AS "stampState",
+        a.del_flag AS "delFlag",
+        a.make_date AS "makeDate",
+        a.delivery_date AS "deliveryDate",
+        a.create_date AS "createDate",
+        a.use_state AS "useState",
+        a.stamp_code AS "stampCode",
+        a.stamp_name AS "stampName",
+        a.laststate_by AS "lastStateBy.id",
+        a.update_by AS "updateBy.id",
+        a.stamp_shape AS "stampShape",
+        a.stamp_type as "stampType",
+        a.record_state AS "recordState",
+        a.update_date AS "updateDate"
+    </sql>
+
+    <!--公安统计功能-->
+    <sql id="policeCountColumns">
+        t_company_1.area_id as areaId,
+        t_company_1.id as makeComId,
+        d.stampCount as stampCount
+    </sql>
+
+    <sql id="stampJoins">
+
+    </sql>
+
+    <sql id="comRecordJoins">
+        LEFT JOIN t_company_2 com ON com.id = a.use_comp
+        LEFT JOIN t_stamprecord_1 stamprecord ON a.record_id = stamprecord.id
+    </sql>
+
+    <sql id="comAreaJoins">
+		    LEFT JOIN t_company_2 com ON com.id = a.use_comp
+		    LEFT JOIN sys_area sa ON sa.id = com.area_id
+	</sql>
+
+
+    <select id="get" resultType="Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        <include refid="stampJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        <include refid="stampJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="stampName != null and stampName != ''">
+                AND a.stamp_name = #{stampName}
+            </if>
+
+            <if test="stampShape != null and stampShape !='' ">
+                AND a.stamp_shape = #{stampShape}
+            </if>
+
+            <if test="stampType != null and stampType !=''">
+                AND a.stamp_type = #{stampType}
+            </if>
+
+            <if test="stampState != null and stampState != '' ">
+                AND a.stamp_state =#{stampState}
+            </if>
+            <if test="lastRecord != null ">
+                <if test="lastRecord.id != null and lastRecord.id !='' ">
+                    AND a.record_id = #{lastRecord.id}
+                </if>
+            </if>
+
+            <if test="nowMakeComp !=null ">
+                <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                    AND a.now_comp = #{nowMakeComp.id}
+                </if>
+            </if>
+            <if test="useComp !=null ">
+                <if test="useComp.id !=null and useComp.id !=''">
+                    AND a.use_comp = #{useComp.id}
+                </if>
+            </if>
+
+            <!--枚举属性 start-->
+            <if test="stampState !=null">
+                AND a.stamp_state=#{stampState}
+            </if>
+
+            <if test="useState != null">
+                AND a.use_state=#{useState}
+            </if>
+
+            <if test="sysState != null ">
+                AND a.sys_state=#{sysState}
+            </if>
+            <!--end-->
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        <include refid="stampJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getUseComId" resultType="String">
+        SELECT
+        DISTINCT a.use_comp AS "useComp.id"
+        FROM t_stamp_${stampShape} a
+        <include refid="stampJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            AND a.now_comp = #{nowMakeComp.id}
+        </where>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO t_stamp_${stampShape}(
+			id,
+			use_comp,
+			make_comp,
+			now_comp,
+			record_id,
+			stamp_name,
+			allow_usenum,
+			stamp_state,
+			stamp_shape,
+			use_state,
+			sys_state,
+			laststate_by,
+			laststate_date,
+			stamp_texture,
+			stamp_type,
+			stamp_subtype,
+			shape_id,
+			record_date,
+			make_date,
+			delivery_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			record_state,
+			remarks,
+			phy_model,
+			ele_model,
+			es_ele_model,
+			scan_model,
+			make_money,
+			province_money,
+			rc_money,
+			city_money,
+			stamp_code,
+			del_flag
+		) VALUES (
+			#{id},
+			#{useComp.id},
+			#{makeComp.id},
+			#{nowMakeComp.id},
+			#{lastRecord.id},
+			#{stampName},
+			#{allowUseNum},
+			#{stampState},
+			#{stampShape},
+			#{useState},
+			#{sysState},
+			#{lastStateBy.id},
+			#{lastStateDate},
+			#{stampTexture},
+			#{stampType},
+			#{stampSubType},
+			#{stampShapeId},
+			#{recordDate},
+			#{makeDate},
+			#{deliveryDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{recordState},
+			#{remarks},
+			#{phyModel},
+			#{eleModel},
+			#{esEleModel},
+			#{scanModel},
+			#{makeMoney},
+			#{provinceMoney},
+			#{rcMoney},
+			#{cityMoney},
+			#{stampCode},
+			#{delFlag}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE t_stamp_${stampShape} SET
+			use_comp = #{useComp.id},
+			make_comp = #{makeComp.id},
+			now_comp = #{nowMakeComp.id},
+			record_id = #{lastRecord.id},
+			stamp_name = #{stampName},
+			allow_usenum = #{allowUseNum},
+			stamp_state = #{stampState},
+			stamp_shape = #{stampShape},
+			sys_state = #{sysState},
+			laststate_by = #{lastStateBy.id},
+			laststate_date = #{lastStateDate},
+			ele_model = #{eleModel},
+            phy_model = #{phyModel},
+            es_ele_model = #{esEleModel},
+            scan_model = #{scanModel},
+			stamp_texture = #{stampTexture},
+			stamp_type = #{stampType},
+			stamp_subtype = #{stampSubType},
+			record_date = #{recordDate},
+			make_date = #{makeDate},
+			delivery_date = #{deliveryDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			shape_id=#{stampShapeId},
+			update_by = #{updateBy.id},
+        	update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+    <!-- 更新物理印章写入芯片状态 -->
+    <update id="updateChip" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a SET
+        a.anti_fake_id = #{antiFakeId},
+        a.anti_fake_write = #{antiFakeWrite}
+        WHERE a.stamp_code = #{stampCode}
+    </update>
+
+    <update id="delete">
+		UPDATE t_stamp_${stampShape} SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+    <!-- 启停印章状态 -->
+    <update id="updateStampState" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a SET
+        a.use_state = #{useState},
+        <if test="lastRecord !=null">
+            a.record_id=#{lastRecord.id},
+        </if>
+        a.update_by = #{updateBy.id},
+        a.update_date = #{updateDate}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 缴销印章 -->
+    <update id="updateStampState2" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a SET
+        a.use_state = #{useState},
+        <if test="lastRecord !=null">
+            a.record_id=#{lastRecord.id},
+        </if>
+        a.record_state = #{recordState},
+        a.update_by = #{updateBy.id},
+        a.update_date = #{updateDate}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新印章临时使用状态标志 -->
+    <update id="updateStateFlag" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a SET
+        a.state_flag = #{stateFlag}
+        WHERE a.id = #{id}
+    </update>
+
+    <!-- 查询某用章公司名下的所有 已交付 可用 物理印章 -->
+    <select id="listStampByComId" parameterType="java.lang.String"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        WHERE a.use_comp = #{useComp.id}
+        AND a.stamp_state = 'DELIVERY'
+        AND a.sys_state = 'USABLE'
+        AND a.del_flag = '0'
+        AND a.stamp_shape = '1'
+        AND a.use_state = 'OPEN'
+    </select>
+
+    <!--<insert id="insertStampList" parameterType="java.util.List">-->
+    <!--INSERT INTO t_stamp (-->
+    <!--id,-->
+    <!--use_comp,-->
+    <!--make_comp,-->
+    <!--now_comp,-->
+    <!--record_id,-->
+    <!--stamp_name,-->
+    <!--stamp_state,-->
+    <!--stamp_shape,-->
+    <!--sys_state,-->
+    <!--lastState_by,-->
+    <!--lastState_date,-->
+    <!--stamp_texture,-->
+    <!--stamp_type,-->
+    <!--record_date,-->
+    <!--create_by,-->
+    <!--create_date,-->
+    <!--update_by,-->
+    <!--update_date,-->
+    <!--remarks,-->
+    <!--del_flag-->
+    <!--)-->
+    <!--VALUES-->
+    <!--<foreach collection="list" item="item" separator=",">-->
+    <!--(-->
+    <!--#{item.id},-->
+    <!--#{item.useComp.id},-->
+    <!--#{item.makeComp.id},-->
+    <!--#{item.nowMakeComp.id},-->
+    <!--#{item.lastRecord.id},-->
+    <!--#{item.stampName},-->
+    <!--#{item.stampState},-->
+    <!--#{item.stampShape},-->
+    <!--#{item.sysState},-->
+    <!--#{item.lastStateBy.id},-->
+    <!--#{item.lastStateDate},-->
+    <!--#{item.stampTexture},-->
+    <!--#{item.stampType},-->
+    <!--#{item.recordDate},-->
+    <!--#{item.createBy.id},-->
+    <!--#{item.createDate},-->
+    <!--#{item.updateBy.id},-->
+    <!--#{item.updateDate},-->
+    <!--#{item.remarks},-->
+    <!--#{item.delFlag}-->
+    <!--)-->
+    <!--</foreach>-->
+
+    <!--</insert>-->
+
+
+    <!--通过印章类型，用章公司，
+     * 计算该公司 这种印章类型的 数目有多少个-->
+    <select id="getStampTypeCountByUseCompanyAndStampType" resultType="java.lang.Integer">
+		SELECT
+			count(*)
+		FROM t_stamp_${stampShape} a
+		WHERE
+			a.stamp_type = #{stampType} AND a.use_comp = #{useCompany.id}
+	</select>
+
+    <!--检查该用章公司的新的印章名是否存在-->
+    <select id="checkStampNameExist" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.stamp_name = #{stampName}
+            AND a.use_comp = #{useCompany.id}
+        </where>
+    </select>
+
+    <!--根据芯片UID检查是否已绑定印章-->
+    <select id="getStampByAntiFakeId" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.anti_fake_id = #{antiFakeId}
+        </where>
+    </select>
+
+    <!--根据印章编码查询印章信息-->
+    <select id="getStampByStampCode" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.stamp_code = #{stampCode}
+        </where>
+    </select>
+
+    <!-- 根据印章使用状态查询印章 -->
+    <select id="listStampByUseState" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        WHERE a.use_comp = #{useComp.id}
+        AND a.del_flag = '0'
+        <if test="stampState != null">
+            <if test="stampState != ''">
+                AND a.stamp_state = #{stampState}
+            </if>
+        </if>
+        <if test="useState != null">
+            <if test="useState != ''">
+                AND a.use_state = #{useState}
+            </if>
+        </if>
+        <if test="sysState != null">
+            <if test="sysState != ''">
+                AND a.sys_state = #{sysState}
+            </if>
+        </if>
+        <if test="stampName != null">
+            <if test="stampName != ''">
+                AND a.stamp_name LIKE concat(concat('%', #{stampName}), '%')
+            </if>
+        </if>
+        <if test="stampShape != null">
+            <if test="stampShape != ''">
+                AND a.stamp_shape = #{stampShape}
+            </if>
+        </if>
+    </select>
+
+
+    <!-- 根据印章状态查询印章 -->
+    <select id="listStampByStampState" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        ,
+        com.company_name AS "nowMakeComp.companyName"
+        FROM t_stamp_${stampShape} a, t_company_1 com
+        WHERE a.use_comp = #{useComp.id}
+        AND a.now_comp = com.id
+        AND a.del_flag = '0'
+        <if test="stampState != null">
+            <if test="stampState != ''">
+                AND a.stamp_state = #{stampState}
+            </if>
+        </if>
+        <if test="sysState != null">
+            <if test="sysState != ''">
+                AND a.sys_state = #{sysState}
+            </if>
+        </if>
+        <if test="stampName != null">
+            <if test="stampName != ''">
+                AND a.stamp_name LIKE concat(concat('%', #{stampName}), '%')
+            </if>
+        </if>
+        <if test="stampShape != null">
+            <if test="stampShape != ''">
+                AND a.stamp_shape = #{stampShape}
+            </if>
+        </if>
+    </select>
+
+    <!--检查 当前的印章id是否可以开始制作-->
+    <select id="checkStampNeedMake" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.id = #{stampId} AND
+            a.del_flag = 0 AND
+            a.stamp_State = 'ENTERING'
+        </where>
+        limit 1
+    </select>
+
+    <!-- 根据 印章名称、用章公司 查找印章（模糊查询） -->
+    <select id="listStampByName" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        WHERE a.use_comp = #{company.id}
+        AND a.del_flag = '0'
+        <if test="stamp.useState != null and stamp.useState != ''">
+            AND a.use_state = #{stamp.useState}
+        </if>
+        <if test="stamp.stampName != null and stamp.stampName != ''">
+            AND a.stamp_name LIKE concat(concat('%', #{stamp.stampName}), '%')
+        </if>
+        <if test="stamp.stampShape != null and stamp.stampShape != ''">
+            AND a.stamp_shape = #{stamp.stampShape}
+        </if>
+        <if test="stamp.sysState != null and stamp.sysState != ''">
+            AND a.sys_state = #{stamp.sysState}
+        </if>
+        <choose>
+            <when test="stamp.page !=null and stamp.page.orderBy != null and stamp.page.orderBy != ''">
+                ORDER BY ${stamp.page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <update id="updateRepairStamp" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+		UPDATE t_stamp_${stampShape} a
+		SET
+		  a.stamp_state = #{stampState},
+		  a.make_date = #{makeDate}
+		WHERE a.id=#{id}
+	</update>
+
+    <update id="bindStampAndMoulage" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a
+        SET
+        a.shape_id = #{stampShapeId},
+        a.stamp_state = #{stampState},
+        <if test="stampName !=null and stampName !=''">
+            a.stamp_name = #{stampName},
+        </if>
+        <if test="stampCode !=null and stampCode !=''">
+            a.stamp_code = #{stampCode},
+        </if>
+        <if test="phyModel != null and phyModel !=''">
+            a.phy_model=#{phyModel},
+        </if>
+        <if test="eleModel != null and eleModel !=''">
+            a.ele_model=#{eleModel},
+        </if>
+        <if test="esEleModel != null and esEleModel !=''">
+            a.es_ele_model=#{esEleModel},
+        </if>
+        a.make_date = #{makeDate},
+        a.update_Date =#{updateDate}
+        WHERE a.id = #{id}
+    </update>
+
+    <update id="deliveryStamp">
+		UPDATE t_stamp_${stampShape} a
+		SET
+			a.sys_state = #{sysState},
+			a.stamp_state = #{stampState},
+			a.use_state = #{useState},
+			a.update_Date =#{updateDate},
+			a.update_By = #{updateBy.id},
+			a.delivery_date = #{deliveryDate},
+			a.lastState_By = #{lastStateBy.id},
+			a.lastState_Date = #{lastStateDate},
+			a.livePhoto = #{livePhoto},
+			a.recordPhoto = #{recordPhoto},
+			a.record_pdf = #{recordPDF}
+		WHERE  a.id = #{id}
+	</update>
+
+    <!--
+    -补刻操作
+    -更改要被补刻的印章的状态
+    -->
+    <update id="changeOldStampState" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+		UPDATE t_stamp_${stampShape} a
+		SET
+			a.use_state = #{useState},
+			a.sys_state = #{sysState},
+			a.record_state = #{recordState},
+			a.record_id = #{lastRecord.id},
+			a.now_comp = #{nowMakeComp.id},
+			a.update_Date =#{updateDate},
+			a.update_By = #{updateBy.id}
+		WHERE
+			a.id=#{id}
+	</update>
+
+
+    <!-- 根据当前公安区域查询stamp -->
+    <select id="findListByPoliceArea" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        ,
+        com.comp_type AS "useComp.compType",
+        com.area_id AS "useComp.area.id",
+        com.sole_code AS "useComp.soleCode",
+        com.company_name AS "useComp.companyName"
+        FROM t_stamp_${stampShape} a
+        <include refid="comAreaJoins"/>
+         <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            AND a.delivery_date is not null
+            <if test="stampName != null and stampName != ''">
+                AND a.stamp_name LIKE CONCAT('%','${stampName}','%' )
+            </if>
+            <if test="useComp !=null ">
+                <if test="useComp.companyName !=null and useComp.companyName !=''">
+                    AND com.company_name LIKE CONCAT('%','${useComp.companyName}','%')
+                </if>
+            </if>
+            <if test="id != null and id != ''">
+                AND a.id = #{id}
+            </if>
+            <if test="stampState != null and stampState != '' ">
+                AND a.stamp_state =#{stampState}
+            </if>
+            <if test="useState != null and useState != '' ">
+                AND a.use_state = #{useState}
+            </if>
+            <if test="stampType !=null and stampType !=''">
+                AND a.stamp_type =#{stampType}
+            </if>
+             <!-- area过滤 -->
+             ${sqlMap.areafilter}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 此查询通过lastRecord.companyName查询 -->
+    <select id="findListByPoliceArea3" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        ,
+        ts.company_Name AS "lastRecord.companyName"
+        FROM t_stamp_${stampShape} a
+        <include refid="comAreaJoins"/>
+
+        LEFT JOIN t_stamprecord_${recordState.key} ts ON a.record_id=ts.id
+
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            AND a.delivery_date is not null
+            <if test="stampName != null and stampName != ''">
+                AND a.stamp_name LIKE CONCAT('%','${stampName}','%' )
+            </if>
+
+            <if test="lastRecord !=null ">
+              AND ts.company_name LIKE CONCAT('%', #{lastRecord.companyName}, '%')
+            </if>
+            <if test="id != null and id != ''">
+                AND a.id = #{id}
+            </if>
+            <if test="stampState != null and stampState != '' ">
+                AND a.stamp_state =#{stampState}
+            </if>
+            <if test="useState != null and useState != '' ">
+                AND a.use_state = #{useState}
+            </if>
+            <if test="stampType !=null and stampType !=''">
+                AND a.stamp_type =#{stampType}
+            </if>
+            <!-- area过滤 -->
+            ${sqlMap.areafilter}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询stamp -->
+    <select id="findListByPoliceArea2" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        ,
+        com.comp_type AS "useComp.compType",
+        com.area_id AS "useComp.area.id",
+        com.sole_code AS "useComp.soleCode",
+        com.company_name AS "useComp.companyName"
+        FROM t_stamp_${stampShape} a
+        <include refid="comAreaJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            AND a.delivery_date is not null
+            <if test="returnCode != null and returnCode != ''">
+                AND a.return_code = #{returnCode}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!-- stamp company信息查询 -->
+    <select id="getWithCom" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        ,
+        com.id AS "useComp.id",
+        com.comp_type AS "useComp.compType",
+        com.area_id AS "useComp.area.id",
+        com.sole_code AS "useComp.soleCode",
+        com.company_name AS "useComp.companyName"
+        FROM t_stamp_${stampShape} a
+        <include refid="comAreaJoins"/>
+
+        <where>
+            a.id = #{id}
+        </where>
+
+    </select>
+
+    <!--
+        通过用章公司id
+        印章名称
+        印章形式
+        印章状态
+        检索 该印章是否存在
+    -->
+    <select id="checkStampExist" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.del_flag = 0
+            <if test="useComp !=null">
+                <if test="useComp.id !=null and useComp.id !=''">
+                    AND a.use_comp = #{useComp.id}
+                </if>
+            </if>
+
+            <if test="stampName !=null and stampName !=''">
+                AND a.stamp_name = #{stampName}
+            </if>
+
+            <if test="stampShape !=null and stampShape!=''">
+                AND a.stamp_shape = #{stampShape}
+            </if>
+
+            <if test="useState !=null ">
+                AND a.use_state =#{useState}
+            </if>
+
+            <if test="stampState !=null">
+                AND a.stamp_state =#{stampState}
+            </if>
+
+            <if test="id !=null and id!=''">
+                AND a.id=#{id}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="getStampByShapesAndName" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"></include>
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.use_comp = #{useComp.id} AND
+            a.stamp_name = #{stampName} AND
+            a.stamp_shape = #{stampShape} AND
+            a.del_flag = 0
+        </where>
+        limit 1
+    </select>
+
+    <select id="getMoulageIdByStampId" resultType="java.lang.String">
+        SELECT
+        a.shape_id
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.id = #{id}
+        </where>
+    </select>
+
+    <select id="countStampByAreaUseCompany"
+            resultType="java.lang.Integer"
+            parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+        SELECT
+        count(*)
+        FROM t_stamp_1 a
+        <where>
+            <if test="size != 0">
+                (
+                <foreach collection="list" separator="or" item="item">
+                    a.use_comp = #{item.id}
+                </foreach>
+                or FALSE
+                )
+            </if>
+            AND (a.stamp_code !='' or a.stamp_code !=null)
+        </where>
+    </select>
+
+    <!--物理印章才会使用检查印章编码-->
+    <select id="checkStampCodeExist" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM t_stamp_1 a
+        <where>
+            a.stamp_code = #{stampCode}
+        </where>
+        limit 1
+    </select>
+
+    <update id="updateStampCode" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a SET
+        a.stamp_code = #{stampCode}
+        WHERE a.id = #{id}
+    </update>
+
+    <!--更新回执编码-->
+    <update id="updateReturnCode" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} a SET
+        a.return_code = #{returnCode}
+        WHERE a.id = #{id}
+    </update>
+
+    <sql id="moneyCountStampSql">
+       a.id AS "id",
+		a.use_comp AS "useComp.id",
+		a.make_comp AS "makeComp.id",
+		a.now_comp AS "nowMakeComp.id",
+		a.stamp_code AS "stampCode",
+		a.make_money AS "makeMoney",
+		a.city_money AS "cityMoney",
+		a.rc_money AS "rcMoney",
+		a.province_money AS "provinceMoney"
+    </sql>
+
+
+    <select id="findStampByMakeAndUseCompany"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="moneyCountStampSql"/>
+        FROM t_stamp_${stamp.stampShape} a
+        <where>
+            a.del_flag = '0'
+            AND a.use_comp = #{stamp.useComp.id}
+            AND a.make_comp = #{stamp.makeComp.id}
+            AND a.stamp_shape = #{stamp.stampShape}
+            <if test="startDate !=null and endDate !=null">
+                AND a.record_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findStampByMakeCompany" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="moneyCountStampSql"/>
+        FROM t_stamp_${stamp.stampShape} a
+        <where>
+            a.del_flag = '0'
+            AND a.make_comp = #{stamp.makeComp.id}
+            AND a.stamp_shape = #{stamp.stampShape}
+            <if test="startDate !=null and endDate !=null">
+                AND a.record_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMakeCompEleModel" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.StampMakeComp">
+        SELECT
+        a.id AS "id",
+        a.makecomp_id AS "makecompId",
+        a.ele_model AS "eleModel"
+        FROM t_stamp_makecomp a
+        <where>
+            AND a.makecomp_id = #{makeCompId}
+        </where>
+    </select>
+
+    <select id="countStampNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_${stamp.stampShape} a
+        <where>
+            a.del_flag = '0'
+            <if test="stamp.useComp !=null">
+                AND a.use_comp = #{stamp.useComp.id}
+            </if>
+            AND a.make_comp = #{stamp.makeComp.id}
+            AND a.stamp_shape = #{stamp.stampShape}
+            <if test="startDate !=null and endDate !=null">
+                AND a.record_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="stamp.useState !=null">
+                AND a.use_state =#{stamp.useState}
+            </if>
+        </where>
+    </select>
+
+    <!--该方法已经使用findListByCondition代替，使用请注意-->
+    <select id="findListByMoreCondition" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+                SELECT
+                <include refid="stampColumns"/>,
+                com.company_Name AS "useComp.companyName",
+                stamprecord.agent_name AS "lastRecord.agentName"
+                FROM t_stamp_${stampShape} a
+                <include refid="stampJoins"/>
+                LEFT JOIN t_company_2 com ON a.use_comp=com.id
+                LEFT JOIN t_stamprecord_1 stamprecord ON a.record_id = stamprecord.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name = #{stampName}
+                    </if>
+
+                    <if test="stampState != null and stampState != '' ">
+                        AND a.stamp_state =#{stampState}
+                    </if>
+                    <if test="lastRecord != null ">
+                        <if test="lastRecord.id != null and lastRecord.id !='' ">
+                            AND a.record_id = #{lastRecord.id}
+                        </if>
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="useState != null">
+                        AND a.use_state=#{useState}
+                    </if>
+                    <if test="sysState != null ">
+                        AND a.sys_state=#{sysState}
+                    </if>
+                    <!--end-->
+                </where>
+                ORDER BY updateDate DESC
+            </when>
+            <otherwise>
+                SELECT
+                <include refid="stampColumns"/>,
+                com.company_Name AS "useComp.companyName",
+                stamprecord.agent_name AS "lastRecord.agentName"
+                FROM t_stamp_1 a
+                LEFT JOIN t_company_2 com ON a.use_comp=com.id
+                LEFT JOIN t_stamprecord_1 stamprecord ON a.record_id = stamprecord.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name like CONCAT('%',#{stampName},'%)
+                    </if>
+                    <if test="stampCode !=null and stampCode !=''">
+                        AND a.stamp_code like CONCAT('%',#{stampCode},'%')
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="makeDate != null and fakemakeDate != null">
+                        AND a.make_date BETWEEN #{makeDate} AND #{fakemakeDate}
+                    </if>
+                    <if test="deliveryDate != null and fakemakeDate != null">
+                        AND a.delivery_date BETWEEN #{deliveryDate} AND #{fakemakeDate}
+                    </if>
+                    <!--end-->
+                </where>
+                UNION
+                SELECT
+                <include refid="stampColumns"/>,
+                com.company_Name AS "useComp.companyName",
+                stamprecord.agent_name AS "lastRecord.agentName"
+                FROM t_stamp_2 a
+                LEFT JOIN t_company_2 com ON a.use_comp=com.id
+                LEFT JOIN t_stamprecord_1 stamprecord ON a.record_id = stamprecord.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name like CONCAT('%',#{stampName},'%)
+                    </if>
+                    <if test="stampCode !=null and stampCode !=''">
+                        AND a.stamp_code like CONCAT('%',#{stampCode},'%')
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="makeDate != null and fakemakeDate != null">
+                        AND a.make_date BETWEEN #{makeDate} AND #{fakemakeDate}
+                    </if>
+                    <if test="deliveryDate != null and fakemakeDate != null">
+                        AND a.delivery_date BETWEEN #{deliveryDate} AND #{fakemakeDate}
+                    </if>
+                    <!--end-->
+                </where>
+                ORDER BY updateDate DESC
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <select id="findListByCondition" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+                SELECT
+                <include refid="stampColumns1"/>,
+                com.company_Name AS "useComp.companyName"
+                FROM t_stamp_${stampShape} a
+                <include refid="stampJoins"/>
+                LEFT JOIN t_company_2 com ON a.use_comp=com.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name = #{stampName}
+                    </if>
+
+                    <if test="stampState != null and stampState != '' ">
+                        AND a.stamp_state =#{stampState}
+                    </if>
+                    <if test="lastRecord != null ">
+                        <if test="lastRecord.id != null and lastRecord.id !='' ">
+                            AND a.record_id = #{lastRecord.id}
+                        </if>
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="useState != null">
+                        AND a.use_state=#{useState}
+                    </if>
+                    <if test="sysState != null ">
+                        AND a.sys_state=#{sysState}
+                    </if>
+                    <!--end-->
+                </where>
+                ORDER BY updateDate DESC
+            </when>
+            <otherwise>
+                SELECT
+                <include refid="stampColumns1"/>,
+                com.company_Name AS "useComp.companyName"
+                FROM t_stamp_1 a
+                LEFT JOIN t_company_2 com ON a.use_comp=com.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name like CONCAT('%',#{stampName},'%)
+                    </if>
+                    <if test="stampCode !=null and stampCode !=''">
+                        AND a.stamp_code like CONCAT('%',#{stampCode},'%')
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="makeDate != null and fakemakeDate != null">
+                        AND a.make_date BETWEEN #{makeDate} AND #{fakemakeDate}
+                    </if>
+                    <if test="deliveryDate != null and fakemakeDate != null">
+                        AND a.delivery_date BETWEEN #{deliveryDate} AND #{fakemakeDate}
+                    </if>
+                    <!--end-->
+                </where>
+                UNION
+                SELECT
+                <include refid="stampColumns1"/>,
+                com.company_Name AS "useComp.companyName"
+                FROM t_stamp_2 a
+                LEFT JOIN t_company_2 com ON a.use_comp=com.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name like CONCAT('%',#{stampName},'%)
+                    </if>
+                    <if test="stampCode !=null and stampCode !=''">
+                        AND a.stamp_code like CONCAT('%',#{stampCode},'%')
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="makeDate != null and fakemakeDate != null">
+                        AND a.make_date BETWEEN #{makeDate} AND #{fakemakeDate}
+                    </if>
+                    <if test="deliveryDate != null and fakemakeDate != null">
+                        AND a.delivery_date BETWEEN #{deliveryDate} AND #{fakemakeDate}
+                    </if>
+                    <!--end-->
+                </where>
+                ORDER BY updateDate DESC
+            </otherwise>
+        </choose>
+
+    </select>
+
+
+    <select id="findListByConditionDeveryList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+                SELECT
+                <include refid="stampColumns1"/>,
+                ts.company_Name AS "lastRecord.companyName"
+                FROM t_stamp_${stampShape} a
+                <include refid="stampJoins"/>
+                LEFT JOIN t_stamprecord_${recordState.key} ts ON a.record_id=ts.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name = #{stampName}
+                    </if>
+
+                    <if test="stampState != null and stampState != '' ">
+                        AND a.stamp_state =#{stampState}
+                    </if>
+                    <if test="lastRecord != null ">
+                        <if test="lastRecord.id != null and lastRecord.id !='' ">
+                            AND a.record_id = #{lastRecord.id}
+                        </if>
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <if test="lastRecord !=null ">
+                        AND ts.company_name LIKE CONCAT('%', #{lastRecord.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="useState != null">
+                        AND a.use_state=#{useState}
+                    </if>
+                    <if test="sysState != null ">
+                        AND a.sys_state=#{sysState}
+                    </if>
+                    <!--end-->
+                </where>
+                ORDER BY updateDate DESC
+            </when>
+            <otherwise>
+                SELECT
+                <include refid="stampColumns1"/>,
+                ts.company_Name AS "lastRecord.companyName"
+                FROM t_stamp_1 a
+                LEFT JOIN t_stamprecord_${recordState.key} ts ON a.record_id=ts.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name like CONCAT('%',#{stampName},'%)
+                    </if>
+                    <if test="stampCode !=null and stampCode !=''">
+                        AND a.stamp_code like CONCAT('%',#{stampCode},'%')
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <if test="lastRecord !=null ">
+                    AND ts.company_name LIKE CONCAT('%', #{lastRecord.companyName}, '%')
+                     </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="makeDate != null and fakemakeDate != null">
+                        AND a.make_date BETWEEN #{makeDate} AND #{fakemakeDate}
+                    </if>
+                    <if test="deliveryDate != null and fakemakeDate != null">
+                        AND a.delivery_date BETWEEN #{deliveryDate} AND #{fakemakeDate}
+                    </if>
+                    <!--end-->
+                </where>
+                UNION
+                SELECT
+                <include refid="stampColumns1"/>,
+                ts.company_Name AS "lastRecord.companyName"
+                FROM t_stamp_2 a
+                LEFT JOIN t_stamprecord_${recordState.key} ts ON a.record_id=ts.id
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <if test="stampName != null and stampName != ''">
+                        AND a.stamp_name like CONCAT('%',#{stampName},'%)
+                    </if>
+                    <if test="stampCode !=null and stampCode !=''">
+                        AND a.stamp_code like CONCAT('%',#{stampCode},'%')
+                    </if>
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <if test="useComp !=null ">
+                        AND com.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                    </if>
+                    <if test="lastRecord !=null ">
+                        AND ts.company_name LIKE CONCAT('%', #{lastRecord.companyName}, '%')
+                    </if>
+                    <!--枚举属性 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="makeDate != null and fakemakeDate != null">
+                        AND a.make_date BETWEEN #{makeDate} AND #{fakemakeDate}
+                    </if>
+                    <if test="deliveryDate != null and fakemakeDate != null">
+                        AND a.delivery_date BETWEEN #{deliveryDate} AND #{fakemakeDate}
+                    </if>
+                    <!--end-->
+                </where>
+                ORDER BY updateDate DESC
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <update id="updateEleModel" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape} SET
+            ele_model = #{eleModel}
+        WHERE id = #{id}
+    </update>
+
+    <select id="countStampList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_${stampShape} a
+                <if test="useComp !=null ">
+                    <if test="useComp.companyName !=null and useComp.companyName !=''">
+                        , t_company_1 b,<!--制章点单位-->
+                        t_company_2 c<!--用章单位-->
+                    </if>
+                </if>
+                <include refid="stampJoins"/>
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !=''">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <!--<if test="checkDate !=null">-->
+                    <!--<![CDATA[ AND a.record_date <=  #{checkDate}  ]]>-->
+                    <!--<![CDATA[ or a.make_date <=  #{checkDate}  ]]>-->
+                    <!--<![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>-->
+                    <!--</if>-->
+                    <!--end-->
+
+                    <if test="beginMakeDate !=null and endMakeDate !=null">
+                        AND a.make_date BETWEEN #{beginMakeDate} AND #{endMakeDate}
+                    </if>
+                    <if test="beginDeliveryDate !=null and endDeliveryDate !=null">
+                        AND a.delivery_date BETWEEN #{beginDeliveryDate} AND #{endDeliveryDate}
+                    </if>
+                    <if test="stampType !=null and stampType != '' ">
+                        AND a.stamp_type = #{stampType}
+                    </if>
+                </where>
+
+
+            </when>
+            <otherwise>
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_1 a
+                <if test="useComp !=null ">
+                    <if test="useComp.companyName !=null and useComp.companyName !=''">
+                        , t_company_1 b,<!--制章点单位-->
+                        t_company_2 c<!--用章单位-->
+                    </if>
+                </if>
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !='' ">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+
+                    <if test="stampType !=null and stampType != '' ">
+                        AND a.stamp_type = #{stampType}
+                    </if>
+                    <!--时间-->
+                    <!--<if test="checkDate !=null">-->
+                    <!--<![CDATA[ AND a.record_date <=  #{checkDate}  ]]>-->
+                    <!--<![CDATA[ or a.make_date <=  #{checkDate}  ]]>-->
+                    <!--<![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>-->
+                    <!--</if>-->
+
+                    <if test="beginMakeDate !=null and endMakeDate !=null">
+                        AND a.make_date BETWEEN #{beginMakeDate} AND #{endMakeDate}
+                    </if>
+                    <if test="beginDeliveryDate !=null and endDeliveryDate !=null">
+                        AND a.delivery_date BETWEEN #{beginDeliveryDate} AND #{endDeliveryDate}
+                    </if>
+
+                    <!--end-->
+                </where>
+                UNION
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_2 a
+                <if test="useComp !=null ">
+                    <if test="useComp.companyName !=null and useComp.companyName !=''">
+                        , t_company_1 b,<!--制章点单位-->
+                        t_company_2 c<!--用章单位-->
+                    </if>
+                </if>
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !=''">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <if test="stampType !=null and stampType != '' ">
+                        AND a.stamp_type = #{stampType}
+                    </if>
+                    <!--时间-->
+                    <!--<if test="checkDate !=null">-->
+                    <!--<![CDATA[ AND unix_timestamp(a.record_date) >  unix_timestamp(#{checkDate})  ]]>-->
+                    <!--&lt;!&ndash;<![CDATA[ or unix_timestamp(a.make_date)  >  unix_timestamp(#{checkDate})  ]]>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<![CDATA[ or unix_timestamp( a.delivery_date)   >  unix_timestamp(#{checkDate})  ]]>&ndash;&gt;-->
+                    <!--</if>-->
+                    <if test="beginMakeDate !=null and endMakeDate !=null">
+                        AND a.make_date BETWEEN #{beginMakeDate} AND #{endMakeDate}
+                    </if>
+                    <if test="beginDeliveryDate !=null and endDeliveryDate !=null">
+                        AND a.delivery_date BETWEEN #{beginDeliveryDate} AND #{endDeliveryDate}
+                    </if>
+                    <!--end-->
+                </where>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="countStamp" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM t_stamp_${stampShape} a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="nowMakeComp !=null ">
+                <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                    AND a.now_comp = #{nowMakeComp.id}
+                </if>
+            </if>
+            <if test="stampType!=null and stampType !=''">
+                AND a.stamp_type =#{stampType}
+            </if>
+            <if test="useComp !=null ">
+                <if test="useComp.id !=null and useComp.id !=''">
+                    AND a.use_comp = #{useComp.id}
+                </if>
+            </if>
+            <if test="useState != null">
+                AND a.use_state=#{useState}
+            </if>
+        </where>
+    </select>
+    <select id="countStamp2" resultMap="allInfo">
+    SELECT
+	a.use_state,
+	COUNT(*)
+    FROM
+        t_stamp_${stampShape} a
+    WHERE
+         a.use_comp = #{useComp.id}
+         AND a.del_flag = #{DEL_FLAG_NORMAL}
+    GROUP BY
+        a.use_state
+    </select>
+
+    <resultMap id="allInfo" type="java.util.Map">
+        <result column="use_state" property="useState" jdbcType="VARCHAR"/>
+        <result column="COUNT(*)" property="COUNT" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="comAreaJoins2">
+        LEFT JOIN sys_area sa ON sa.id = c.area_id
+    </sql>
+
+    <select id="policeCountStampList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_${stampShape} a ,
+                t_company_2 c<!--用章单位-->
+                <include refid="comAreaJoins2"/>
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !=''">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <if test="checkDate !=null">
+                        <![CDATA[ AND a.record_date <=  #{checkDate}  ]]>
+                        <![CDATA[ or a.make_date <=  #{checkDate}  ]]>
+                        <![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>
+                    </if>
+                    <!--end-->
+                    ${sqlMap.areafilter}
+                </where>
+            </when>
+            <otherwise>
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_1 a ,
+                t_company_2 c<!--用章单位-->
+                <include refid="comAreaJoins2"/>
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !='' ">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <if test="checkDate !=null">
+                        <![CDATA[ AND a.record_date <=  #{checkDate}  ]]>
+                        <![CDATA[ or a.make_date <=  #{checkDate}  ]]>
+                        <![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>
+                    </if>
+                    <!--end-->
+                    ${sqlMap.areafilter}
+                    AND c.id = a.use_comp
+                </where>
+                UNION
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_2 a ,
+                t_company_2 c<!--用章单位-->
+                <include refid="comAreaJoins2"/>
+                <where>
+                    a.del_flag = #{DEL_FLAG_NORMAL}
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !=''">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <if test="checkDate !=null">
+                        <![CDATA[ AND unix_timestamp(a.record_date) >  unix_timestamp(#{checkDate})  ]]>
+                        <!--<![CDATA[ or unix_timestamp(a.make_date)  >  unix_timestamp(#{checkDate})  ]]>-->
+                        <!--<![CDATA[ or unix_timestamp( a.delivery_date)   >  unix_timestamp(#{checkDate})  ]]>-->
+                    </if>
+                    <!--end-->
+                    ${sqlMap.areafilter}
+                    AND c.id = a.use_comp
+                </where>
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--公安—印章数据统计-->
+    <select id="policeCountStampList2" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        <choose>
+            <when test="stampShape !=null and stampShape !=''">
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_${stampShape} a ,
+                <if test="nowMakeComp !=null ">
+                    <if test="nowMakeComp.companyName !=null and nowMakeComp.companyName !=''">
+                      t_company_1 d,  <!--刻章单位-->
+                    </if>
+                </if>
+                t_company_2 c <!--用章单位-->
+                <include refid="comAreaJoins2"/>
+                <where>
+                    1=1
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--当前刻章点名称查询-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.companyName !=null and nowMakeComp.companyName !=''">
+                            AND d.id = a.now_comp
+                            AND d.company_name LIKE CONCAT('%', #{nowMakeComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !=''">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <!--<if test="checkDate !=null">-->
+                        <!--<![CDATA[ AND a.record_date <=  #{checkDate}  ]]>-->
+                        <!--<![CDATA[ or a.make_date <=  #{checkDate}  ]]>-->
+                        <!--<![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>-->
+                    <!--</if>-->
+                    <if test="beginMakeDate !=null and endMakeDate !=null">
+                        AND a.make_date BETWEEN #{beginMakeDate} AND DATE_ADD(#{endMakeDate},INTERVAL 1 DAY)
+                    </if>
+                    <if test="beginDeliveryDate !=null and endDeliveryDate !=null">
+                        AND a.delivery_date BETWEEN #{beginDeliveryDate} AND DATE_ADD(#{endDeliveryDate},INTERVAL 1 DAY)
+                    </if>
+                    <if test="stampType !=null and stampType !=''">
+                        AND a.stamp_type  = #{stampType}
+                    </if>
+                    <!--end-->
+                    ${sqlMap.areafilter}
+                    AND c.id = a.use_comp
+                </where>
+            </when>
+            <otherwise>
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_1 a ,
+                <if test="nowMakeComp !=null ">
+                    <if test="nowMakeComp.companyName !=null and nowMakeComp.companyName !=''">
+                        t_company_1 d,  <!--刻章单位-->
+                    </if>
+                </if>
+                t_company_2 c<!--用章单位-->
+                <include refid="comAreaJoins2"/>
+                <where>
+                    1=1
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--当前刻章点名称查询-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.companyName !=null and nowMakeComp.companyName !=''">
+                            AND d.id = a.now_comp
+                            AND d.company_name LIKE CONCAT('%', #{nowMakeComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !='' ">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <!--<if test="checkDate !=null">-->
+                        <!--<![CDATA[ AND a.record_date <=  #{checkDate}  ]]>-->
+                        <!--<![CDATA[ or a.make_date <=  #{checkDate}  ]]>-->
+                        <!--<![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>-->
+                    <!--</if>-->
+                    <if test="beginMakeDate !=null and endMakeDate !=null">
+                        AND a.make_date BETWEEN #{beginMakeDate} AND DATE_ADD(#{endMakeDate},INTERVAL 1 DAY)
+                    </if>
+                    <if test="beginDeliveryDate !=null and endDeliveryDate !=null">
+                        AND a.delivery_date BETWEEN #{beginDeliveryDate} AND DATE_ADD(#{endDeliveryDate},INTERVAL 1 DAY)
+                    </if>
+                    <if test="stampType !=null and stampType !=''">
+                        AND a.stamp_type  = #{stampType}
+                    </if>
+                    <!--end-->
+                    ${sqlMap.areafilter}
+                    AND c.id = a.use_comp
+                </where>
+                UNION
+                SELECT
+                <include refid="stampColumns"/>
+                FROM t_stamp_2 a ,
+                <if test="nowMakeComp !=null ">
+                    <if test="nowMakeComp.companyName !=null and nowMakeComp.companyName !=''">
+                        t_company_1 d,  <!--刻章单位-->
+                    </if>
+                </if>
+                t_company_2 c<!--用章单位-->
+                <include refid="comAreaJoins2"/>
+                <where>
+                    1=1
+                    <!--当前刻章点-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                            AND a.now_comp = #{nowMakeComp.id}
+                        </if>
+                    </if>
+                    <!--当前刻章点名称查询-->
+                    <if test="nowMakeComp !=null ">
+                        <if test="nowMakeComp.companyName !=null and nowMakeComp.companyName !=''">
+                            AND d.id = a.now_comp
+                            AND d.company_name LIKE CONCAT('%', #{nowMakeComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--用章单位名称-->
+                    <if test="useComp !=null ">
+                        <if test="useComp.companyName !=null and useComp.companyName !=''">
+                            AND a.use_comp = c.id
+                            AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                        </if>
+                    </if>
+                    <!--印章状态 start-->
+                    <if test="stampState !=null">
+                        AND a.stamp_state=#{stampState}
+                    </if>
+                    <!--时间-->
+                    <!--<if test="checkDate !=null">-->
+                        <!--<![CDATA[ AND unix_timestamp(a.record_date) >  unix_timestamp(#{checkDate})  ]]>-->
+                        <!--&lt;!&ndash;<![CDATA[ or unix_timestamp(a.make_date)  >  unix_timestamp(#{checkDate})  ]]>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<![CDATA[ or unix_timestamp( a.delivery_date)   >  unix_timestamp(#{checkDate})  ]]>&ndash;&gt;-->
+                    <!--</if>-->
+                    <if test="beginMakeDate !=null and endMakeDate !=null">
+                        AND a.make_date BETWEEN #{beginMakeDate} AND DATE_ADD(#{endMakeDate},INTERVAL 1 DAY)
+                    </if>
+                    <if test="beginDeliveryDate !=null and endDeliveryDate !=null">
+                        AND a.delivery_date BETWEEN #{beginDeliveryDate} AND DATE_ADD(#{endDeliveryDate},INTERVAL 1 DAY)
+                    </if>
+                    <if test="stampType !=null and stampType !=''">
+                        AND a.stamp_type  = #{stampType}
+                    </if>
+
+                    <!--end-->
+                    ${sqlMap.areafilter}
+                    AND c.id = a.use_comp
+                </where>
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="policeCountPhyStampList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_1 a ,
+        t_company_2 c<!--用章单位-->
+        <include refid="comAreaJoins2"/>
+        <where>
+            1=1
+            <!--当前刻章点-->
+            <if test="nowMakeComp !=null ">
+                <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                    AND a.now_comp = #{nowMakeComp.id}
+                </if>
+            </if>
+            <!--用章单位名称-->
+            <if test="useComp !=null ">
+                <if test="useComp.companyName !=null and useComp.companyName !='' ">
+                    AND a.use_comp = c.id
+                    AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                </if>
+            </if>
+            <!--印章状态 start-->
+            <if test="stampState !=null">
+                AND a.stamp_state=#{stampState}
+            </if>
+            <!--时间-->
+            <if test="checkDate !=null">
+                <![CDATA[ AND a.record_date <=  #{checkDate}  ]]>
+                <![CDATA[ or a.make_date <=  #{checkDate}  ]]>
+                <![CDATA[ or a.delivery_date  <=  #{checkDate}  ]]>
+            </if>
+            <!--end-->
+            ${sqlMap.areafilter}
+            AND c.id = a.use_comp
+        </where>
+        UNION
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_2 a ,
+        t_company_2 c<!--用章单位-->
+        <include refid="comAreaJoins2"/>
+        <where>
+            --             a.del_flag = #{DEL_FLAG_NORMAL}
+            1=1
+            <!--当前刻章点-->
+            <if test="nowMakeComp !=null ">
+                <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                    AND a.now_comp = #{nowMakeComp.id}
+                </if>
+            </if>
+            <!--用章单位名称-->
+            <if test="useComp !=null ">
+                <if test="useComp.companyName !=null and useComp.companyName !=''">
+                    AND a.use_comp = c.id
+                    AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                </if>
+            </if>
+            <!--印章状态 start-->
+            <if test="stampState !=null">
+                AND a.stamp_state=#{stampState}
+            </if>
+            <!--时间-->
+            <if test="checkDate !=null">
+                <![CDATA[ AND unix_timestamp(a.record_date) >  unix_timestamp(#{checkDate})  ]]>
+                <!--<![CDATA[ or unix_timestamp(a.make_date)  >  unix_timestamp(#{checkDate})  ]]>-->
+                <!--<![CDATA[ or unix_timestamp( a.delivery_date)   >  unix_timestamp(#{checkDate})  ]]>-->
+            </if>
+            <!--end-->
+            ${sqlMap.areafilter}
+            AND c.id = a.use_comp
+        </where>
+    </select>
+    <select id="policeCountEleStampList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_2 a ,
+        t_company_2 c<!--用章单位-->
+        <include refid="comAreaJoins2"/>
+        <where>
+            -- a.del_flag = #{DEL_FLAG_NORMAL}
+            <!--当前刻章点-->
+            <if test="nowMakeComp !=null ">
+                <if test="nowMakeComp.id !=null and nowMakeComp.id != '' ">
+                    AND a.now_comp = #{nowMakeComp.id}
+                </if>
+            </if>
+            <!--用章单位名称-->
+            <if test="useComp !=null ">
+                <if test="useComp.companyName !=null and useComp.companyName !=''">
+                    AND a.use_comp = c.id
+                    AND c.company_name LIKE CONCAT('%', #{useComp.companyName}, '%')
+                </if>
+            </if>
+            <!--印章状态 start-->
+            <if test="stampState !=null">
+                AND a.stamp_state=#{stampState}
+            </if>
+            <!--时间-->
+            <if test="checkDate !=null">
+                <![CDATA[ AND unix_timestamp(a.record_date) >  unix_timestamp(#{checkDate})  ]]>
+                <!--<![CDATA[ or unix_timestamp(a.make_date)  >  unix_timestamp(#{checkDate})  ]]>-->
+                <!--<![CDATA[ or unix_timestamp( a.delivery_date)   >  unix_timestamp(#{checkDate})  ]]>-->
+            </if>
+            <!--end-->
+            ${sqlMap.areafilter}
+            AND c.id = a.use_comp
+        </where>
+    </select>
+
+
+    <update id="saveWaterImage" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stamp_${stampShape}
+        SET
+          water_model = #{waterEleModel}
+        WHERE id = #{id}
+    </update>
+
+    <!--用于检查除了公章以外的印章制作数量的统计-->
+    <select id="checkMakeStampCount" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="int">
+        SELECT  COUNT(*)  "makeStampCount"
+        FROM t_stamp_${stampShape} a
+        WHERE a.stamp_type = #{stampType} AND a.stamp_state = #{stampState} AND a.use_comp = #{useComp.id}
+    </select>
+
+    <!--用于检查公章的制作是否唯一 Start-->
+    <select id="checkStampTypeCount" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="int">
+        SELECT  COUNT(*)
+        FROM t_stamp_${stampShape} a
+        WHERE a.stamp_type = #{stampType}  AND a.del_flag = "1" AND a.use_comp = #{useComp.id}
+    </select>
+
+    <select id="checkSTC1" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_${stampShape} a
+        WHERE a.stamp_type = #{stampType} AND a.stamp_state = "DELIVERY" AND a.use_comp = #{useComp.id} AND (
+        a.use_state = "LOGOUT" OR a.use_state = "REPORT" )
+    </select>
+
+    <select id="checkSTC2" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="int">
+        SELECT COUNT (*)
+        FROM t_stamp_${stampShape} a
+        WHERE a.stamp_type = #{stampType} AND a.id != #{id} AND a.del_flag = "1" AND a.use_comp = #{useComp.id}
+    </select>
+    <!--用于检查公章的制作是否唯一 End-->
+
+    <!--反向思维查询公章制作唯一性 Start-->
+    <select id="checkStampType01isOnly" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_${stampShape} a
+        <where>
+            <if test="DEL_FLAG_NORMAL != null">
+                a.del_flag = #{DEL_FLAG_NORMAL}
+            </if>
+            <if test="stampType != null">
+                AND a.stamp_type = #{stampType}
+            </if>
+            <if test="useComp.id != null">
+                AND a.use_comp = #{useComp.id}
+            </if>
+            AND <![CDATA[(a.use_state = "OPEN" OR a.use_state = "STOP")]]>
+        </where>
+    </select>
+    <!--END-->
+
+    <!--根据唯一的recordId和物理印章来查询-->
+    <select id="findEngStampFromRecordId" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_1 a
+        WHERE a.record_id = #{lastRecord.id}
+    </select>
+
+    <!--根据唯一的recordId和电子印章来查询-->
+    <select id="findEleStampFromRecordId" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        <include refid="stampColumns"/>
+        FROM t_stamp_2 a
+        WHERE a.record_id = #{lastRecord.id}
+    </select>
+
+    <!--统计多证合一和备案系统录入的印章数-->
+    <select id="countStampFromDZHY" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_${stamp.stampShape} a
+        LEFT JOIN t_stamprecord_1 b ON a.record_id = b.id
+        <where>
+            b.sblsh IS NOT NULL
+            <if test="Ids != null and Ids.size() >0">
+                AND a.make_comp IN
+                <foreach collection="Ids" item="makeCompIds" open="(" close=")" separator=",">
+                    #{makeCompIds}
+                </foreach>
+            </if>
+            AND a.del_flag = '0'
+        </where>
+    </select>
+    <select id="countStampFromBA" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_${stamp.stampShape} a
+        LEFT JOIN t_stamprecord_1 b ON a.record_id = b.id
+        <where>
+            b.sblsh IS NULL
+            <if test="Ids != null and Ids.size() >0">
+            AND a.make_comp IN
+            <foreach collection="Ids" item="makeCompIds" open="(" close=")" separator=",">
+                #{makeCompIds}
+            </foreach>
+            </if>
+            AND a.del_flag = '0'
+        </where>
+    </select>
+
+
+    <!--统计印章类型的数量-->
+    <select id="countStampFromStampType" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        (select a.create_date,a.make_comp,a.del_flag,a.stamp_type
+        from t_stamp_1 a
+        <where>
+            a.del_flag = '0'
+            <if test="stamp.makeComp !=null ">
+                <if test="stamp.makeComp.id !=null and stamp.makeComp.id != '' ">
+                    AND a.make_comp = #{stamp.makeComp.id}
+                </if>
+            </if>
+        </where>
+        union all
+        select b.create_date,b.make_comp,b.del_flag,b.stamp_type
+        from t_stamp_2 b
+        <where>
+            b.del_flag = '0'
+            <if test="stamp.makeComp !=null ">
+                <if test="stamp.makeComp.id !=null and stamp.makeComp.id != '' ">
+                    AND b.make_comp = #{stamp.makeComp.id}
+                </if>
+            </if>
+        </where>
+        ) c
+        <where>
+            <if test="size != 0">
+                c.stamp_type in
+                <foreach collection="list" separator="," index="" open="(" close=")" item="item">
+                      #{item.value}
+                </foreach>
+            </if>
+
+        </where>
+        GROUP BY c.stamp_type
+    </select>
+
+
+    <!--(公安)统计今天、本周、本月、今年中备案、已制作、已交付印章的数量-->
+    <select id="stampStateCountFromPolice" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_1 a
+        <where>
+            a.del_flag = '0'
+            AND a.make_comp  IN
+            <if test="size != 0">
+                <foreach collection="list" separator="," item="item" index="" close=")" open="(">
+                    #{item.id}
+                </foreach>
+            </if>
+            ${stamp.sqlMap.stampStateFilter}
+        </where>
+    </select>
+    <!--(公安)统计今天、本周、本月、今年中辖区备案企业总数-->
+    <select id="UseComCountFromPolice" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_company_2 c
+        <include refid="comAreaJoins2"/>
+        <where>
+            c.del_flag = '0'
+            ${sqlMap.dateFilterForC}
+            ${sqlMap.areafilter}
+        </where>
+    </select>
+
+
+    <!--辖区申请印章总数-->
+    <select id="getTotalApplyCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_1 a,
+        t_company_2 c <!--用章单位-->
+        <include refid="comAreaJoins2"/>
+        <where>
+             a.del_flag = '0'
+            ${sqlMap.areafilter}
+            AND c.id = a.use_comp
+        </where>
+    </select>
+
+    <!--统计辖区已备案、已制作、已交付总数-->
+    <select id="getTotalCountForPolice" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        (select c.create_date,c.make_comp,c.del_flag,c.record_date,c.make_date,c.delivery_date
+        from t_stamp_1 c
+        union all
+        select b.create_date,b.make_comp,b.del_flag,b.record_date,b.make_date,b.delivery_date
+        from t_stamp_2 b
+        ) a
+        <where>
+            a.del_flag = '0'
+            AND a.make_comp  IN
+            <if test="size != 0">
+                <foreach collection="list" separator="," item="item" index="" close=")" open="(">
+                    #{item.id}
+                </foreach>
+            </if>
+            ${stamp.sqlMap.stampStateFilter2}
+        </where>
+    </select>
+    <!--辖区备案企业总数-->
+    <select id="getTotalUseComCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_company_2 c
+        <include refid="comAreaJoins2"/>
+        <where>
+            c.del_flag = '0'
+            ${sqlMap.areafilter}
+        </where>
+    </select>
+
+    <!--区域印章数量统计-->
+
+    <select id="stampAreaDataBySource" resultType="com.thinkgem.jeesite.modules.stamp.dto.count.PoliceCountDTO">
+        SELECT
+        <include refid="policeCountColumns"/>
+        FROM  t_company_1
+        LEFT JOIN (
+        SELECT
+        c.now_comp,
+        count(*) stampCount
+        FROM
+        ( SELECT a.now_comp, a.del_flag FROM t_stamp_1 a where a.del_flag ='0'
+        UNION ALL SELECT b.now_comp, b.del_flag FROM t_stamp_2 b where b.del_flag ='0'
+        ) c
+        GROUP BY
+        c.now_comp
+        ) d ON t_company_1.id = d.now_comp
+    </select>
+
+    <!--(公安)每年中每个月的印章数量统计-->
+    <select id="stampPerMonthForYearPolice" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp" resultType="java.util.Map">
+        SELECT
+        COUNT(1) as num,
+        MONTH(c.create_date) as month,
+        year(c.create_date) as year
+        FROM
+        (select a.create_date,a.make_comp,a.del_flag
+        from t_stamp_1 a
+        union all
+        select b.create_date,b.make_comp,b.del_flag
+        from t_stamp_2 b
+        ) c
+        <where>
+            c.del_flag = '0'
+             AND c.make_comp  IN
+            <if test="size != 0">
+                <foreach collection="list" separator="," item="item" index="" close=")" open="(">
+                    #{item.id}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY year(c.create_date), MONTH(c.create_date)
+    </select>
+
+    <!--(刻章点)每年中每个月的印章数量统计-->
+    <select id="stampPerMonthForYearMakeCom" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp" resultType="java.util.Map">
+        SELECT
+        COUNT(1) as num,
+        MONTH(c.create_date) as month,
+        year(c.create_date) as year
+        FROM
+        (select a.create_date,a.make_comp,a.del_flag
+        from t_stamp_1 a
+            <where>
+            a.del_flag = '0'
+            <if test="makeComp !=null ">
+                <if test="makeComp.id !=null and makeComp.id != '' ">
+                    AND a.make_comp = #{makeComp.id}
+                </if>
+            </if>
+            </where>
+
+        union all
+
+        select b.create_date,b.make_comp,b.del_flag
+        from t_stamp_2 b
+            <where>
+                b.del_flag = '0'
+                <if test="makeComp !=null ">
+                    <if test="makeComp.id !=null and makeComp.id != '' ">
+                        AND b.make_comp = #{makeComp.id}
+                    </if>
+                </if>
+            </where>
+        ) c
+
+        GROUP BY year(c.create_date), MONTH(c.create_date)
+
+    </select>
+
+
+    <!--统计该区域下刻章点所刻制的印章数量-->
+    <select id="makeComStampDataSources"  resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        (select a.make_comp,a.del_flag
+        from t_stamp_1 a
+        union all
+        select b.make_comp,b.del_flag
+        from t_stamp_2 b
+        ) c
+        <where>
+            c.del_flag = '0'
+            <if test="size !=0"> <!--当前刻章点-->
+                AND c.make_comp IN
+                <foreach collection="list" open="(" close=")" index="" item="item" separator=",">
+                    #{item.id}
+                </foreach>
+            </if>
+            GROUP BY
+            FIELD
+            <foreach collection="list" open="(c.make_comp," close=")" index="" item="item" separator=",">
+                #{item.id}
+            </foreach>
+
+        </where>
+    </select>
+
+
+    <!--刻章点统计相关查询-->
+    <!--（刻章点）统计已备案、已制作、已交付总数-->
+    <select id="getTotalCountForState" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_1 a
+        <where>
+            AND a.del_flag = '0'
+            <!--当前刻章点-->
+            <if test="makeComp !=null ">
+                <if test="makeComp.id !=null and makeComp.id != '' ">
+                    AND a.make_comp = #{makeComp.id}
+                </if>
+            </if>
+            ${sqlMap.stampStateFilter2}
+        </where>
+    </select>
+
+    <!--刻章点统计备案企业总数-->
+    <select id="getUseComCount" resultType="java.lang.Integer">
+        SELECT count( DISTINCT  a.use_comp)
+        from t_stamprecord_1 a
+        <where>
+            a.del_flag = '0'
+            <!--当前刻章点-->
+            <if test="makeComp !=null ">
+                <if test="makeComp.id !=null and makeComp.id != '' ">
+                    AND a.make_comp = #{makeComp.id}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!--（刻章点）统计今天、本周、本月、今年中备案、已制作、已交付印章的数量-->
+    <select id="stampStateCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stamp_1 a
+        <where>
+            <!--当前刻章点-->
+            <if test="makeComp !=null ">
+                <if test="makeComp.id !=null and makeComp.id != '' ">
+                    AND a.make_comp = #{makeComp.id}
+                </if>
+            </if>
+            AND a.del_flag = '0'
+            ${sqlMap.stampStateFilter}
+        </where>
+    </select>
+
+    <!--（刻章点）统计统计今天、本周、本月、今年中备案企业总数-->
+    <select id="UseComCountForDate" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT a.use_comp)
+        FROM t_stamprecord_1 a
+        <where>
+            a.del_flag = '0'
+            <!--当前刻章点-->
+            <if test="makeComp !=null ">
+                <if test="makeComp.id !=null and makeComp.id != '' ">
+                    AND a.make_comp = #{makeComp.id}
+                </if>
+            </if>
+            <!--日期过滤-->
+            ${sqlMap.dateFilter}
+        </where>
+    </select>
+
+
+
+    <sql id="stamp_query_condition_t1">
+        <where>
+            t1.del_flag = 0
+            <if test="useComp !=null">
+                <if test="useComp.id !=null and useComp.id !=''">
+                    AND t1.use_comp = #{useComp.id}
+                </if>
+                <if test="useComp.companyName !=null and useComp.companyName !=''">
+                    AND t1.use_comp = #{useComp.companyName}
+                </if>
+            </if>
+
+            <if test="stampName !=null and stampName !=''">
+                AND t1.stamp_name = #{stampName}
+            </if>
+
+            <if test="useState !=null ">
+                AND t1.use_state =#{useState}
+            </if>
+
+            <if test="stampState !=null">
+                AND t1.stamp_state =#{stampState}
+            </if>
+
+            <if test="id !=null and id!=''">
+                AND t1.id=#{id}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="stamp_query_condition_t2">
+        <where>
+            t2.del_flag = 0
+            <if test="useComp !=null">
+                <if test="useComp.id !=null and useComp.id !=''">
+                    AND t2.use_comp = #{useComp.id}
+                </if>
+                <if test="useComp.companyName !=null and useComp.companyName !=''">
+                    AND t2.use_comp = #{useComp.companyName}
+                </if>
+            </if>
+
+            <if test="stampName !=null and stampName !=''">
+                AND t2.stamp_name = #{stampName}
+            </if>
+
+            <if test="useState !=null ">
+                AND t2.use_state =#{useState}
+            </if>
+
+            <if test="stampState !=null">
+                AND t2.stamp_state =#{stampState}
+            </if>
+
+            <if test="id !=null and id!=''">
+                AND t2.id=#{id}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findStampListByCompanyInfo"  parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+            t1.id AS "id",
+            t1.use_comp AS "useComp.id",
+            t1.make_comp AS "makeComp.id",
+            t1.now_comp AS "nowMakeComp.id",
+            t1.record_id AS "lastRecord.id",
+            t1.stamp_name AS "stampName",
+            t1.allow_usenum AS "allowUseNum",
+            t1.stamp_state AS "stampState",
+            t1.use_state AS "useState",
+            t1.sys_state AS "sysState",
+            t1.laststate_by AS "lastStateBy.id",
+            t1.laststate_date AS "lastStateDate",
+            t1.stamp_type AS "stampType",
+            t1.stamp_texture AS "stampTexture",
+            t1.stamp_subtype AS "stampSubType",
+            t1.record_date AS "recordDate",
+            t1.make_date AS "makeDate",
+            t1.delivery_date AS "deliveryDate",
+            t1.stamp_shape AS "stampShape",
+            t1.create_by AS "createBy.id",
+            t1.create_date AS "createDate",
+            t1.update_by AS "updateBy.id",
+            t1.update_date AS "updateDate",
+            t1.livePhoto AS "livePhoto",
+            t1.recordPhoto AS "recordPhoto",
+            t1.remarks AS "remarks",
+            t1.ele_model AS "eleModel",
+            t1.phy_model AS "phyModel",
+            t1.anti_fake_id AS "antiFakeId",
+            t1.anti_fake_write AS "antiFakeWrite",
+            t1.record_state AS "recordState",
+            t1.shape_id AS "stampShapeId",
+            t1.del_flag AS "delFlag",
+            t1.stamp_code AS "stampCode",
+            t1.make_money AS "makeMoney",
+            t1.city_money AS "cityMoney",
+            t1.rc_money AS "rcMoney",
+            t1.province_money AS "provinceMoney",
+            t1.water_model AS "waterEleModel",
+            t1.return_code AS "returnCode",
+            t1.state_flag AS "stateFlag",
+            t1.record_pdf AS "recordPDF"
+        FROM
+            t_stamp_1 t1
+        <include refid="stamp_query_condition_t1" />
+        UNION ALL
+        SELECT
+            t2.id AS "id",
+            t2.use_comp AS "useComp.id",
+            t2.make_comp AS "makeComp.id",
+            t2.now_comp AS "nowMakeComp.id",
+            t2.record_id AS "lastRecord.id",
+            t2.stamp_name AS "stampName",
+            t2.allow_usenum AS "allowUseNum",
+            t2.stamp_state AS "stampState",
+            t2.use_state AS "useState",
+            t2.sys_state AS "sysState",
+            t2.laststate_by AS "lastStateBy.id",
+            t2.laststate_date AS "lastStateDate",
+            t2.stamp_type AS "stampType",
+            t2.stamp_texture AS "stampTexture",
+            t2.stamp_subtype AS "stampSubType",
+            t2.record_date AS "recordDate",
+            t2.make_date AS "makeDate",
+            t2.delivery_date AS "deliveryDate",
+            t2.stamp_shape AS "stampShape",
+            t2.create_by AS "createBy.id",
+            t2.create_date AS "createDate",
+            t2.update_by AS "updateBy.id",
+            t2.update_date AS "updateDate",
+            t2.livePhoto AS "livePhoto",
+            t2.recordPhoto AS "recordPhoto",
+            t2.remarks AS "remarks",
+            t2.ele_model AS "eleModel",
+            t2.phy_model AS "phyModel",
+            t2.anti_fake_id AS "antiFakeId",
+            t2.anti_fake_write AS "antiFakeWrite",
+            t2.record_state AS "recordState",
+            t2.shape_id AS "stampShapeId",
+            t2.del_flag AS "delFlag",
+            t2.stamp_code AS "stampCode",
+            t2.make_money AS "makeMoney",
+            t2.city_money AS "cityMoney",
+            t2.rc_money AS "rcMoney",
+            t2.province_money AS "provinceMoney",
+            t2.water_model AS "waterEleModel",
+            t2.return_code AS "returnCode",
+            t2.state_flag AS "stateFlag",
+            t2.record_pdf AS "recordPDF"
+        FROM
+            t_stamp_2 t2
+        <include refid="stamp_query_condition_t2" />
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.common.util.attachment.dao.DeliverAttachmentDao">
+
+
+    <select id="findListByStampId"  resultMap="attachmentMap">
+      SELECT
+        a.id AS "id",
+        a.StampId AS "stampId",
+        a.RecordId AS "recordId",
+        a.FileName AS "fileName",
+        a.Xflag AS "xFlag"
+      FROM t_deliver a
+      WHERE a.StampId = #{stampId}
+    </select>
+
+    <resultMap id="attachmentMap" type="com.thinkgem.jeesite.modules.stamp.common.util.attachment.entity.DeliverAttachment">
+        <id column="id" property="id"></id>
+        <result column="StampId" property="stampId"></result>
+        <result column="RecordId" property="recordId"></result>
+        <result column="FileName" property="fileName"></result>
+        <result column="Xflag" property="xFlag"></result>
+    </resultMap>
+
+
+
+</mapper>

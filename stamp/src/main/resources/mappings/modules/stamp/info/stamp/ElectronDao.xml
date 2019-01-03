@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamp.ElectronDao">
+
+	<insert id="insert" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Electron">
+		INSERT INTO t_electron(
+			id,
+			create_time,
+			validDateStart,
+			validDateEnd,
+			stamp_type,
+			stamp_version,
+			stamp_vendorId,
+			seal_path,
+			create_by,
+			stamp_name,
+			seal_model,
+			allow_use,
+			sysOpr_state
+		)VALUE (
+			#{id},
+			#{createTime},
+			#{validDateStart},
+			#{validDateEnd},
+			#{type},
+			#{version},
+			#{vendorId},
+			#{sealPath},
+			#{createBy.id},
+			#{stampName},
+			#{sealEleModel},
+			#{allowUse},
+			#{sysOprState}
+		)
+	</insert>
+
+	<sql id="electronSql">
+		a.id AS "id",
+		a.create_time AS "createTime",
+		a.validDateStart AS "validDateStart",
+		a.validDateEnd AS "validDateEnd",
+		a.stamp_type AS "type",
+		a.stamp_version AS "version",
+		a.stamp_vendorId AS "vendorId",
+		a.seal_path AS "sealPath",
+		a.seal_model AS "sealEleModel",
+		a.create_by as "createBy.id",
+		a.rc_date AS "rcDate",
+		a.sysOpr_state AS "sysOprState"
+	</sql>
+
+
+	<select id="get" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Electron"
+					resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Electron">
+		SELECT
+		  <include refid="electronSql"></include>
+		 from t_electron a
+		<where>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+		</where>
+	</select>
+
+
+	<update id="rcControl" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Electron">
+		UPDATE t_electron
+		SET rc_date =#{rcDate}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="systemOprationState">
+		update t_electron a SET
+		a.sysOpr_state = #{oprState}
+		WHERE
+		a.id=#{id}
+	</update>
+
+</mapper>

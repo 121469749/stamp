@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.makeStampCompany.MakeCompanyLicenseDao">
+
+
+	<sql id="licenceColumns">
+		a.id AS "id",
+		a.make_comp AS "makeComp.id",
+		a.work_type AS "workType",
+		a.work_reason AS "workReason",
+		a.comp_name AS "compName",
+		a.bus_type AS "busType",
+		a.legal_name AS "legalName",
+		a.legal_phone AS "legalPhone",
+		a.legal_certtype AS "legalCertType",
+		a.legal_certcode AS "legalCertCode",
+		a.police_name AS "policeName",
+		a.police_idcode AS "policeIdCode",
+		a.police_phone AS "policePhone",
+		a.head_count AS "headCount",
+		a.special_count AS "specialCount",
+		a.agent_name AS "agentName",
+		a.agent_certcode AS "agentCertCode",
+		a.agent_phone AS "agentPhone",
+		a.attachs AS "attachs",
+		a.bus_run AS "busRun",
+		a.check_state AS "checkState",
+		a.check_reason AS "checkReason",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+
+
+	</sql>
+	<!--**********************select operation start***********************************-->
+	<!--取得该company
+		公司业务办理信息的最新一条。
+	-->
+	<select id="checkOtherLicence" resultType="com.thinkgem.jeesite.modules.stamp.common.Enumeration.CheckState">
+		SELECT
+			  a.check_state
+		FROM t_licence_${workType.key} a
+		<where>
+			a.make_comp =#{id}
+		</where>
+		ORDER BY a.create_date
+		LIMIT 1
+	</select>
+
+
+
+	<select id="checkNewestLicence" resultType="Licence">
+		SELECT
+		<include refid="licenceColumns"/>
+		FROM t_licence_${workType.key} a
+		<where>
+			a.make_comp =#{makeCompId}
+			AND a.del_flag = '0'
+		</where>
+		ORDER BY a.create_date DESC
+		LIMIT 1
+	</select>
+
+
+
+
+
+	<select id="getLicence" resultType="Licence">
+		SELECT
+		<include refid="licenceColumns"/>
+		FROM t_licence_${workType.key} a
+		<where>
+			a.make_comp =#{makeCompId}
+			AND a.work_type = #{workType}
+			AND a.del_flag = '0'
+		</where>
+		ORDER BY a.create_date
+		LIMIT 1
+	</select>
+	<!--**********************select operation end***********************************-->
+
+	<!--**********************update operation start********************************-->
+
+
+
+	<!--**********************update operation end********************************-->
+
+
+	<!--********************insert operation start********************************-->
+
+	<!--
+      把新的许可证申请信息持久化
+	-->
+	<insert id="insertLicence"
+			parameterType="com.thinkgem.jeesite.modules.stamp.entity.licence.Licence">
+		INSERT INTO t_licence_${workType.key}(
+			id,
+			make_comp,
+			work_type,
+			work_reason,
+			comp_name,
+			bus_type,
+			legal_name,
+			legal_phone,
+			legal_certType,
+			leagl_certCode,
+			police_name,
+			police_IdCode,
+			police_phone,
+			head_count,
+			special_count,
+			agent_name,
+			agent_certCode,
+			agent_phone,
+			attachs,
+			bus_run,
+			check_state,
+			check_reason,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUE (
+			#{id},
+			#{makeComp.id},
+			#{workType},
+			#{workReason},
+			#{compName},
+			#{busType},
+			#{legalName},
+			#{legalPhone},
+			#{legalCertType},
+			#{legalCertCode},
+			#{policeName},
+			#{policeIdCode},
+			#{policePhone},
+			#{headCount},
+			#{specialCount},
+			#{agentName},
+			#{agentCertCode},
+			#{agentPhone},
+			#{attachs},
+			#{busRun},
+			#{checkState},
+			#{checkReason},
+			#{createBy.id}
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+
+	<!--********************insert operation end********************************-->
+
+
+</mapper>

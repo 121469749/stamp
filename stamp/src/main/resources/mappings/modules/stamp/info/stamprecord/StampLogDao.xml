@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamprecord.StampLogDao">
+
+    <sql id="stampLogColumns">
+        a.id AS "id",
+        a.title AS "title",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate"
+    </sql>
+
+    <sql id="userJoins">
+        LEFT JOIN sys_user_${createBy.userType.key} u ON a.create_by = u.id
+    </sql>
+
+    <sql id="userJoinsColumns">
+        u.name AS "createBy.name"
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO t_stamplog(
+            title,
+            create_by,
+            create_date
+        ) VALUES (
+            #{title},
+            #{createBy.id},
+            #{createDate}
+        )
+    </insert>
+
+    <select id="findList" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampLog">
+        SELECT
+          <include refid="stampLogColumns"/>,
+          <include refid="userJoinsColumns"/>
+        FROM t_stamplog a
+          <include refid="userJoins"/>
+        WHERE a.create_date BETWEEN #{beginDate} AND #{endDate}
+        AND u.id IN (SELECT id
+                      FROM sys_user_${createBy.userType.key} b
+                      WHERE b.userTypeId = #{createBy.userTypeId})
+        <if test="title != null and title != ''">
+            AND a.title LIKE concat(concat('%', #{title}), '%')
+        </if>
+        ORDER BY a.create_date DESC
+    </select>
+</mapper>

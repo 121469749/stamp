@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.test.dao.TestDao">
+    
+    <sql id="testColumns">
+		a.*,
+		o.id AS "office.id",
+		o.name AS "office.name"
+	</sql>
+	
+	<sql id="testJoins">
+		JOIN sys_office o ON o.id = a.office_id
+    </sql>
+    
+    <select id="get" resultType="Test">
+		SELECT 
+			<include refid="testColumns"/>
+		FROM sys_user a
+		<include refid="testJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Test">
+		SELECT 
+			<include refid="testColumns"/>
+		FROM sys_user a
+		<include refid="testJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		<if test="name != null and name != ''">
+			AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+		ORDER BY a.id DESC
+	</select>
+	
+	<select id="findAllList" resultType="Test">
+		SELECT 
+			<include refid="testColumns"/>
+		FROM sys_user a
+		<include refid="testJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY a.id DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_user(
+			id, 
+			name, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_user SET 
+			name = #{name}, 
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sys_user SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+<!--测试用-->
+	<select id="testUpdate" resultType="Company">
+		SELECT
+		a.id,
+		a.area_id as "area.id"
+		FROM t_company_2 a
+		LEFT JOIN sys_area sa ON sa.id = a.area_id
+		WHERE a.del_flag = '0'
+		AND a.sole_code LIKE concat(concat('%', #{soleCode}), '%')
+		AND a.area_id = #{area_id}
+	</select>
+
+
+	<!--测试用:返回stamp1-->
+	<select id="returnStamp1" resultType="Stamp">
+		SELECT
+		a.id,
+		a.make_comp as "makeComp.id",
+		a.now_comp AS "nowMakeComp.id"
+		FROM t_stamp_1 a
+		WHERE a.del_flag = '0'
+		AND a.use_comp = #{use_comp}
+	</select>
+
+
+	<!--测试用:返回制章公司地区编码-->
+	<select id="returnMakeComp" resultType="Company">
+		SELECT
+		a.id,
+		a.area_id as "area.id"
+		FROM t_company_1 a
+		LEFT JOIN sys_area sa ON sa.id = a.area_id
+		WHERE a.del_flag = '0'
+		AND a.id = #{id}
+	</select>
+
+
+
+	<update id="updateAreaId">
+		UPDATE t_company_2 SET
+		area_id = #{area_id}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamprecord.StampAuthDao">
+
+    <sql id="stampAuthColumns">
+        a.id AS "id",
+        a.stamp_id AS "stamp.id",
+        a.user_id AS "user.id",
+        a.start_time AS "startTime",
+        a.end_time AS "endTime",
+        a.opr_state AS "stampAuthState",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.remarks AS "remarks"
+    </sql>
+    
+    <sql id="userJoinColumns">
+        u.name AS "user.name",
+        u.no AS "user.no",
+        u.login_name AS "user.loginName"
+    </sql>
+
+    <sql id="stampJoinColumns">
+        s.stamp_name AS "stamp.stampName",
+        s.stamp_shape AS "stamp.stampShape"
+    </sql>
+
+    <sql id="userJoins">
+        LEFT JOIN sys_user_${user.userType.key} u ON a.user_id = u.id
+    </sql>
+
+    <sql id="stampJoins">
+        LEFT JOIN t_stamp_2 s ON a.stamp_id = s.id
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO t_stampauth(
+            stamp_id,
+            user_id,
+            start_time,
+            end_time,
+            remarks,
+            create_by,
+            create_date,
+            opr_state
+        ) VALUES (
+            #{stamp.id},
+            #{user.id},
+            #{startTime},
+            #{endTime},
+            #{remarks},
+            #{createBy.id},
+            #{createDate},
+            #{stampAuthState}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE t_stampauth SET
+            stamp_id = #{stamp.id},
+            user_id = #{user.id},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            remarks = #{remarks},
+            create_by = #{updateBy.id},
+            create_date = #{updateDate},
+            opr_state = #{stampAuthState}
+    </update>
+
+    <!-- 更改印章使用授权 -->
+    <update id="changeAuthState" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampAuth">
+        UPDATE t_stampauth SET
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            end_time = #{endTime},
+            opr_state = #{stampAuthState},
+            create_by = #{updateBy.id},
+            create_date = #{updateDate}
+        WHERE stamp_id = #{stamp.id}
+        AND user_id = #{user.id}
+    </update>
+
+    <!-- 判断表中是否存在该印章和用户的信息 -->
+    <select id="judgeExitStampAndUser" resultType="java.lang.Integer"
+            parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampAuth">
+        SELECT COUNT(*)
+        FROM t_stampauth
+        WHERE stamp_id = #{stamp.id}
+        AND user_id = #{user.id}
+    </select>
+
+    <!-- 取消印章的所有授权 -->
+    <update id="closeAllAuthByStamp" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        UPDATE t_stampauth SET
+            opr_state = "AUTH_FALSE",
+            end_time = #{updateDate},
+            create_by = #{updateBy.id},
+            create_date = #{updateDate}
+        WHERE stamp_id = #{id}
+        AND opr_state = "AUTH_TRUE"
+    </update>
+
+    <!-- 通过 印章和用户 查找单条信息 -->
+    <select id="getOneByStampAndUser" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampAuth">
+        SELECT
+            <include refid="stampAuthColumns"/>
+        FROM t_stampauth a
+        WHERE a.stamp_id = #{stamp.id}
+        AND a.user_id = #{user.id}
+    </select>
+    
+    <!-- 查找印章的授权状况 -->
+    <select id="findStampAuth" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampAuth">
+        SELECT
+            <include refid="stampAuthColumns"/>,
+            <include refid="userJoinColumns"/>
+        FROM t_stampauth a
+            <include refid="userJoins"/>
+        WHERE a.stamp_id = #{stamp.id}
+        AND a.user_id IN (SELECT id
+                          FROM sys_user_${user.userType.key} c
+                          WHERE c.userTypeId = #{stamp.useComp.id}
+                          AND c.is_sysrole = '0'
+                          AND c.del_flag = '0')
+        ORDER BY a.create_date DESC
+    </select>
+
+    <!-- 查找针对某一印章未在授权表中的用户 -->
+    <select id="findNoAuthUser" resultType="com.thinkgem.jeesite.modules.sys.entity.User">
+        SELECT u.no, u.name, u.id
+        FROM sys_user_${user.userType.key} u
+        WHERE u.id NOT IN (SELECT a.user_id
+                           FROM t_stampauth a
+                           WHERE a.stamp_id = #{stamp.id})
+        AND u.userTypeId = #{user.userTypeId}
+        AND u.is_sysrole = '0'
+        AND u.del_flag = '0'
+    </select>
+
+    <!-- 删除某一印章下的一个用户 -->
+    <delete id="delete">
+        DELETE FROM t_stampauth
+        WHERE user_id = #{user.id}
+        AND stamp_id = #{stamp.id}
+    </delete>
+
+    <!-- 查询员工可使用的印章 -->
+    <select id="findUsefulByUser" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampAuth">
+        SELECT
+          <include refid="stampAuthColumns"/>,
+          <include refid="stampJoinColumns"/>
+        FROM t_stampauth a
+          <include refid="stampJoins"/>
+        WHERE a.user_id = #{user.id}
+        AND a.opr_state = #{stampAuthState}
+        AND s.use_state = #{stamp.useState}
+        <if test="stamp != null">
+            <if test="stamp.stampName != null and stamp.stampName != ''">
+                AND s.stamp_name LIKE concat(concat('%', #{stamp.stampName}) , '%')
+            </if>
+        </if>
+    </select>
+
+    <!-- 查询印章的使用人 -->
+    <select id="findUsingByStamp" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampAuth">
+        SELECT
+          <include refid="stampAuthColumns"/>,
+          <include refid="userJoinColumns"/>
+        FROM t_stampauth a
+          <include refid="userJoins"/>
+        WHERE a.opr_state = 'AUTH_TRUE'
+        AND a.stamp_id = #{stamp.id}
+    </select>
+</mapper>

@@ -1,0 +1,34 @@
+tbody{
+    margin:0;
+}
+body{
+    width:60%;
+    margin:2% auto;
+    font-size:12px;
+}
+.table-bordered td, .table-bordered th {
+
+    border: 1px solid black;
+}
+
+.table-tr-title{
+    background-color: #51b2f6;
+
+
+
+}
+.title-change{
+    background-color:rgb(153, 153, 153);
+}
+
+.normalEvenTD{
+    background-color: rgb(238, 238, 238);
+}
+.normalOddTD{
+    background: white;
+}
+
+.trSelected{
+    background-color: #51b2f6;
+
+}

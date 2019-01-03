@@ -1,0 +1,181 @@
+﻿/*表单名称*/
+.panel-head {
+    padding: 10px 15px;
+    overflow: hidden;
+}
+
+#my-btn {
+    border: none;
+    padding: 10px 35px !important;
+    margin-bottom: 2%;
+}
+
+#my-btn :hover {
+    background: #38f !important;
+}
+
+/*表单验证样式*/
+.errorTip{
+    background: rgba(255,0,0,0.1);
+}
+
+.my-mask {
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: rgba(0,0,0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.contact-tip, .id-tip, .code-tip, .area-tip {
+    width: 300px;
+    color: #fff;
+    font-size: 1.5em;
+    position: absolute;
+    display: none;
+    z-index: 999;
+    top: 50%;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -150px;
+}
+
+.table tr td{
+    vertical-align: middle !important;
+}
+
+
+/*图片上传*/
+
+.ul-img {
+    list-style: none;
+    overflow: hidden;
+    border: 1px solid #999999;
+    width: 482px;
+    padding-left: 0;
+    margin-left: 2em;
+    margin-right: 4em;
+}
+
+.ul-img li {
+    list-style: none;
+    display: inline-block;
+    float: left;
+    width: 120px;
+    line-height: 120px;
+    border: 1px solid #D9D9D9;
+    box-sizing: border-box;
+}
+
+.ul-img li img {
+    width: 100%;
+    height: 120px;
+    max-width: 100%;
+}
+
+.uploadBox {
+    float: left;
+    position: relative;
+    width: 90px;
+    height: 92px;
+    border: 1px solid #D9D9D9;
+    box-sizing: border-box;
+    margin-bottom: 0;
+}
+
+.uploadBox:before,
+.uploadBox:after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /*两个参数添加给后续定义路径中的所有点*/
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #D9D9D9;
+}
+
+.uploadBox:before {
+    width: 2px;
+    height: 80px;
+}
+
+.uploadBox:after {
+    width: 80px;
+    height: 2px;
+}
+
+.uploadBox:active {
+    border-color: #999999;
+}
+
+.uploadBox:active:before,
+.uploadBox:active:after {
+    background-color: #999999;
+}
+
+.uploadBox input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+#imageContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10000;
+    padding-top: 20px;
+    padding-bottom: 5px;
+    background-color: rgba(30, 30, 30, 0.7);
+    text-align: center;
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+#main {
+    width: 90%;
+    height: 90%;
+    margin: 5px auto;
+    position: relative;
+}
+
+#main > img {
+    height: 100%;
+}
+
+#imageContainer img + a {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.imagesUpload{
+    list-style: none;
+    overflow: hidden;
+    padding-left: 0;
+    margin: 0 !important;
+}
+.imagesUpload li{
+    list-style: none;
+    display: inline-block;
+    float: left;
+    width: 90px;
+    line-height: 90px;
+    border: 1px solid #D9D9D9;
+    box-sizing: border-box;
+}
+.imagesUpload li img{
+    width:100%;
+    height: 90px;
+}

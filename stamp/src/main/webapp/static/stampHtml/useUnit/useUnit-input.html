@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>印章管理-印章使用录入</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/licence.css">
+    <script language="JavaScript" src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <style>
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            border: none;
+        }
+        td{
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div style="width: 40%;margin: 20px auto">
+<h3 style="text-align: center">物理印章使用录入</h3>
+<table class="table">
+    <tr>
+        <td>物理印章名称：</td>
+        <td>
+            <select name="" class="form-control" id="">
+                <option value="">公章</option>
+                <option value="">财务章</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>使用用户名：</td>
+        <td><input type="text" class="form-control"></td>
+    </tr>
+    <tr>
+        <td>使用时间：</td>
+        <td><input type="date" class="form-control"></td>
+    </tr>
+    <tr>
+        <td>用途：</td>
+        <td><input type="text" class="form-control"></td>
+    </tr>
+</table>
+    <button class="btn btn-default" style="width: 10%;margin-left: 45%">新增</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.AreaDao">
+    
+	<sql id="areaColumns">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.code,
+		a.name,
+		a.sort,
+		a.type,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.count,
+		p.name AS "parent.name"
+	</sql>
+
+	<sql id="areaColumns2">
+		a.id,
+		a.code,
+		a.name,
+		a.sort,
+		a.type,
+		a.del_flag,
+		a.count
+	</sql>
+
+	
+	<sql id="areaJoins">
+		LEFT JOIN sys_office p ON p.id = a.parent_id
+    </sql>
+    
+	<select id="get" resultType="Area">
+		SELECT
+			<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Area">
+		SELECT
+			<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		OR a.id = #{currentUser.office.area.id}
+		ORDER BY a.code
+	</select>
+	
+	<select id="findAllList" resultType="Area">
+		SELECT
+			<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.code
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="Area">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM sys_area a
+		WHERE
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		AND a.parent_ids LIKE
+		<if test="dbName == 'oracle'">'%,'||#{parentIds}||',%'</if>
+		<if test="dbName == 'mssql'">'%,'+#{parentIds}+',%'</if>
+		<if test="dbName == 'mysql'">CONCAT('%,', #{parentIds}, ',%')</if>
+		ORDER BY a.code
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_area(
+			id, 
+			parent_id, 
+			parent_ids, 
+			code, 
+			name, 
+			sort,
+			type, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag,
+			count
+		) VALUES (
+			#{id}, 
+			#{parent.id}, 
+			#{parentIds}, 
+			#{code}, 
+			#{name}, 
+			#{sort}, 
+			#{type}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag},
+			#{count}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_area SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}, 
+			code = #{code}, 
+			name = #{name}, 
+			sort = #{sort}, 
+			type = #{type},
+			count = #{count},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE sys_area SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sys_area SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+	<select id="getAreaByCode" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE
+			a.code=#{areaCode}
+				AND
+			a.del_flag = 0
+		limit 1
+	</select>
+	<!--通过区域名称查找区域对象信息-->
+	<select id="getAreaByName" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE
+		a.name LIKE CONCAT('%',#{name},'%')
+		AND
+		a.del_flag = 0
+		limit 1
+	</select>
+
+	<!--通过区域类型查找区域对象信息集合-->
+	<select id="getAreaByType" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE
+		a.type = #{type}
+		AND
+		a.del_flag = 0
+	</select>
+
+	<select id="checkAreaExist" resultType="java.lang.Integer">
+	  SELECT COUNT(*)
+	  	FROM  sys_area a
+	  WHERE
+	  	  a.id = #{areaid} AND a.del_flag = '0'
+	</select>
+
+
+	<!--更新印章编码的数量-->
+	<update id="updateCount">
+		UPDATE sys_area a SET
+			count = #{count}
+		WHERE a.id = #{areaId}
+	</update>
+
+	<select id="getSubAreaByPareanId" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		<where>
+			a.del_flag = '0' AND
+			a.parent_ids like CONCAT('%', #{parentId}, '%')
+			<!--<if test="dbName == 'oracle'">'%,'||#{parentId}||',%'</if>-->
+			<!--<if test="dbName == 'mssql'">'%,'+#{parentId}+',%'</if>-->
+			<!--<if test="dbName == 'mysql'">CONCAT('%,', #{parentId}, ',%')</if>-->
+		</where>
+
+	</select>
+
+	<select id="findCustomAreaListByAreaType" resultType="Area">
+		SELECT
+		<include refid="areaColumns2"/>
+		FROM sys_area a
+		<where>
+		   a.del_flag = #{DEL_FLAG_NORMAL}
+		   AND a.type = #{type}
+		</where>
+		ORDER BY a.code
+	</select>
+
+	<select id="findALLProvince" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		WHERE a.del_flag = '0'
+			  AND a.type != '1' AND a.type !='4'
+		ORDER BY a.code
+	</select>
+
+	<select id="findSubAreasByParentId" resultType="Area">
+		SELECT
+		<include refid="areaColumns2"/>
+		FROM sys_area a
+		<where>
+			a.del_flag = '0'
+
+			<if test="parent !=null">
+				AND a.parent_ids like CONCAT('%,', #{parent.id}, ',%')
+			</if>
+
+			<if test="id !=null and id !=''">
+				AND  a.id = #{id}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAreaBySubArea" resultType="Area">
+		SELECT
+		<include refid="areaColumns2"/>
+		FROM sys_area a
+		<where>
+			a.del_flag = '0'
+			<if test="parent !=null">
+				AND a.id = #{parent.id}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAreasByParentArea" resultType="Area">
+		SELECT
+			<include refid="areaColumns2"/>
+		FROM sys_area a
+		<where>
+			a.del_flag = '0'
+			AND a.parent_id = #{id}
+		</where>
+	</select>
+
+
+	<select id="checkSubAreasExist" resultType="java.lang.Integer" parameterType="Area">
+		SELECT
+			count(*)
+	  	FROM sys_area a
+	  	WHERE a.parent_id=#{id}
+	</select>
+
+</mapper>

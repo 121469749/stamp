@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.police.PoliceLogDao">
+    <sql id="policeLogColumns">
+        a.id AS "id",
+        a.type AS "type",
+         a.operate_type AS "operateType",
+        a.title AS "title",
+        a.content AS "content",
+        a.operator AS "operator",
+        a.create_date AS "createDate",
+        a.del_flag AS "delFlag",
+        su.name AS "operator.name"
+    </sql>
+<sql id="policeLogJoin">
+    LEFT JOIN sys_user_5 su ON  su.id = a.operator
+    LEFT JOIN  sys_area sa ON sa.id = a.area
+</sql>
+    <insert id="insert">
+        INSERT INTO t_police_log(
+        id,
+        type,
+        operate_type,
+        title,
+        content,
+        operator,
+        create_date,
+        area,
+        del_flag
+        ) VALUES (
+        #{id},
+        #{type},
+        #{operateType},
+        #{title},
+        #{content},
+        #{operator.id},
+        #{createDate},
+        #{area.id},
+        #{delFlag}
+        )
+    </insert>
+
+
+    <select id="findList" resultType="PoliceLog">
+        SELECT
+        <include refid="policeLogColumns"/>
+        FROM t_police_log a
+        <include refid="policeLogJoin"></include>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+
+            <if test="type != null and type != ''">
+                AND a.type = #{type}
+            </if>
+            <if test="title != null and title != ''">
+                AND a.title like concat('%', #{title},'%')
+            </if>
+            <if test="operator.name != null and operator.name != ''">
+                AND su.name like concat('%', #{operator.name},'%')
+            </if>
+            <if test="beginDate != null and beginDate != ''">
+                AND <![CDATA[ a.create_date >= #{beginDate} ]]>
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND <![CDATA[ a.create_date <= #{endDate} ]]>
+            </if>
+            <!-- area过滤 -->
+            ${sqlMap.areafilter}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

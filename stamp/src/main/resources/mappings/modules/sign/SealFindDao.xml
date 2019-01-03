@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.thinkgem.jeesite.modules.sign.dao.SealFindDao">
+
+
+    <sql id="SealSql1">
+        a.id AS "id",
+        a.seal_name AS "sealName",
+        a.seal_path AS "sealPath",
+        a.allowUse AS "allowUse",
+        a.owner AS "user.id"
+    </sql>
+
+    <select id="findList" resultType="com.thinkgem.jeesite.modules.sign.entity.Seal"
+            parameterType="com.thinkgem.jeesite.modules.sign.entity.Seal">
+        SELECT
+        <include refid="SealSql1"/>
+        FROM t_seal a
+        <where>
+            a.owner = #{user.id}
+        </where>
+    </select>
+
+    <select id="get" resultType="com.thinkgem.jeesite.modules.sign.entity.Seal"
+            parameterType="com.thinkgem.jeesite.modules.sign.entity.Seal">
+        SELECT
+        <include refid="SealSql1"/>
+        FROM t_seal a
+        <where>
+            a.id=#{id}
+        </where>
+    </select>
+
+    <select id="findStamp" parameterType="com.thinkgem.jeesite.modules.sign.entity.Seal"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+      SELECT
+       a.id as id,
+       ele_model as eleModel,
+        stamp_name as stampName,
+      ele_model as eleModel,
+      bind_stamp as bindStampId
+        FROM
+          t_stamp_1 a
+        WHERE
+          a.bind_stamp=#{id}
+
+    </select>
+
+    <select id="findStampById" parameterType="com.thinkgem.jeesite.modules.sign.entity.Seal"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Stamp">
+        SELECT
+        a.id as id,
+        ele_model as eleModel,
+        stamp_name as stampName,
+        ele_model as eleModel,
+        bind_stamp as bindStampId,
+        stamp_type as stampType
+        FROM
+        t_stamp_1 a
+        WHERE
+        a.id=#{id}
+
+    </select>
+
+</mapper>

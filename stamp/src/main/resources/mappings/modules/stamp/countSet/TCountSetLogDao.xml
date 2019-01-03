@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.CountSet.TCountSetLogDao">
+    
+	<sql id="tCountSetLogColumns">
+		a.id AS "id",
+		a.company_name AS "companyName",
+		a.company_id AS "companyId",
+		a.ele_count AS "eleCount",
+		a.ele_sumcount AS "eleSumcount",
+		a.phy_count AS "phyCount",
+		a.phy_sumcount AS "phySumcount",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.create_by AS "createBy.id",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="tCountSetLogJoins">
+	</sql>
+    
+	<select id="get" resultType="TCountSetLog">
+		SELECT 
+			<include refid="tCountSetLogColumns"/>
+		FROM t_count_set_log a
+		<include refid="tCountSetLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCountSetLog">
+		SELECT 
+			<include refid="tCountSetLogColumns"/>
+		FROM t_count_set_log a
+		<include refid="tCountSetLogJoins"/>
+		<where>
+			<if test="companyId != null ">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null and beginUpdateDate != '' and endUpdateDate != ''">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCountSetLog">
+		SELECT 
+			<include refid="tCountSetLogColumns"/>
+		FROM t_count_set_log a
+		<include refid="tCountSetLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getSumEleCount" resultType="java.lang.String" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+		SELECT
+		SUM(a.ele_count) AS eleSumCount
+		FROM t_count_set_log a
+		WHERE
+		a.company_id=#{id}
+	</select>
+
+	<select id="getSumPhyCount" resultType="string" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company">
+		SELECT
+		SUM(a.phy_count) AS phySumCount
+		FROM t_count_set_log a
+		WHERE
+		a.company_id=#{id}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_count_set_log(
+			id,
+			company_name,
+			company_id,
+			ele_count,
+			ele_sumcount,
+			phy_count,
+			phy_sumcount,
+			create_date,
+			update_date,
+			create_by,
+			update_by
+		) VALUES (
+			#{id},
+			#{companyName},
+			#{companyId},
+			#{eleCount},
+			#{eleSumcount},
+			#{phyCount},
+			#{phySumcount},
+			#{createDate},
+			#{updateDate},
+			#{createBy.id},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_count_set_log SET 	
+			company_name = #{companyName},
+			company_id = #{companyId},
+			ele_count = #{eleCount},
+			ele_sumcount = #{eleSumcount},
+			phy_count = #{phyCount},
+			phy_sumcount = #{phySumcount},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_count_set_log
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

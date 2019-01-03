@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.CountSet.CountSetDao">
+    
+	<sql id="countSetSql1">
+		a.id AS "id",
+		a.company_id AS "company.id",
+		a.area_id AS "area.id",
+		a.stamp_shape AS "stampShape",
+		a.count AS "count",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.create_by AS "createBy.id",
+		a.update_by AS "updateBy.id"
+	</sql>
+
+	<insert id="insert" parameterType="com.thinkgem.jeesite.modules.stamp.entity.countSet.CountSet">
+		INSERT INTO t_count_set(
+			id,
+			company_id,
+			area_id,
+			stamp_shape,
+			count,
+			update_date,
+			create_date,
+			create_by,
+			update_by
+		)VALUE (
+			#{id},
+			#{company.id},
+			#{area.id},
+			#{stampShape},
+			#{count},
+			#{updateDate},
+			#{createDate},
+			#{createBy.id},
+			#{updateBy.id}
+		)
+	</insert>
+
+	<select id="get" parameterType="com.thinkgem.jeesite.modules.stamp.entity.countSet.CountSet"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.countSet.CountSet">
+		SELECT
+		<include refid="countSetSql1"/>
+		FROM t_count_set a
+		<where>
+			<if test="id !=null and id !='' ">
+				AND a.id=#{id}
+			</if>
+			<if test="company!=null">
+				<if test="company.id !=null and company.id !=''">
+					AND a.company_id=#{company.id}
+				</if>
+			</if>
+			<if test="stampShape !=null">
+				AND a.stamp_shape=#{stampShape}
+			</if>
+			<if test="area !=null">
+				<if test="area.id !=null and area.id !=''">
+					AND a.area_id=#{area.id}
+				</if>
+			</if>
+		</where>
+		limit 1
+	</select>
+
+	<select id="getEleCountByCompany" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+	  resultType="com.thinkgem.jeesite.modules.stamp.entity.countSet.CountSet">
+		SELECT 	<include refid="countSetSql1"/>
+		FROM t_count_set a WHERE 1=1
+		<if test="id !=null and id !=''">
+			AND a.company_id=#{id}
+		</if>
+			AND a.stamp_shape='ELESTAMP'
+	</select>
+
+	<select id="getPhyCountByCompany" parameterType="com.thinkgem.jeesite.modules.stamp.entity.company.Company"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.countSet.CountSet">
+		SELECT 	<include refid="countSetSql1"/>
+		FROM t_count_set a WHERE 1=1
+		<if test="id !=null and id !=''">
+			AND a.company_id=#{id}
+		</if>
+		AND a.stamp_shape='PHYSTAMP'
+	</select>
+
+	<update id="update" parameterType="com.thinkgem.jeesite.modules.stamp.entity.countSet.CountSet">
+		UPDATE t_count_set a SET
+		a.count = #{count}
+		WHERE a.id=#{id}
+	</update>
+
+	<update id="updateEleStampCountByCompanyId" parameterType="com.thinkgem.jeesite.modules.stamp.dto.countSet.CountSetDTO">
+		UPDATE t_count_set a SET
+		a.count = #{eleCountSet.count}
+		WHERE a.company_id=#{companyId}
+		AND
+		a.stamp_shape=#{eleCountSet.stampShape}
+	</update>
+
+	<update id="updatePhyStampCountByCompanyId" parameterType="com.thinkgem.jeesite.modules.stamp.dto.countSet.CountSetDTO">
+		UPDATE t_count_set a SET
+		a.count = #{phyCountSet.count}
+		WHERE a.company_id=#{companyId}
+		AND
+		a.stamp_shape=#{phyCountSet.stampShape}
+	</update>
+</mapper>

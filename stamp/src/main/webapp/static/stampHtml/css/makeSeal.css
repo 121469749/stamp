@@ -1,0 +1,56 @@
+body{
+    padding: 0;
+    margin: 0 !important;
+}
+.container{
+    margin-top: 20px;
+    padding-left: 0;
+}
+.panel-title{
+    text-align: center;
+}
+.stress{
+    color: red;
+    line-height: 2;
+    font-size: 15px;
+}
+#tag{
+    margin: 0;
+    padding:0;
+    list-style: none;
+    display: inline-block;
+}
+#tag li{
+    text-align: center;
+    line-height: 2.5em;
+    float: left;
+    width: 90px;
+    height: 30px;
+}
+#tag li:hover{
+    cursor: pointer;
+}
+.active{
+    border-bottom: 2px solid #2A76BF;
+    background-color: #F1F1F1;
+}
+.showSeal{
+    width: 50%;
+    float: left;
+    margin-top: 0;
+}
+.setAnnularFont{
+    display: none;
+}
+.setHorizontalFont{
+    display: none;
+}
+
+.set_style{
+    margin-left: 23px;
+    font-size: 14px;
+    font-weight: 700;
+}
+fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver}
+
+legend{padding:.5em;border:0;width:auto;margin-bottom: 0;}

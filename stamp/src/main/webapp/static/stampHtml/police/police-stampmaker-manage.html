@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>公安部门首页-刻章点管理</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script language="JavaScript" src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <style>
+        table input{
+            border: none;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+<table class="table table-striped table-bordered" style="width: 80%;margin: 10px auto">
+    <tr>
+        <th>单位名称</th>
+        <th>单位地址</th>
+        <th>年审状态</th>
+        <th>公司状态</th>
+        <th>操作</th>
+    </tr>
+    <tr>
+        <td><input type="text" value="xxx" readonly></td>
+        <td><input type="text" value="xxx" readonly></td>
+        <td><input type="text" value="过期" readonly></td>
+        <td><input id="xuke" type="text" value="已许可" readonly ></td>
+        <td><a class="btn btn-block btn-default" style="display: inline">查看</a></td>
+    </tr>
+    <tr>
+        <td><input type="text" value="xxx" readonly></td>
+        <td><input type="text" value="xxx" readonly></td>
+        <td><input type="text" value="过期" readonly></td>
+        <td><input id="chexiao" type="text"  value="已撤销" readonly ></td>
+        <td><a class="btn btn-block btn-default" style="display: inline">查看</a></td>
+    </tr>
+    <tr>
+        <td><input type="text" value="xxx" readonly></td>
+        <td><input type="text" value="xxx" readonly></td>
+        <td><input type="text" value="过期" readonly></td>
+        <td><input id="zanting" type="text " value="暂停" readonly ></td>
+        <td><a class="btn btn-block btn-default" style="display: inline">查看</a></td>
+    </tr>
+</table>
+<script>
+    $(function(){
+        if($("#xuke").val() == "已许可"){
+            $("#xuke").parent().next().children().before("<a class='btn btn-block btn-default' style='display: inline'>暂停</a><a class='btn btn-block btn-default' style='display: inline'>撤销</a>");
+        }else if($("#xuke").val() == "暂停"){
+            $("#xuke").parent().next().children().before("<a class='btn btn-block btn-default' style='display: inline'>启用</a>");
+        }
+        if($("#chexiao").val() == "已许可"){
+            $("#chexiao").parent().next().children().before("<a class='btn btn-block btn-default' style='display: inline'>暂停</a><a class='btn btn-block btn-default' style='display: inline'>撤销</a>");
+        }else if($("#chexiao").val() == "暂停"){
+            $("#chexiao").parent().next().children().before("<a class='btn btn-block btn-default' style='display: inline'>启用</a>");
+        }
+        if($("#zanting").val() == "已许可"){
+            $("#zanting").parent().next().children().before("<a class='btn btn-block btn-default' style='display: inline'>暂停</a><a class='btn btn-block btn-default' style='display: inline'>撤销</a>");
+        }else if($("#zanting").val() == "暂停"){
+            $("#zanting").parent().next().children().before("<a class='btn btn-block btn-default' style='display: inline'>启用</a>");
+        }
+    })
+</script>
+</body>
+</html>

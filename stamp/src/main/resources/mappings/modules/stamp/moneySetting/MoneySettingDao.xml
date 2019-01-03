@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.moneySetting.MoneySettingDao">
+
+    <sql id="moneySettingSql">
+        a.id AS "id",
+        a.area_id AS "area.id",
+		a.company_id AS "company.id",
+		a.money AS "money",
+		a.stampTexture AS "stampTexture",
+		a.payment_type AS "paymentType",
+		a.create_Date AS "createDate",
+		a.create_User AS "createUser.id",
+		a.update_User AS "updateUser.id",
+		a.update_Date AS "updateDate"
+    </sql>
+
+    <insert id="insert" parameterType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting">
+        INSERT INTO t_moneysetting(
+          id ,
+		  company_id,
+		  area_id,
+		  money,
+		  stampTexture,
+		  payment_type ,
+		  create_Date ,
+		  create_User,
+		  update_User,
+		  update_Date
+        )VALUE (
+          #{id},
+          #{company.id},
+          #{area.id},
+          #{money},
+          #{stampTexture},
+          #{paymentType},
+          #{createDate},
+          #{createUser.id},
+          #{updateUser.id},
+          #{updateDate}
+        )
+    </insert>
+
+    <select id="findListByCompanyId" resultType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting">
+        SELECT
+        <include refid="moneySettingSql"/>
+        FROM t_moneysetting a
+        <where>
+            a.company_id = #{companyId}
+        </where>
+    </select>
+
+
+    <update id="update" parameterType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting">
+        UPDATE t_moneysetting a SET
+        a.money = #{money},
+        <if test="area !=null">
+            a.area_id = #{area.id},
+        </if>
+        a.stampTexture =#{stampTexture},
+        a.payment_type =#{paymentType},
+        a.update_User = #{updateUser.id},
+        a.update_Date =#{updateDate}
+        WHERE
+        a.id=#{id}
+        AND a.company_id=#{company.id}
+
+    </update>
+
+    <select id="findList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting">
+        SELECT
+        <include refid="moneySettingSql"/>
+        FROM t_moneysetting a
+        <where>
+            <if test="area !=null">
+                And a.area_id =#{area.id}
+            </if>
+            <if test="company !=null">
+                AND a.company_id =#{company.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMoneySetting" parameterType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting"
+            resultType="com.thinkgem.jeesite.modules.stamp.entity.money.MoneySetting">
+        SELECT
+        <include refid="moneySettingSql"/>
+        FROM t_moneysetting a
+        <where>
+            <if test="area !=null">
+                AND a.area_id =#{area.id}
+            </if>
+            <if test="company !=null">
+                AND a.company_id =#{company.id}
+            </if>
+            <if test="paymentType !=null">
+               AND a.payment_type =#{paymentType}
+            </if>
+            <if test="stampTexture !=null and stampTexture !=''">
+                AND a.stampTexture =#{stampTexture}
+            </if>
+        </where>
+    </select>
+
+</mapper>

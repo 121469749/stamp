@@ -1,0 +1,201 @@
+body{
+    /*background-color: #F5F5F5!important;*/
+}
+.layui-card-header {
+    position: relative;
+}
+.layui-card-header {
+    position: relative;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #f6f6f6;
+    color: #333;
+    border-radius: 2px 2px 0 0;
+    font-size: 14px;
+}
+.layui-card:last-child {
+    margin-bottom: 0;
+}
+.layui-card {
+    margin-bottom: 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+}
+.layuiadmin-badge {
+    top: 50%;
+    margin-top: -9px;
+    color: #01AAED;
+}
+.layuiadmin-badge, .layuiadmin-btn-group, .layuiadmin-span-color {
+    position: absolute;
+}
+.layui-badge, .layui-badge-dot, .layui-badge-rim {
+    position: relative;
+    display: inline-block;
+    padding: 0 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: #FF5722;
+    color: #fff;
+    border-radius: 2px;
+}
+.btn-default{
+    color: #fff;
+}
+.layui-badge {
+    height: 18px;
+    line-height: 18px;
+}
+.layui-bg-blue {
+    background-color: #1E9FFF!important;
+}
+.layui-bg-green {
+    background-color: #009688!important;
+}
+.layui-bg-orange {
+    background-color: #FFB800!important;
+}
+.layui-bg-cyan {
+    background-color: #2F4056!important;
+}
+
+.container-style{
+    float: left!important;
+    width: 60%!important;
+    padding: 0 15px!important;
+}
+.container-right{
+    float: right;
+    width: 30%;
+    margin-right: 6%;
+}
+.counter-title{
+    /*padding: 2em 0;*/
+    margin-left: 0.5%;
+}
+.modeler{
+    height: 130px;
+    /*line-height: 130px;*/
+    margin: 0 6px;
+    width: 200px;
+    float: left;
+}
+.counter{
+    /*background: #7a7fb6;*/
+    text-align: center;
+    position: relative;
+}
+.counter .counter-content{
+    width: 100%!important;
+    padding: 20px 10px 30px;
+    color: #fff;
+    position: relative;
+}
+.counter-content .counter-content-left{
+    float: left;
+    width: 40%;
+}
+.counter-content .counter-content-right{
+    float:right;
+    width: 60%;
+    text-align: left;
+    height: 50px;
+    line-height: 40px;
+}
+
+/*在某元素前后插入内容，并设置插入内容的样式*/
+/*.counter:before,
+.counter:after,
+.counter .counter-content:before,
+.counter .counter-content:after{
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    box-shadow: inset 0 2px 2px #000;
+    top: 15px;
+    left: 15px;
+}*/
+.counter:after{
+    left: auto;
+    right: 15px;
+}
+.counter .counter-content:before,
+.counter .counter-content:after{
+    box-shadow: inset 0 -2px 2px #000;
+    top: auto;
+    bottom: 15px;
+}
+.counter .counter-content:after{
+    left: auto;
+    bottom: 15px;
+    right: 15px;
+}
+.counter .counter-icon{
+    display: inline-block;
+    font-size: 40px;
+    width: 25px;/*42*/
+    height: 45px;/*30*/
+    margin: auto;
+    background-image: url('../../images/seal-icon.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.counter .counter-value{
+    display: block;
+    font-size: 30px;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.71);
+}
+.counter .title{
+    color: white;
+    text-transform: uppercase;
+    font-size: 15px;
+}
+@media only screen and (max-width: 990px){
+    .counter{ margin-bottom: 20px; }
+}
+.line-style{
+    width: 900px;
+    height:450px;
+    margin-top: 50px;
+}
+.stampType-style{
+    width: 800px;
+    height:450px;
+    margin-top: 60px;
+}
+.margin-top{
+    margin-top: 10px;
+}
+.margin-left{
+    margin-left: 15px!important;
+}
+.bg-color1{
+    background: #F39C12;
+}
+.bg-color2{
+    background: #36A3F7;
+}
+.bg-color3{
+    background: #F67389;
+}
+.bg-color4{
+    background: mediumseagreen;
+}
+.bg-color5{
+    background: #52CECB;
+}
+.bg-color6{
+    background: #FC8379;
+}
+.bg-color7{
+    background: #99CC00;
+}
+.bg-color8{
+    background: #993333;
+}

@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamprecord.StampRecordDao">
+
+    <sql id="stampRecordColumns">
+		a.id AS "id",
+		a.sblsh AS "sblsh",
+		a.serial_num AS "serialNum",
+		a.use_comp AS "useComp.id",
+		a.make_comp AS "makeComp.id",
+		a.stamp_id AS "stamp.id",
+		a.work_type AS "workType",
+		a.work_remakrs AS "workRemakrs",
+		a.agent_name AS "agentName",
+		a.agent_certtype AS "agentCertType",
+		a.agent_certcode AS "agentCertCode",
+		a.agent_phone AS "agentPhone",
+		a.apply_infos AS "applyInfos",
+		a.attachs AS "attachs",
+		a.getstamp_name AS "getStampName",
+		a.getstamp_idcode AS "getStampIdCode",
+		a.finish_date AS "finishDate",
+		a.finish_file AS "finishFile",
+		a.delivery_date AS "deliveryDate",
+		a.delivery_photo AS "deliveryPhoto",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.legalName AS "legalName",
+		a.legalPhone AS "legalPhone",
+		a.legalCertType AS "legalCertType",
+		a.legalCertCode AS "legalCertCode",
+		a.soleCode AS "soleCode",
+		a.company_name AS "companyName",
+		a.type1 AS "type1",
+		a.comp_address AS "compAddress",
+		a.comp_phone AS "compPhone",
+		a.del_flag AS "delFlag",
+		a.permission_photo AS permissionPhoto
+	</sql>
+
+
+    <sql id="stampRecordJoins">
+    </sql>
+
+    <select id="get" resultType="StampRecord">
+        SELECT
+        <include refid="stampRecordColumns"/>
+        FROM t_stamprecord_${workType.key} a
+        <include refid="stampRecordJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="StampRecord">
+        SELECT
+        <include refid="stampRecordColumns"/>
+        FROM t_stamprecord_${workType.key} a
+        <include refid="stampRecordJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="StampRecord">
+        SELECT
+        <include refid="stampRecordColumns"/>
+        FROM t_stamprecord_${workType.key} a
+        <include refid="stampRecordJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO t_stamprecord_${workType.key}(
+			id,
+			serial_num,
+			use_comp,
+			make_comp,
+			stamp_id,
+			work_type,
+			work_remakrs,
+			agent_name,
+			agent_certtype,
+			agent_certcode,
+			agent_phone,
+			apply_infos,
+			attachs,
+			getstamp_name,
+			getstamp_idcode,
+			finish_date,
+			finish_file,
+			delivery_date,
+			delivery_photo,
+			permission_photo,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			legalName,
+			legalPhone,
+			legalCertType,
+			legalCertCode,
+			soleCode,
+			company_name,
+			type1,
+			comp_address,
+			comp_phone,
+			del_flag
+		) VALUES (
+			#{id},
+			#{serialNum},
+			#{useComp.id},
+			#{makeComp.id},
+			#{stamp.id},
+			#{workType},
+			#{workRemakrs},
+			#{agentName},
+			#{agentCertType},
+			#{agentCertCode},
+			#{agentPhone},
+			#{applyInfos},
+			#{attachs},
+			#{getStampName},
+			#{getStampIdCode},
+			#{finishDate},
+			#{finishFile},
+			#{deliveryDate},
+			#{deliveryPhoto},
+			#{permissionPhoto},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{legalName},
+			#{legalPhone},
+			#{legalCertType},
+			#{legalCertCode},
+			#{soleCode},
+			#{companyName},
+			#{type1},
+			#{compAddress},
+			#{compPhone},
+			#{delFlag}
+		)
+	</insert>
+
+
+	<insert id="batchInsertRecord">
+		INSERT INTO t_stamprecord_${workType.key}(
+		id,
+		serial_num,
+		use_comp,
+		make_comp,
+		stamp_id,
+		work_type,
+		work_remakrs,
+		agent_name,
+		agent_certtype,
+		agent_certcode,
+		agent_phone,
+		apply_infos,
+		attachs,
+		getstamp_name,
+		getstamp_idcode,
+		finish_date,
+		finish_file,
+		delivery_date,
+		delivery_photo,
+		permission_photo,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		legalName,
+		legalPhone,
+		legalCertType,
+		legalCertCode,
+		soleCode,
+		company_name,
+		type1,
+		comp_address,
+		comp_phone,
+		del_flag
+		) VALUES
+		<if test="stampRecordList != null and stampRecordList.size() > 0 ">
+			<foreach item="item" index="index" collection="stampRecordList" open="" separator="," close="">
+				(
+				#{item.id},
+				#{item.serialNum},
+				#{item.useComp.id},
+				#{item.makeComp.id},
+				#{item.stamp.id},
+				#{item.workType},
+				#{item.workRemakrs},
+				#{item.agentName},
+				#{item.agentCertType},
+				#{item.agentCertCode},
+				#{item.agentPhone},
+				#{item.applyInfos},
+				#{item.attachs},
+				#{item.getStampName},
+				#{item.getStampIdCode},
+				#{item.finishDate},
+				#{item.finishFile},
+				#{item.deliveryDate},
+				#{item.deliveryPhoto},
+				#{item.permissionPhoto},
+				#{item.createBy.id},
+				#{item.createDate},
+				#{item.updateBy.id},
+				#{item.updateDate},
+				#{item.remarks},
+				#{item.legalName},
+				#{item.legalPhone},
+				#{item.legalCertType},
+				#{item.legalCertCode},
+				#{item.soleCode},
+				#{item.companyName},
+				#{item.type1},
+				#{item.compAddress},
+				#{item.compPhone},
+				#{item.delFlag}
+				)
+			</foreach>
+		</if>
+	</insert>
+
+    <update id="update">
+		UPDATE t_stamprecord_${workType.key} SET
+			serial_num = #{serialNum},
+			use_comp = #{useComp.id},
+			make_comp = #{makeComp.id},
+			stamp_id = #{stamp.id},
+			work_type = #{workType},
+			work_remakrs = #{workRemakrs},
+			agent_name = #{agentName},
+			agent_certtype = #{agentCertType},
+			agent_certcode = #{agentCertCode},
+			agent_phone = #{agentPhone},
+			apply_infos = #{applyInfos},
+			attachs = #{attachs},
+			getstamp_name = #{getStampName},
+			getstamp_idcode = #{getStampIdCode},
+			finish_date = #{finishDate},
+			finish_file = #{finishFile},
+			delivery_date = #{deliveryDate},
+			delivery_photo = #{deliveryPhoto},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="bindRecord">
+		UPDATE t_stamprecord_${workType.key} SET
+		stamp_id = #{stamp.id},
+		apply_infos = #{applyInfos}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		UPDATE t_stamprecord_${workType.key} SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+    <select id="countStampRecord" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_stampRecord_${stampRecord.workType.key} a
+        <where>
+            a.make_comp=#{stampRecord.makeComp.id}
+            <if test="stampRecord.useComp !=null">
+                AND a.use_comp=#{stampRecord.useComp.id}
+            </if>
+			<if test="startDate != null and endDate !=null">
+				AND a.create_date BETWEEN #{startDate} AND #{endDate}
+			</if>
+            AND a.work_type = #{stampRecord.workType}
+            AND a.del_flag = '0'
+        </where>
+    </select>
+
+	<update id="editStampRecord" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord">
+		UPDATE t_stamprecord_${workType.key} SET
+			legalName = #{legalName},
+			legalPhone = #{legalPhone},
+			legalCertType = #{legalCertType},
+			legalCertCode = #{legalCertCode},
+			type1 = #{type1},
+			comp_address = #{compAddress},
+			comp_phone = #{compPhone},
+			agent_name = #{agentName},
+			agent_certtype = #{agentCertType},
+			agent_certcode = #{agentCertCode},
+			agent_phone = #{agentPhone}
+		WHERE id =#{id}
+	</update>
+
+	<update id="editAttachs"  parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord">
+		UPDATE t_stamprecord_${workType.key} SET
+			attachs =#{attachs}
+		WHERE id =#{id}
+	</update>
+
+	<!--<select id="findCountList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord">
+		SELECT
+		<include refid="stampRecordColumns"/>
+		FROM t_stampRecord_${workType.key} a
+		<where>
+			<if test="makeComp !=null">
+				<if test="makeComp.id!=null and makeComp.id !=''">
+					AND a.make_comp=#{makeComp.id}
+				</if>
+			</if>
+			<if test="useComp !=null">
+				AND a.use_comp=#{useComp.id}
+			</if>
+			AND a.del_flag = '0'
+		</where>
+
+	</select>-->
+
+	<!--查询某个用章企业的备案详情-->
+	<select id="findCountList" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord">
+		SELECT
+		<include refid="stampRecordColumns"/>
+		FROM t_stampRecord_${workType.key} a
+		<where>
+			a.use_comp=#{useComp.id}
+			<if test="makeComp !=null">
+			  <if test="makeComp.id!=null and makeComp.id !=''">
+			   AND a.make_comp=#{makeComp.id}
+			  </if>
+			</if>
+			AND a.del_flag = '0'
+	GROUP BY a.apply_infos
+</where>
+
+</select>
+
+
+<!--根据流水号和stampWorkType共同查找record_id-->
+	<select  id="findRecordIdFromWorkType" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord"
+			 resultType="com.thinkgem.jeesite.modules.stamp.entity.stamprecord.StampRecord">
+		SELECT
+		<include refid="stampRecordColumns"/>
+		FROM t_stampRecord_${workType.key} a
+		WHERE a.serial_num = #{serialNum}
+	</select>
+
+	<select id="findAttasByCompanyId" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT
+			t.attachs as attachs
+		FROM
+			t_stamprecord_1 t
+		WHERE
+			t.use_comp = #{companyId}
+		ORDER BY
+			t.create_date DESC
+		LIMIT 1
+	</select>
+
+</mapper>

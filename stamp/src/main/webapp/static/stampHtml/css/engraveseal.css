@@ -1,0 +1,164 @@
+.border-box{
+    max-width: 950px;
+    margin: 20px auto;
+}
+.border-box2{
+    max-width: 80%;
+    margin: 30px auto;
+}
+.each-input label{
+    width: 11%;
+    text-align: right;
+}
+.each-input input{
+    width: 60%;
+    padding: 5px;
+}
+.each-input select{
+    width: 60%;
+    height: 25px;
+}
+.essentialinformation{
+    width: 100%;
+    font-size: 22px;
+}
+.engrave-left{
+    min-width: 350px;
+    height: 400px;
+    border: 2px solid #777777;
+}
+.engrave-left-part1{
+    min-width: 360px;
+    height: 730px;
+    border: 2px solid #777777;
+}
+.engrave-left-part2{
+    min-width: 360px;
+    height: 420px;
+    border: 2px solid #777777;
+}
+.engrave-right-part{
+    min-width: 360px;
+    height: 420px;
+    border: 2px solid #777777;
+    text-align: center;
+}
+.engrave-left-part,.engrave-right-part,.engrave-left-part1,.engrave-left-part2 ul{
+    text-align: center;
+}
+.engrave-left-part,.engrave-right-part,.engrave-left-part1,.engrave-left-part2 ul li{
+    font-size: 20px;
+    color: #286090;
+}
+.engrave-text{
+    float: left;
+    font-size: 15px;
+}
+
+.engrave-left-tab{
+    height: 100%;
+    margin-top: 10px;
+}
+.engrave-left-tab select{
+    height: 25px;
+}
+.bottom-btn{
+    margin: 10px auto;
+}
+.engrave-right{
+    height: 400px;
+    border: 2px solid #777777;
+    border-left: 0;
+    text-align: center;
+}
+.engrave-right p{
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    text-align: center;
+}
+.wrapBox{
+    text-align: center;
+    float: left;
+
+}
+#stampName p{
+    width: 100%;
+    height: auto;
+    word-wrap:break-word;
+    word-break:break-all;
+    overflow: hidden;
+}
+.foot button{
+    margin-top: 15px
+}
+.nav li a{
+    border-bottom: 1px solid #ddd;
+}
+/*���ϴ���ʽ*/
+.file-box {
+    position: relative;
+    width: 340px
+}
+
+.txt {
+    height: 30px;
+    border: 1px solid #cdcdcd;
+    width: 200px;
+}
+
+.file-btn {
+    background-color: #ffa618;
+    border: 1px solid #CDCDCD;
+    height: 30px;
+    width: 70px;
+}
+
+.file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    float: left;
+    right: 80px;
+    height: 30px;
+    filter: alpha(opacity:0);
+    opacity: 0;
+    width: 275px
+}
+.picsborder{
+    width: 60%;
+    text-align: center;
+    min-width: 650px
+}
+.picshow{
+    float: left;
+}
+.picshow + .picshow{
+    margin-left: 20px;
+}
+.downloadbtn{
+    margin-top: 20px;
+}
+.imgborder{
+    width: 300px;
+    height: 300px;
+    border: 1px solid #000000;
+}
+@media (max-width: 1170px){
+    .engrave-left{
+        min-width: 300px;
+        height: 450px;
+    }
+    .engrave-right{
+        height: 450px;
+    }
+    .col-md-6,.col-xs-6,.col-sm-6{
+        padding: 5px;
+    }
+    .form-group .col-md-4,.col-md-5{
+        padding: 0;
+    }
+    .each-input label{
+        width: 15%;
+    }
+}

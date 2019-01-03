@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.exchange.DataExchangeDao">
+    
+	<sql id="dataExchangeColumns">
+		a.id AS "id",
+		a.business_id AS "businessId",
+		a.stamp_type AS "stampType",
+		a.stamp_shape AS "stampShape",
+		a.stamp_texture AS "stampTexture",
+		a.seal_count AS "sealCount",
+		a.business_type AS "businessType",
+		a.make_comp_socialcreditcode AS "makeCompSocialcreditcode",
+		a.use_comp_area AS "useCompArea",
+		a.sole_code AS "soleCode",
+		a.company_name AS "companyName",
+		a.comp_type AS "compType",
+		a.comp_address AS "compAddress",
+		a.use_foundingdate AS "useFoundingdate",
+		a.legal_name AS "legalName",
+		a.legal_phone AS "legalPhone",
+		a.legal_certtype AS "legalCertType",
+		a.legal_certcode AS "legalCertCode",
+		a.agent_name AS "agentName",
+		a.agent_phone AS "agentPhone",
+		a.agent_certtype AS "agentCertType",
+		a.agent_certcode AS "agentCertCode",
+		a.attachments AS "attachments",
+		a.del_flag AS "delFlag",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.ex_flag AS "exFlag",
+		a.ex_fail_reason AS "exFailReason",
+		a.default1 AS "default1",
+		a.default2 AS "default2",
+		a.default3 AS "default3",
+		a8.NAME AS "area.name",
+	    a8.code as "area.code",
+		a8.id as "area.id",
+	    a8.type as "area.type"
+	</sql>
+	
+	<sql id="dataExchangeJoins">
+		LEFT JOIN sys_area a8 ON a8.code = a.use_comp_area
+	</sql>
+    
+	<select id="get" resultType="DataExchange">
+		SELECT 
+			<include refid="dataExchangeColumns"/>
+		FROM t_data_exchange a
+		<include refid="dataExchangeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DataExchange">
+		SELECT 
+			<include refid="dataExchangeColumns"/>
+		FROM t_data_exchange a
+		<include refid="dataExchangeJoins"/>
+		<include refid="data_exchange_condition" />
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DataExchange">
+		SELECT 
+			<include refid="dataExchangeColumns"/>
+		FROM t_data_exchange a
+		<include refid="dataExchangeJoins"/>
+		<include refid="data_exchange_condition" />
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<sql id="data_exchange_condition">
+		<where>
+		a.del_flag = 0
+		<if test="companyName != null and companyName!=''">
+			and a.company_Name like CONCAT('%', #{companyName}, '%')
+		</if>
+		<if test="soleCode != null and soleCode!=''">
+			and a.sole_code =  #{soleCode}
+		</if>
+		<if test="legalName != null and legalName!=''">
+			and a.legal_Name =  #{legalName}
+		</if>
+		</where>
+	</sql>
+	
+	<insert id="insert">
+		INSERT INTO t_data_exchange(
+			id,
+			business_id,
+			stamp_type,
+			stamp_shape,
+			stamp_texture,
+			seal_count,
+			business_type,
+			area_id,
+			make_comp_socialcreditcode,
+			use_comp_area,
+			sole_code,
+			company_name,
+			comp_type,
+			comp_address,
+			use_foundingdate,
+			legal_name,
+			legal_phone,
+			legal_certtype,
+			legal_certcode,
+			agent_name,
+			agent_phone,
+			agent_certtype,
+			agent_certcode,
+			attachments,
+			del_flag,
+			create_date,
+			update_date,
+			ex_flag,
+			ex_fail_reason,
+			default1,
+			default2,
+			default3
+		) VALUES (
+			#{id},
+			#{businessId},
+			#{stampType},
+			#{stampShape},
+			#{stampTexture},
+			#{sealCount},
+			#{businessType},
+			#{area.id},
+			#{makeCompSocialcreditcode},
+			#{useCompArea},
+			#{soleCode},
+			#{companyName},
+			#{compType},
+			#{compAddress},
+			#{useFoundingdate},
+			#{legalName},
+			#{legalPhone},
+			#{legalCertType},
+			#{legalCertCode},
+			#{agentName},
+			#{agentPhone},
+			#{agentCertType},
+			#{agentCertCode},
+			#{attachments},
+			#{delFlag},
+			#{createDate},
+			#{updateDate},
+			#{exFlag},
+			#{exFailReason},
+			#{default1},
+			#{default2},
+			#{default3}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_data_exchange SET 	
+			business_id = #{businessId},
+			stamp_type = #{stampType},
+			stamp_shape = #{stampShape},
+			stamp_texture = #{stampTexture},
+			seal_count = #{sealCount},
+			business_type = #{businessType},
+			area_id = #{area.id},
+			make_comp_socialcreditcode = #{makeCompSocialcreditcode},
+			use_comp_area = #{useCompArea},
+			sole_code = #{soleCode},
+			company_name = #{companyName},
+			comp_type = #{compType},
+			comp_address = #{compAddress},
+			use_foundingdate = #{useFoundingdate},
+			legal_name = #{legalName},
+			legal_phone = #{legalPhone},
+			legal_certtype = #{legalCertType},
+			legal_certcode = #{legalCertCode},
+			agent_name = #{agentName},
+			agent_phone = #{agentPhone},
+			agent_certtype = #{agentCertType},
+			agent_certcode = #{agentCertCode},
+			attachments = #{attachments},
+			update_date = #{updateDate},
+			ex_flag = #{exFlag},
+			ex_fail_reason = #{exFailReason},
+			default1 = #{default1},
+			default2 = #{default2},
+			default3 = #{default3}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_data_exchange SET 
+			del_flag = 1
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

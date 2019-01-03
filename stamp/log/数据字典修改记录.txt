@@ -1,0 +1,175 @@
+
+许彩开2017/12/21新增了stamp中的t_electron表中的sysOpr_state字段；
+许彩开2017/12/25新增了stamp中的t_stamp_1表中的return_code、state_flag字段；
+许彩开2017/12/25新增了stamp中的t_stamp_2表中的return_code、state_flag字段；
+许彩开2018/02/27新增了stamp中的area_attachment表中的requiredList字段；
+许彩开2018/04/10新增了sys_area表中的count字段（用于计数）
+许彩开2018/08/01新增了t_log_detail表（操作日志明细）
+
+练浩文2017/12/28新增了stamp中的t_count_set_log表。
+-- ----------------------------
+-- Table structure for t_count_set_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_count_set_log`;
+CREATE TABLE `t_count_set_log` (
+  `id` varchar(64) NOT NULL,
+  `company_name` varchar(64) DEFAULT NULL COMMENT '单位名称',
+  `company_id` varchar(64) DEFAULT NULL COMMENT '单位id',
+  `ele_count` int(11) DEFAULT NULL COMMENT '电子印章数',
+  `ele_sumCount` int(20) DEFAULT NULL COMMENT '历史电子印章数',
+  `phy_count` int(20) DEFAULT NULL COMMENT '物理印章数',
+  `phy_sumCount` varchar(255) DEFAULT NULL COMMENT '历史物理印章数',
+  `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `update_by` varchar(64) DEFAULT NULL COMMENT '更新者',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据分配历史';
+
+夏博2018/01/16更新了t_stamp_1表中的anti_fake_write字段的默认值为'0';
+夏博2018/03/02更新了t_stamprecord_1/2/3/4/5表中的sblsh字段;
+夏博2018/03/05新增了t_stamp_1表中的seal_picture_data字段（暂存）;
+夏博2018/03/08更新了t_stamprecord_1表中的soleCode字段长度为30;
+夏博2018/03/08更新了sys_use_1/2/3/4/5表中的company_id字段的正确存储;
+（此修改会导致以前生成的用户不能登录，后续新生成的就可以了，
+然后有company的用户有刻章点、用章企业、经销商，剩余的系统用户和公安无，因此companyId值应为空）
+夏博2018/03/23新增了t_stamp_1/2表中的record_pdf字段;
+夏博2018/03/02更新了t_document_sign表，关闭create_date字段自动更新的属性;
+夏博2018/07/09将t_company_2/sys_office/sys_user_4/t_stamprecord_1/t_stamp_1/t_stamp_2表中
+的remarks字段用来存储t_data_exchange表的id;
+夏博2018/07/19新增了t_audit表用于审计;
+夏博2018/08/19新增了sys_area_log表用于记录sys_area表中count字段的更新日志（需要在sys_area表中添加触发器）;
+夏博2018/08/28在t_company_1/t_company_2/t_company_3表增加【company_code】字段,在t_police表增加【police_code】字段;
+夏博2018/08/28在t_stamp_1/2表新增es_ele_model字段;
+夏博2018/09/11在新增了t_company_1/2/3_sequence和t_police_sequence序列表用于保存单位编码;
+夏博2018/09/14在新增了t_stamp_1/2表中的scan_model字段用于存储扫描的电子印模;
+
+朱海辉2018/08/02新增了t_stampopr_1表的apply_username字段;
+
+刘总新增 t_deliver [附件表]:
+    * Id []:
+    * StampId [印章Id]:
+    * RecordId [备案Id]:
+    * FileName [附件名称]:
+    * Xflag [附件类型]:
+    1.身份证正面
+    2.身份证背面
+    3.经办人照片
+    4.备案登记表
+    5.其他
+    10.签名图片
+    * UserId
+    * Crtdate
+
+林志宝 2018-8-22 新增t_company_2_old_data表
+
+SET FOREIGN_KEY_CHECKS=0;
+-- ----------------------------
+-- Table structure for t_company_2_old_data
+-- ----------------------------
+DROP TABLE IF EXISTS `t_company_2_old_data`;
+CREATE TABLE `t_company_2_old_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` varchar(64) COLLATE utf8_bin NOT NULL,
+  `comp_type` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '单位系统类型',
+  `area_id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '所属区域',
+  `sole_code` varchar(200) COLLATE utf8_bin NOT NULL COMMENT '单位唯一编码',
+  `company_Name` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '单位名称',
+  `type1` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '单位一级类别',
+  `type2` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '单位二级类别',
+  `type3` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '单位三级类别',
+  `legal_Name` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '法定代表人',
+  `legal_Phone` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '法人手机',
+  `legal_certType` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '法人证件类型',
+  `legal_certCode` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '法人证件号码',
+  `police_Name` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '治安负责人',
+  `police_IdCode` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '治安负责人身份证号码',
+  `police_Phone` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '治安负责人联系电话',
+  `bus_model` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '经营方式',
+  `bus_type` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '经济性质',
+  `head_count` int(11) DEFAULT NULL COMMENT '单位总人数',
+  `special_count` int(11) DEFAULT NULL COMMENT '单位特业从业人员',
+  `comp_address` varchar(300) COLLATE utf8_bin NOT NULL COMMENT '单位地址',
+  `comp_phone` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '单位电话',
+  `postCode` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT '邮编',
+  `bus_licNum` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '企业营业执照号',
+  `bus_tagNum` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '企业税务登记证号',
+  `comp_state` varchar(10) COLLATE utf8_bin NOT NULL COMMENT '企业状态',
+  `comp_creatDate` datetime DEFAULT NULL COMMENT '成立日期',
+  `bus_startDate` datetime DEFAULT NULL COMMENT '营业期限起始时间',
+  `bus_endDate` datetime DEFAULT NULL COMMENT '营业期限截止时间',
+  `licence_state` char(10) COLLATE utf8_bin DEFAULT 'NULL',
+  `record_unit` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '登记机关',
+  `bus_scope` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '经营范围',
+  `reg_cap` varchar(200) COLLATE utf8_bin DEFAULT NULL COMMENT '注册资本',
+  `sysOpr_state` varchar(10) COLLATE utf8_bin DEFAULT 'OPEN' COMMENT '润城科技管理员操作状态',
+  `create_by` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '创建者',
+  `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '更新者',
+  `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `remarks` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `del_flag` char(1) COLLATE utf8_bin NOT NULL DEFAULT '0' COMMENT '删除标记',
+  `last_licence_state` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT '上次许可证申请类型',
+  `upload_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_company_id` (`company_id`),
+  CONSTRAINT `fk_company_id` FOREIGN KEY (`company_id`) REFERENCES `t_company_2` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='更新公司数据时,将旧数据保存一份,方便新老数据对比';
+
+
+修改日志附件表
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for t_modify_company_attachment
+-- ----------------------------
+DROP TABLE IF EXISTS `t_modify_company_attachment`;
+CREATE TABLE `t_modify_company_attachment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` varchar(50) DEFAULT NULL COMMENT '公司ids',
+  `attachs` varchar(500) DEFAULT NULL COMMENT '附件ids',
+  `company_type` char(1) DEFAULT NULL COMMENT '公司类型',
+  `agent_name` varchar(25) DEFAULT '' COMMENT '经办人',
+  `agent_phone` varchar(25) DEFAULT NULL COMMENT '经办人手机号码',
+  `agent_cert_type` varchar(10) DEFAULT NULL COMMENT '经办人证件类型',
+  `agent_cert_code` varchar(255) DEFAULT NULL COMMENT '经办人证件号码',
+  `modify_reason` varchar(512) DEFAULT NULL COMMENT '变更原因',
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+
+
+-- 系统修改日志表
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for t_modify_info_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_modify_info_log`;
+CREATE TABLE `t_modify_info_log` (
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '编号',
+  `table_name` varchar(64) DEFAULT NULL COMMENT '表名',
+  `column_name` varchar(64) DEFAULT NULL COMMENT '字段',
+  `column_text` varchar(100) DEFAULT NULL COMMENT '字段名',
+  `business_name` varchar(100) DEFAULT NULL COMMENT '操作对象(业务名称)',
+  `operation_type` varchar(20) DEFAULT NULL COMMENT '操作类型',
+  `company_name` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `old_value` varchar(255) DEFAULT NULL COMMENT '旧值',
+  `new_value` varchar(255) DEFAULT NULL COMMENT '新值',
+  `make_com` varchar(100) DEFAULT NULL COMMENT '刻章点',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '创建者',
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '删除标记',
+  `remarks` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注信息',
+  `type` varchar(100) DEFAULT NULL COMMENT '操作类型 modifyCompanyInfo为修改公司信息',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作日志明细';
+
+add by
+
+
+
+
+
+

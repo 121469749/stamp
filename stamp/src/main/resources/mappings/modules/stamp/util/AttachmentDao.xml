@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.common.util.attachment.dao.AttachmentDao">
+
+
+    <insert id="save" parameterType="com.thinkgem.jeesite.modules.stamp.common.util.attachment.entity.Attachment">
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_attachment(
+          id,
+          attach_path,
+          attach_type,
+          attach_suffix
+        ) VALUE (
+          #{id},
+          #{attachPath},
+          #{attachType},
+          #{fileSuffix}
+        )
+    </insert>
+
+    <select id="findList"  resultMap="attachmentMap">
+      SELECT
+        a.id AS "id",
+        a.attach_Path AS  "attachPath",
+        a.attach_type AS  "attachType",
+        a.attach_suffix AS "fileSuffix"
+      FROM t_attachment a
+    </select>
+
+    <select id="findListByJsonList" parameterType="java.util.List" resultMap="attachmentMap">
+        SELECT
+        a.id AS "id",
+        a.attach_Path as "attachPath",
+        a.attach_type as "attachType",
+        a.attach_suffix AS "fileSuffix"
+        FROM t_attachment a
+        WHERE
+        a.attach_type = #{type} AND
+        a.id in
+        (
+        <foreach collection="list"  item="item"
+                  separator=",">
+            #{item.id}
+        </foreach>
+        )
+    </select>
+
+    <select id="findListByIdList"  resultMap="attachmentMap">
+        SELECT
+        a.id AS "id",
+        a.attach_Path as "attachPath",
+        a.attach_type as "attachType",
+        a.attach_suffix AS "fileSuffix"
+        FROM t_attachment a
+        WHERE a.id in
+        <foreach collection="list" index="index" item="id"
+                 open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertAttachmentList" parameterType="java.util.List" >
+      INSERT INTO  t_attachment (
+          id,
+          attach_path,
+          attach_type,
+          attach_suffix
+      )VALUES
+        <foreach collection="list" item="item"  separator=",">
+        (
+          #{item.id},
+          #{item.attachPath},
+          #{item.attachType},
+          #{item.fileSuffix}
+        )
+        </foreach>
+    </insert>
+
+    <resultMap id="attachmentMap" type="com.thinkgem.jeesite.modules.stamp.common.util.attachment.entity.Attachment">
+        <id column="id" property="id"></id>
+        <result column="attach_path" property="attachPath"></result>
+        <result column="attach_type" property="attachType"></result>
+        <result column="attach_suffix" property="fileSuffix"></result>
+        <!--<result column="workTypeOrdinal" property="workTypeOrdinal" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+                <!--javaType="com.thinkgem.jeesite.modules.stamp.commons.enums.WorkType"></result>-->
+    </resultMap>
+
+    <select id="getAttachment" resultMap="attachmentMap">
+      SELECT
+          a.id AS "id",
+          a.attach_Path as "attachPath",
+          a.attach_type as "attachType",
+          a.attach_suffix AS "fileSuffix"
+      FROM t_attachment a
+      WHERE a.id=#{id}
+    </select>
+
+
+    <select id="findAttachmentsPathByIds" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            GROUP_CONCAT(t.attach_Path SEPARATOR ',') as attachs
+        FROM
+            t_attachment t
+        where
+            <if test="ids != null and ids!= ''">
+                 t.id in
+                <foreach collection="ids.split(',')" item="id" index="index"
+                         open="(" close=")" separator=",">
+                    '${id}'
+                </foreach>
+            </if>
+    </select>
+
+
+</mapper>

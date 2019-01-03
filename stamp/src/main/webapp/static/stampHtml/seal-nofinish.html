@@ -1,0 +1,81 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>待刻印章</title>
+    <link rel="stylesheet" href="css/zui.min.css">
+    <link rel="stylesheet" href="css/seal.css">
+    <link href="css/page.css"  rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script language="JavaScript" src="js/seal.js"></script>
+
+</head>
+<body>
+<p style="font-size: 18px">
+    <span><strong>当前路径：</strong></span>
+    <span >首页</span>
+    <span>\</span>
+    <span >待刻印章</span>
+</p>
+<table class="table table-bordered table-condensed">
+    <thead>
+    <div class="form-group">
+        <input type="text" placeholder="搜索"class="form-control" style="width: 200px;display: inline">
+        <select class="form-control" style="width: 150px;display: inline" >
+            <option>-请选择印章类型-</option>
+            <option>公章</option>
+            <option>财务专用章</option>
+            <option>发票专用章</option>
+            <option >合同专用章</option>
+            <option >业务专用章</option>
+            <option >法定代表人名章</option>
+            <option >其他类型印章</option>
+        </select>
+        <button class="btn btn-primary">搜索</button>
+    </div>
+    </thead>
+    <tbody>
+    <tr class="table-tr-title">
+        <th>申请单位名称</th>
+        <th>印章类型</th>
+        <th>电子/物理印章</th>
+        <th>经办人</th>
+        <th>操作</th>
+    </tr>
+
+    <tr>
+        <td>xx专用章1</td>
+        <td>公章</td>
+        <td>物理印章、电子印章</td>
+        <td>xxx</td>
+        <td style="text-align: center">
+            <button onclick="window.open('check-stamp.html','_self')">详情</button>
+        </td>
+    </tr>
+    <tr>
+        <td>xx专用章1</td>
+        <td>公章</td>
+        <td>物理印章、电子印章</td>
+        <td>xxx</td>
+        <td style="text-align: center">
+            <button onclick="window.open('check-stamp.html','_self')">详情</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div id="page" style="text-align: center"></div>
+
+<script type="text/javascript" src="js/page.js"></script>
+<script>
+    $(function(){
+        $("#page").Page({
+            totalPages: 9,//分页总数
+            liNums: 7,//分页的数字按钮数(建议取奇数)
+            activeClass: 'activP', //active 类样式定义
+            callBack : function(page){
+                //console.log(page)
+            }
+        });
+    })
+</script>
+</body>
+</html>

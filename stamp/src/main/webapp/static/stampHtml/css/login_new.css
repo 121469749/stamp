@@ -1,0 +1,727 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/*.background {*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*background: url("../images/loginbg_new.png") 0 0 no-repeat;*/
+    /*background-size: 100%;*/
+/*}*/
+
+.mainContent{
+    min-height: 700px;
+    min-width: 1100px;
+    width: 70%;
+    height: 80%;
+    background: white;
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    border-radius: 16px;
+    box-shadow: 0px 0px 15px #999999;
+}
+
+.sealSystem{
+    width: 65%;
+    height: 100%;
+    float: left;
+}
+
+.sealProblem{
+    background: #36A7E9;
+    border-radius: 16px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.login{
+    width: 35%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+
+.sealTitleTable{
+    position: absolute;
+    width: 100%;
+    height: 120px;
+    top: 0;
+    display: table;
+}
+
+.sealTitleAndLogo{
+    /*position: absolute;*/
+    /*width: 100%;*/
+    /*height: 120px;*/
+
+    /*top: 0;*/
+    /*display: table;*/
+    height: 100%;
+    width: 100%;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.logo{
+    display:inline-block;
+    width: 55%;
+    /*height: 50%;*/
+}
+
+.systemName{
+    color: white;
+    margin-left: 20px;
+    font-size: 18px;
+    letter-spacing: 3px;
+}
+
+.sealProblemContent{
+    width: 100%;
+    height: 100%;
+    padding: 120px 50px 50px 50px;
+}
+
+.sealProblemContentDiv{
+    height: 100%;
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+}
+
+.sealProblemList{
+    width: 25%;
+    height: 100%;
+    float: left;
+    word-wrap: break-word;
+}
+
+.sealProblemLineOut{
+    width: 1%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+
+.line{
+    position: absolute;
+    top: 10%;
+    width: 2px;
+    height: 80%;
+    background: #eeeeee;
+}
+
+.sealProblemExplain{
+    width: 74%;
+    height: 100%;
+    padding: 30px;
+    float: left;
+    color: #8c8f94;
+
+}
+
+.sealExplainContent{
+    height: 100%;
+    overflow: auto;
+}
+
+.listContent{
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+.listContentSingle{
+    list-style-type:none;
+}
+
+.listContentSingleCenter{
+    width: 180px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.listContentSingleText{
+    display: inline-block;
+    padding: 0px 20px;
+
+}
+
+
+.listContentSingleChoose{
+    font-size: 16px;
+    color: #36A7E9;
+    border-bottom: solid 1px #36A7E9;
+    word-wrap: break-word;
+
+}
+
+.listContentSingleUnChoose{
+    font-size: 16px;
+    color: #8C8F94;
+    border: none;
+    word-wrap: break-word;
+
+}
+
+li div div p:hover{
+    color: #36A7E9;
+}
+
+.loginTitleTable{
+    display: table;
+    width: 100%;
+    height: 25%;
+}
+
+.loginTitle{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.loginTitleText{
+    font-size: 25px;
+    color: #b1b1b1;
+    letter-spacing: 3px;
+}
+
+
+.errorLoginDiv{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+    /*display: none;*/
+}
+
+.errorLogin{
+    width: 80%;
+    font-size: 14px;
+    padding: 10px 0;
+    background: #ffaeb3;
+    color: white;
+    display: inline-block;
+}
+
+
+.loginInputArea{
+    width: 100%;
+    text-align: center;
+}
+
+.loginInputBorder{
+    display: inline-block;
+    width: 80%;
+    border: solid 1px #dfdfdf;
+    border-radius: 8px;
+    position: relative;
+}
+
+.LoginInput{
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 1px 10px;
+    color: #8C8F94;
+}
+.forgetInput{
+    width: 60%;
+    height: 48px;
+    line-height: 48px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 1px 10px;
+    margin-left: 0;
+    color: #8C8F94;
+}
+
+.inputLabel{
+    position: absolute;
+    color: #b1b1b1;
+    left: 10px;
+    line-height: 14px;
+    font-size: 14px;
+    display: none;
+}
+
+.verificationCodeClass{
+    display: inline-block;
+    width: 80%;
+    border-radius: 8px;
+    position: relative;
+    margin: 20px 0 0 0 ;
+    text-align: left;
+}
+
+.verificationCodeInput{
+    width: 45%;
+    height: 48px;
+    border: solid 1px #dfdfdf;
+    line-height: 48px;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 1px 10px;
+    color: #8C8F94;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.verificationCodeImg{
+    height: 15%;
+    width: 30%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.verificationLabel{
+    top: 17px;
+}
+
+.usernameLabel{
+    top: 17px;
+}
+
+.passwordLabel{
+    top: 66px;
+}
+
+.verticalCodeInput{
+    width: 80%;
+    height: 48px;
+    line-height: 48px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 1px 10px;
+    color: #8C8F94;
+}
+
+.inputSplitLine{
+    width: 100%;
+    height: 1px;
+    background: #dfdfdf;
+}
+
+.rememberMe{
+    text-align: right;
+    width: 80%;
+    padding: 20px 0;
+    display: inline-block;
+    color: #dedede;
+}
+
+.rememberMeCheckbox{
+    margin: 0 10px 0 0;
+}
+
+
+
+.rememberMeLabelTure{
+    color: #36A7E9;
+    letter-spacing: 1px;
+}
+
+.rememberMeLabelFalse{
+    color: #dedede;
+    letter-spacing: 1px;
+}
+
+.passwordLogin{
+    width: 35%;
+    height: 40px;
+    background-color: #36A7E9;
+    color: #eeeeee;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 0 10px #999999;
+    border-radius: 5px;
+    margin: 0 2.5%;
+}
+
+.certificateLogin{
+    width: 35%;
+    height: 40px;
+    background-color: white;
+    color: #36A7E9;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 0 10px #999999;
+    border-radius: 5px;
+    margin: 0 2.5%;
+}
+.forgetPasswordBtn{
+    float: left;
+    width: 40%;
+    height: 48px;
+    background-color: #36A7E9;
+    color: #eeeeee;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 0 10px #999999;
+    border-radius: 5px;
+}
+.forgetCodeDiv{
+    width: 100%;
+}
+.reset{
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+}
+.resetBtn{
+    width: 50%;
+    margin: 0 auto;
+    display: block;
+    height: 40px;
+    background-color: #e9413b;
+    color: #eeeeee;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 0 10px #999999;
+    border-radius: 5px;
+}
+
+.validateCodeClass{
+    margin: 10px 10%;
+    width: 100%;
+}
+
+.forgetPassword{
+    color: #36A7E9;
+    font-size: 16px;
+    padding-top: 40px;
+}
+
+.loginBottom{
+    width: 100%;
+    position: absolute;
+    height: 150px;
+    font-size: 16px;
+    bottom: 0;
+    color: #36A7E9;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.contactUs{
+    position: absolute;
+    bottom: 10%;
+    right: 20px;
+    width: 50px;
+    height: 100px;
+    box-shadow: #999999 0 0 10px;
+}
+
+.contactUsSingle{
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+}
+
+.QRCode{
+    background: white;
+}
+
+.QQ{
+    background: #36A7E9;
+}
+
+.hideQRCode{
+    display: none;
+}
+
+.showQRCode{
+    position: absolute;
+    right: 80px;
+    bottom: 5%;
+    background: white;
+    box-shadow: #36A7E9 0 0 10px;
+    width: 160px;
+    height:200px;
+    color: #8C8F94;
+    font-size: 16px;
+    text-align: center;
+}
+
+.WX{
+    padding: 6px;
+}
+
+.WXQRCode{
+    width: 160px;
+    height: 160px;
+}
+
+.changeHand{
+    cursor:pointer;
+}
+
+.Search{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+}
+
+.SearchCenter{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.SearchDiv{
+    display: inline-block;
+    width: 1000px;
+    height: 600px;
+    position: relative;
+}
+
+.SearchContent{
+    display: block;
+    width: 960px;
+    height: 600px;
+    background: white;
+}
+
+.SearchCancel{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.SearchCondition{
+    height: 80px;
+    padding: 20px 0 ;
+}
+
+.SearchLabel{
+    font-size: 15px;
+}
+
+.SearchInput{
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    border: #b1b1b1 solid 1px;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+.SearchSelect{
+    width: 120px;
+    line-height: 15px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 3px;
+    /*padding: 5px 0;  ie*/
+}
+
+.SearchButton{
+    width: 90px;
+    margin-left: 10px;
+    height: 34px;
+    border-radius: 10px;
+    background: #36A7E9;
+    color: white;
+    border: none;
+}
+
+.SearchForm{
+    padding: 0;
+    margin: 0;
+}
+
+.SearchResult{
+    width: 100%;
+    height: 500px;
+    overflow: auto;
+}
+
+.SearchResultBlock{
+    background: #F9F9F9;
+    border-top: solid 1px #eeeeee;
+
+}
+
+.SearchResultShow{
+    width: 840px;
+    padding: 19px;
+    display: inline-block;
+}
+
+.SearchResultInfo{
+    width: 400px;
+    float: left;
+    font-size: 15px;
+}
+
+.SearchResultImage{
+    width: 400px;
+    float: left;
+}
+
+.SearchBlockSplitLine{
+    width: 100%;
+    height: 20px;
+    border-top: solid 1px #eeeeee;
+    background: white;
+}
+
+.SearchSplitLine{
+    height: 2px;
+    width: 100%;
+    background: #dedede;
+    margin-bottom: 19px;
+}
+
+.SearchResultInfoSpan{
+    text-align: left;
+    display: block;
+    position: relative;
+    margin: 20px 0;
+}
+
+.SearchResultInfoSpanTitle{
+    display: inline-block;
+    width: 100px;
+    position: absolute;
+    font-weight: bold;
+    top: 0;
+    margin: 0;
+}
+
+.SearchResultInfoSpanContent{
+    display: inline-block;
+    width: 280px;
+    margin: 0 0 0 100px;
+    word-break: break-all;
+}
+
+.SearchResultImageShow{
+
+}
+
+.SearchCancelImg{
+    width: 100%;
+    height: 100%;
+}
+
+div,img,input,form{
+    box-sizing: border-box;
+}
+
+
+/**
+ * 兼容ie8 需要修改的class
+ **/
+
+.mainContentIe8{
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 1200px;
+    height: 750px;
+    background: white;
+    /*background: url("../images/mainContentSon_new.png");*/
+    /*background-size: 100%;*/
+    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/mainContentSon_new.png',sizingMethod=scale);*/
+}
+
+.sealProblemIe8{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /*padding: 8px;*/
+}
+
+.sealProblemContentIe8{
+    width: 100%;
+    height: 100%;
+    padding: 120px 50px 50px 50px;
+    background: #36A7E9;
+    /*background-size: 100%;*/
+    /*background: url("../images/mainContentBlue_new.png");*/
+    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/mainContentBlue_new.png',sizingMethod=scale);*/
+}
+
+.sealProblemContentDivIe8{
+    height: 100%;
+    width: 100%;
+    background: white;
+    /*background-size: 100%;*/
+    /*background: url("../images/mainContentSon_new.png");*/
+    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/mainContentSon_new.png',sizingMethod=scale);*/
+}
+
+.certificateLoginIe8{
+    width: 35%;
+    height: 40px;
+    color: #36A7E9;
+    font-size: 14px;
+    border: none;
+    margin: 0 2.5%;
+    background: white;
+    border: solid 1px #36A7E9
+}
+
+.SearchIe8{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,136);
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#88000000,endColorstr=#88000000);
+    display: none;
+}
+
+.SearchCancelIe8{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.SearchSelectIe8{
+    width: 120px;
+    line-height: 15px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 3px;
+    padding: 5px 0;
+}
+
+.hideRole{
+    display: none;
+    height: 0;
+    width: 0;
+}
+.sealExplainContent p{
+     padding:2px;
+     margin:0px;
+ }
+.sealExplainContent h4{
+    padding:0px;
+    margin-bottom:8px;
+}

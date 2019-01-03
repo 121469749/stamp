@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>回执打印</title>
+    <link rel="stylesheet" href="css/zui.min.css">
+    <script language="javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script language="javascript">
+
+        function printf(oper)
+        {
+            window.print();
+        }
+    </script>
+    <style>
+        @media print {
+            .curroute{
+                display: none;
+            }
+        }
+        body{
+            width:100%;
+            margin:auto;
+
+        }
+        article{
+            margin:2% auto;
+            border:solid 1px black;
+            height:300px;
+            width:600px;
+        }
+        button{
+            margin-top:20px;
+        }
+        .curroute{
+            width: 40%;
+            min-width: 350px;
+            margin: 20px auto;
+
+        }
+        @media print {
+            .noprint{
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<p class="curroute" style="font-size: 18px">
+    <span><strong>当前路径：</strong></span>
+    <span >首页</span>
+    <span>\</span>
+    <span >备案登记</span>
+    <span>\</span>
+    <span >备案登记回执</span>
+</p>
+<!--startprint1-->
+<article class="article">
+    <header>
+
+        <h1 class="text-center">回执</h1>
+    </header>
+    <section class="content">
+         <p>&nbsp&nbsp xxx公司的xxx于20xx年xx月xx日到xxxx保安公司领取xxxx章1个，xxxx章1个，xxxx章1个，xxxx章1个。特此证明。</p>
+        <p style="margin-left: 468px;margin-top:20px;" >xxx刻章公司</p>
+
+        <p  style="margin-left: 469px; margin-top:-10px;">2014-04-14 </p>
+
+    </section>
+
+</article>
+<!--endprint1-->
+    <div id="btn" class="noprint" style="text-align: center">
+        <input class='btn' type='button' name='button_export' title='打印' onclick='printf()' value='打印'>
+    </div>
+
+<script>
+    window.onload=function(){
+        printf();
+    }
+</script>
+</body>
+</html>

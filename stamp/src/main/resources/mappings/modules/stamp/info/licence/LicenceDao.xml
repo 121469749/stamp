@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.licence.LicenceDao">
+    
+	<sql id="licenceColumns">
+		a.id AS "id",
+		a.make_comp AS "makeComp.id",
+		a.work_type AS "workType",
+		a.work_reason AS "workReason",
+		a.comp_name AS "compName",
+		a.bus_type AS "busType",
+		a.legal_name AS "legalName",
+		a.legal_phone AS "legalPhone",
+		a.legal_certtype AS "legalCertType",
+		a.legal_certcode AS "legalCertCode",
+		a.police_name AS "policeName",
+		a.police_idcode AS "policeIdCode",
+		a.police_phone AS "policePhone",
+		a.head_count AS "headCount",
+		a.special_count AS "specialCount",
+		a.agent_name AS "agentName",
+		a.agent_certcode AS "agentCertCode",
+		a.agent_phone AS "agentPhone",
+		a.attachs AS "attachs",
+		a.bus_run AS "busRun",
+		a.check_state AS "checkState",
+		a.check_reason AS "checkReason",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+
+
+	</sql>
+	<!-- company-->
+	<sql id="comColumns">
+		,
+
+	com.comp_type AS "makeComp.compType",
+	com.area_id AS "makeComp.area.id",
+	com.sole_code AS "makeComp.soleCode",
+	com.company_name AS "makeComp.companyName",
+	com.type1 AS "makeComp.type1",
+	com.type2 AS "makeComp.type2",
+	com.type3 AS "makeComp.type3",
+	com.legal_name AS "makeComp.legalName",
+	com.legal_phone AS "makeComp.legalPhone",
+	com.legal_certtype AS "makeComp.legalCertType",
+	com.legal_certcode AS "makeComp.legalCertCode",
+	com.police_name AS "makeComp.policeName",
+	com.police_idcode AS "makeComp.policeIdCode",
+	com.police_phone AS "makeComp.policePhone",
+	com.bus_model AS "makeComp.busModel",
+	com.bus_type AS "makeComp.busType",
+	com.head_count AS "makeComp.headCount",
+	com.special_count AS "makeComp.specialCount",
+	com.comp_address AS "makeComp.compAddress",
+	com.comp_phone AS "makeComp.compPhone",
+	com.postcode AS "makeComp.postcode",
+	com.bus_licnum AS "makeComp.busLicnum",
+	com.bus_tagnum AS "makeComp.busTagnum",
+	com.comp_state AS "makeComp.compState",
+	com.comp_creatdate AS "makeComp.compCreatDate",
+	com.bus_startdate AS "makeComp.busStartDate",
+	com.bus_enddate AS "makeComp.busEndDate",
+	com.record_unit AS "makeComp.recordUnit",
+	com.bus_scope AS "makeComp.busScope",
+	com.reg_cap AS "makeComp.regCap",
+	com.create_by AS "makeComp.createBy.id",
+	com.create_date AS "makeComp.createDate",
+	com.update_by AS "makeComp.updateBy.id",
+	com.update_date AS "makeComp.updateDate",
+	com.remarks AS "makeComp.remarks",
+	com.del_flag AS "makeComp.delFlag",
+
+	sa.parent_id AS "makeComp.area.parentId",
+    sa.parent_ids as "makeComp.area.parentIds"
+	</sql>
+	<sql id="licenceJoins">
+	</sql>
+	<sql id="JoinMakeCom">
+		    LEFT JOIN t_company_1 com ON com.id = a.make_comp
+		    LEFT JOIN sys_area sa ON sa.id = com.area_id
+	</sql>
+    
+	<select id="get" resultType="Licence">
+		SELECT 
+			<include refid="licenceColumns"/>
+		FROM t_licence_${workType.key} a
+		<include refid="licenceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Licence">
+		SELECT 
+			<include refid="licenceColumns"/>
+			<include refid="comColumns"/>
+		FROM t_licence_${workType.key} a
+		<include refid="licenceJoins"/>
+		<include refid="JoinMakeCom"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="checkState != null and checkState != ''">
+				AND a.check_state = #{checkState}
+			</if>
+			<if test="compName !=null and compName !='' ">
+				AND a.comp_name like concat('%',#{compName},'%')
+			</if>
+			<!-- area过滤 -->
+			${sqlMap.areafilter}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findHistoryList" resultType="Licence">
+		SELECT
+		<include refid="licenceColumns"/>
+		<include refid="comColumns"/>
+		FROM t_licence_${workType.key} a
+		<include refid="licenceJoins"/>
+		<include refid="JoinMakeCom"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="checkState != null and checkState != ''">
+				AND a.check_state != #{checkState}
+			</if>
+			<if test="compName !=null and compName !=''">
+				AND a.comp_name like concat('%',#{compName},'%')
+			</if>
+			<!-- area过滤 -->
+			${sqlMap.areafilter}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getNewestLicense" resultType="Licence">
+		SELECT
+		<include refid="licenceColumns"/>
+		FROM t_licence_${workType.key} a
+		<include refid="licenceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.make_comp = #{makeComp.id}
+		</where>
+			ORDER BY a.update_date DESC
+			LIMIT 1
+	</select>
+	<select id="findAllList" resultType="Licence">
+		SELECT 
+			<include refid="licenceColumns"/>
+		FROM t_licence_${workType.key} a
+		<include refid="licenceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<!--<select id="getByCompanyId" resultType="Licence">-->
+		<!--SELECT-->
+		<!--<include refid="licenceColumns"/>-->
+		<!--FROM t_licence_${workType.key} a-->
+		<!--<include refid="licenceJoins"/>-->
+		<!--<where>-->
+			<!--a.make_comp = #{companyId}-->
+		<!--</where>-->
+		<!--<choose>-->
+			<!--<when test="page !=null and page.orderBy != null and page.orderBy != ''">-->
+				<!--ORDER BY ${page.orderBy}-->
+			<!--</when>-->
+			<!--<otherwise>-->
+				<!--ORDER BY a.update_date DESC-->
+			<!--</otherwise>-->
+		<!--</choose>-->
+	<!--</select>-->
+
+	<insert id="insert">
+		INSERT INTO t_licence_${workType.key}(
+			id,
+			make_comp,
+			work_type,
+			work_reason,
+			comp_name,
+			bus_type,
+			legal_name,
+			legal_phone,
+			legal_certtype,
+			legal_certcode,
+			police_name,
+			police_idcode,
+			police_phone,
+			head_count,
+			special_count,
+			agent_name,
+			agent_certcode,
+			agent_phone,
+			attachs,
+			bus_run,
+			check_state,
+			check_reason,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{makeComp.id},
+			#{workType},
+			#{workReason},
+			#{compName},
+			#{busType},
+			#{legalName},
+			#{legalPhone},
+			#{legalCertType},
+			#{legalCertCode},
+			#{policeName},
+			#{policeIdCode},
+			#{policePhone},
+			#{headCount},
+			#{specialCount},
+			#{agentName},
+			#{agentCertCode},
+			#{agentPhone},
+			#{attachs},
+			#{busRun},
+			#{checkState},
+			#{checkReason},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_licence_${workType.key} SET
+			make_comp = #{makeComp.id},
+			work_type = #{workType},
+			work_reason = #{workReason},
+			comp_name = #{compName},
+			bus_type = #{busType},
+			legal_name = #{legalName},
+			legal_phone = #{legalPhone},
+			legal_certtype = #{legalCertType},
+			legal_certcode = #{legalCertCode},
+			police_name = #{policeName},
+			police_idcode = #{policeIdCode},
+			police_phone = #{policePhone},
+			head_count = #{headCount},
+			special_count = #{specialCount},
+			agent_name = #{agentName},
+			agent_certcode = #{agentCertCode},
+			agent_phone = #{agentPhone},
+			attachs = #{attachs},
+			bus_run = #{busRun},
+			check_state = #{checkState},
+			check_reason = #{checkReason},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_licence_${workType.key} SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 更改许可证审核状态-->
+	<update id="updateCheckState">
+		UPDATE t_licence_${workType.key} a SET
+		a.check_state = #{checkState}
+		<if test="checkReason != null and checkReason != ''">
+		,a.check_reason = #{checkReason}
+		</if>
+		where id = #{id}
+	</update>
+
+	<!--许可证申请 -->
+	<insert id="insertLicence">
+		INSERT INTO t_licence_${workType.key}(
+			id,
+			make_comp,
+			work_type,
+			work_reason,
+			comp_name,
+			bus_type,
+			legal_name,
+			legal_phone,
+			legal_certtype,
+			legal_certcode,
+			police_name,
+			police_idcode,
+			police_phone,
+			head_count,
+			special_count,
+			agent_name,
+			agent_certcode,
+			agent_phone,
+			attachs,
+			bus_run,
+			check_state,
+			check_reason,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{makeComp.id},
+			#{workType},
+			#{workReason},
+			#{compName},
+			#{busType},
+			#{legalName},
+			#{legalPhone},
+			#{legalCertType},
+			#{legalCertCode},
+			#{policeName},
+			#{policeIdCode},
+			#{policePhone},
+			#{headCount},
+			#{specialCount},
+			#{agentName},
+			#{agentCertCode},
+			#{agentPhone},
+			#{attachs},
+			#{busRun},
+			#{checkState},
+			#{checkReason},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+
+	<!--取得该company
+		公司业务办理信息的最新一条。
+	-->
+	<select id="checkOtherLicence" resultType="com.thinkgem.jeesite.modules.stamp.common.Enumeration.CheckState">
+		SELECT
+			  a.check_state
+		FROM t_licence_${workType.key} a
+		<where>
+			a.make_comp =#{makeCompId}
+				AND
+			a.check_state = 'CHECKING';
+		</where>
+		ORDER BY a.create_date
+		limit 1
+	</select>
+
+
+	<!--删除license根据makecom
+	-->
+	<update id="deleteInMakeCom">
+		UPDATE t_licence_${workType.key} SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE make_comp = #{id}
+	</update>
+
+
+
+</mapper>

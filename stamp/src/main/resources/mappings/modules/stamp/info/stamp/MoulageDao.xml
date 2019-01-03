@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stamp.dao.stamp.MoulageDao">
+
+
+	<insert id="insertMoulage" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Moulage">
+		INSERT INTO t_moulage(
+			id,
+			stamp_type,
+			moulage_name,
+			make_company,
+			use_company,
+			stamp_text,
+			across_text,
+			sub_text,
+			security_code,
+			inside_image,
+			ring_up,
+			ring_size,
+			ring_width,
+			ring_angle,
+			across_offset,
+			across_size,
+			across_width,
+			code_size,
+			code_width,
+			code_up,
+			code_angle,
+			del_flag
+		)VALUE(
+			#{id},
+			#{stampType},
+			#{moulageName},
+			#{makeCompany.id},
+			#{useCompany.id},
+			#{stampText},
+			#{acrossText},
+			#{subText},
+			#{securityCode},
+			#{insideImage},
+			#{ringUp},
+			#{ringSize},
+			#{ringWidth},
+			#{ringAngle},
+			#{acrossOffset},
+			#{acrossSize},
+			#{acrossWidth},
+			#{codeSize},
+			#{codeWidth},
+			#{codeUp},
+			#{codeAngle},
+			#{delFlag}
+		)
+	</insert>
+
+	<sql id="moulageSql">
+		  a.id AS "id",
+		  a.stamp_type AS "stampType",
+		  a.moulage_name AS "moulageName",
+		  a.make_company AS "makeCompany.id",
+		  a.use_company AS "useMakeCompany.id",
+		  a.stamp_text AS "stampText",
+		  a.across_text AS "acrossText",
+		  a.sub_text AS "subText",
+		  a.security_code AS "securityCode",
+		  a.inside_image AS "insideImage",
+		  a.ring_up AS "ringUp",
+		  a.ring_size AS "ringSize",
+		  a.ring_width AS "ringWidth",
+		  a.ring_angle AS "ringAngle",
+		  a.across_offset AS "acrossOffset",
+		  a.across_size AS "acrossSize",
+		  a.across_width AS "acrossWidth",
+		  a.code_size AS "codeSize",
+		  a.code_width AS "codeWidth",
+		  a.code_up AS "codeUp",
+		  a.code_angle AS "codeAngle"
+	</sql>
+
+	<select id="getMoulageById" resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Moulage">
+		SELECT
+			<include refid="moulageSql"></include>
+		FROM t_moulage a
+		<where>
+			a.id=#{id}
+		</where>
+		limit 1
+	</select>
+
+	<sql id="moulageSql2">
+		a.id AS "id",
+		a.moulage_name AS "moulageName"
+	</sql>
+
+	<select id="findListInMake"  parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Moulage"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Moulage">
+		SELECT
+		<include refid="moulageSql2"/>
+		FROM t_moulage a
+		<where>
+			a.make_company = #{makeCompany.id}
+			AND a.use_company = #{useCompany.id}
+			AND a.stamp_type = #{stampType}
+		</where>
+	</select>
+
+	<select id="get" parameterType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Moulage"
+			resultType="com.thinkgem.jeesite.modules.stamp.entity.stamp.Moulage">
+
+		SELECT
+		<include refid="moulageSql"/>
+		FROM t_moulage a
+		<where>
+			a.make_company = #{makeCompany.id}
+			AND a.id = #{id}
+		</where>
+	</select>
+
+</mapper>
